@@ -1,0 +1,122 @@
+buildscript {
+    repositories {
+        maven { url "http://repo.spring.io/libs-milestone" }
+        mavenLocal()
+    }
+    dependencies {
+//          classpath("org.springframework.boot:spring-boot-gradle-plugin:1.0.2.RELEASE")
+          classpath 'org.gradle.api.plugins:gradle-tomcat-plugin:0.9.8'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+//apply plugin: 'spring-boot'
+apply plugin: 'war'
+apply plugin: 'tomcat'
+apply plugin: 'idea'
+
+jar {
+    baseName = 'hibernate-tutorial'
+    version =  '0.1.0'
+}
+
+repositories {
+    mavenCentral()
+    maven { url "http://repo.spring.io/libs-milestone" }
+}
+
+
+dependencies {
+    def tomcatVersion = '7.0.42'
+    tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
+            "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}"
+    tomcat("org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}") {
+      exclude group: 'org.eclipse.jdt.core.compiler', module: 'ecj'
+    }
+
+   compile 'org.hamcrest:hamcrest-library:1.3'
+   compile 'org.scribe:scribe:1.3.1'
+   runtime 'mysql:mysql-connector-java:5.1.30'
+//   testCompile("junit:junit")
+   compile 'com.google.code.gson:gson:2.2.4'
+   compile 'org.json:json:20140107'    
+   compile 'org.slf4j:slf4j-log4j12:1.7.6' 
+   compile 'javax.servlet.jsp:javax.servlet.jsp-api:2.3.1'
+   compile 'javax.validation:validation-api:1.1.0.Final'
+   compile 'javax.mail:mail:1.4'
+   compile 'javax.servlet:javax.servlet-api:3.1.0'
+   runtime 'javax.servlet:jstl:1.2'
+
+   compile 'org.apache.commons:commons-io:1.3.2'
+   compile 'org.apache.commons:commons-lang3:3.0'
+   compile 'org.apache.commons:commons-dbcp2:2.0'
+
+//remove
+   compile 'commons-fileupload:commons-fileupload:1.3.1'
+   compile 'joda-time:joda-time:2.3'
+
+// hibernate
+   compile("org.hibernate:hibernate-core:4.2.8.Final")
+   compile 'org.hibernate:hibernate-validator:5.0.1.Final'
+   compile 'org.hibernate:hibernate-entitymanager:4.3.5.Final'
+   compile 'org.hibernate:hibernate-c3p0:4.3.5.Final'
+
+   compile 'org.springframework:spring-test:3.2.3.RELEASE'
+   compile 'org.springframework:spring-webmvc:3.2.8.RELEASE'
+//   compile("org.springframework.boot:spring-boot-starter-security")
+   compile 'org.springframework:spring-orm:4.0.3.RELEASE'
+   compile 'org.springframework.security:spring-security-web:3.2.3.RELEASE'
+   compile 'org.springframework.security:spring-security-config:3.2.3.RELEASE'
+   compile 'org.springframework.security:spring-security-core:3.2.3.RELEASE'
+
+   compile 'org.apache.tomcat:tomcat-jdbc:7.0.19'
+   compile 'org.apache.tomcat:juli:6.0.26'         
+//   compile 'org.mockito:mockito-all:1.9.5'
+  compile 'org.mockito:mockito-core:1.9.5'
+
+   testCompile 'junit:junit-dep:4.11'
+
+}
+
+
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.12'
+}
+
+task pushRedHat(type: Exec){
+  workingDir '../jbossews'
+  commandLine 'cmd', '/c', 'deployRH.bat'
+}
+
+
+task copyRHPropertyFile(type: Copy) {
+    from 'config/propertyPlaceholder-RH.properties'
+    into 'src/main/resources'
+    rename { String fileName ->
+        fileName.replace('-RH','')
+    }
+}
+
+task copyLocalPropertyFile(type: Copy) {
+    from 'config/propertyPlaceholder-LOCAL.properties'
+    into 'src/main/resources'
+    rename { String fileName ->
+        fileName.replace('-LOCAL','')
+    }
+}
+
+
+task runLocal (type: GradleBuild){
+  tasks=['copyLocalPropertyFile','clean','tomcatrunwar']  
+}
+
+task createRHWar (type: GradleBuild){
+  tasks=['copyRHPropertyFile','clean','war']  
+}
+
+
+/* Change context path (base url). otherwise defaults to name of project */
+tomcatRunWar.contextPath = ''
