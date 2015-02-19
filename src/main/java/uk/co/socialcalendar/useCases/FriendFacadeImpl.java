@@ -1,11 +1,10 @@
 package uk.co.socialcalendar.useCases;
 
-import uk.co.socialcalendar.entities.FriendStatus;
 import uk.co.socialcalendar.entities.Friend;
-import uk.co.socialcalendar.frameworksAndDrivers.FriendDAOHibernateImpl;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import static uk.co.socialcalendar.entities.FriendStatus.*;
 
 public class FriendFacadeImpl implements FriendFacade {
 
@@ -17,30 +16,27 @@ public class FriendFacadeImpl implements FriendFacade {
 
 	public Friend createFriendRequest(String requesterName,
 			String requesteeName) {
-		return new Friend(requesterName, requesteeName, FriendStatus.PENDING);
+		return new Friend(requesterName, requesteeName, PENDING);
 	}
 
-	public Friend acceptFriendRequest(String requesterName,
-			String requesteeName) {
-		return new Friend(requesterName, requesteeName, FriendStatus.ACCEPTED);
+	public Friend acceptFriendRequest(int friendId) {
+		Friend friend = friendDAO.read(friendId);
+		friend.setStatus(ACCEPTED);
+		friendDAO.save(friend);
+		return friend;
 	}
 
-	public Friend declineFriendRequest(String requesterName,
-			String requesteeName) {
-		return new Friend(requesterName, requesteeName, FriendStatus.DECLINED);
+	public Friend declineFriendRequest(int friendId) {
+		Friend friend = friendDAO.read(friendId);
+		friend.setStatus(DECLINED);
+		friendDAO.save(friend);
+		return friend;
 	}
 
 	public List<Friend> getConfirmedFriends(String user) {
 		List<Friend> returnList = friendDAO.getListOfConfirmedFriendsByRequesterName(user);
 		returnList.addAll(friendDAO.getListOfConfirmedFriendsByRequesteeName(user));
 		return returnList;
-
-//		for (Friend friend:friendsList){
-//			if (friend.getStatus().equals(FriendStatus.ACCEPTED)
-//					&& (friend.getRequesteeName().equals(user) || friend.getRequesterName().equals(user))){
-//				returnList.add(friend);
-//			}
-//		}
 	}
 
 	public boolean saveFriend(Friend friend){
@@ -52,5 +48,11 @@ public class FriendFacadeImpl implements FriendFacade {
 	public List<Friend> getFriendRequests(String user) {
 		return friendDAO.getFriendRequests(user);
 	}
+
+	@Override
+	public Friend getFriend(int friendId) {
+		return friendDAO.read(friendId);
+	}
+
 
 }

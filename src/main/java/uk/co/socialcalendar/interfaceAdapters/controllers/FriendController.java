@@ -1,10 +1,8 @@
-package uk.co.socialcalendar.interfaceAdapters;
+package uk.co.socialcalendar.interfaceAdapters.controllers;
 
-import uk.co.socialcalendar.entities.Friend;
-import uk.co.socialcalendar.useCases.FriendDAO;
-import uk.co.socialcalendar.useCases.FriendFacade;
-import uk.co.socialcalendar.useCases.FriendFacadeImpl;
 import org.springframework.web.servlet.ModelAndView;
+import uk.co.socialcalendar.entities.Friend;
+import uk.co.socialcalendar.useCases.FriendFacade;
 
 public class FriendController {
 	

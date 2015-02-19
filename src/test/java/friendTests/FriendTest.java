@@ -38,37 +38,37 @@ public class FriendTest {
 	@Test
 	public void canCreateFriendWithPendingStatus(){
 		Friend friend = new Friend(FRIEND_NAME_REQUESTER, FRIEND_NAME_REQUESTEE, FriendStatus.PENDING);
-		assertEquals(FRIEND_NAME_REQUESTER,friend.getRequesterName());
-		assertEquals(FRIEND_NAME_REQUESTEE,friend.getRequesteeName());
+		assertEquals(FRIEND_NAME_REQUESTER,friend.getRequesterEmail());
+		assertEquals(FRIEND_NAME_REQUESTEE,friend.getBeFriended());
 		assertEquals(FRIEND_STATUS_PENDING,friend.getStatusString());
 	}
 
 	@Test
 	public void canCreateFriendWithAcceptedStatus(){
 		Friend friend = new Friend(FRIEND_NAME_REQUESTER, FRIEND_NAME_REQUESTEE, FriendStatus.ACCEPTED);
-		assertEquals(FRIEND_NAME_REQUESTER,friend.getRequesterName());
-		assertEquals(FRIEND_NAME_REQUESTEE,friend.getRequesteeName());
+		assertEquals(FRIEND_NAME_REQUESTER,friend.getRequesterEmail());
+		assertEquals(FRIEND_NAME_REQUESTEE,friend.getBeFriended());
 		assertEquals(FRIEND_STATUS_ACCEPTED,friend.getStatusString());
 	}
 
 	@Test
 	public void canCreateFriendWithDeclinedStatus(){
 		Friend friend = new Friend(FRIEND_NAME_REQUESTER, FRIEND_NAME_REQUESTEE, FriendStatus.DECLINED);
-		assertEquals(FRIEND_NAME_REQUESTER,friend.getRequesterName());
-		assertEquals(FRIEND_NAME_REQUESTEE,friend.getRequesteeName());
+		assertEquals(FRIEND_NAME_REQUESTER,friend.getRequesterEmail());
+		assertEquals(FRIEND_NAME_REQUESTEE,friend.getBeFriended());
 		assertEquals(FRIEND_STATUS_DECLINED,friend.getStatusString());
 	}
 
 	@Test
 	public void canSetRequesterName(){
-		friend.setRequesterName(FRIEND_NAME_REQUESTER);
-		assertEquals(FRIEND_NAME_REQUESTER,friend.getRequesterName());
+		friend.setRequesterEmail(FRIEND_NAME_REQUESTER);
+		assertEquals(FRIEND_NAME_REQUESTER,friend.getRequesterEmail());
 	}
 	
 	@Test
 	public void canSetRequesteeName(){
-		friend.setRequesteeName(FRIEND_NAME_REQUESTEE);
-		assertEquals(FRIEND_NAME_REQUESTEE,friend.getRequesteeName());		
+		friend.setBeFriended(FRIEND_NAME_REQUESTEE);
+		assertEquals(FRIEND_NAME_REQUESTEE,friend.getBeFriended());
 	}
 	
 	@Test

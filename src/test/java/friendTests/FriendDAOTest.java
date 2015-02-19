@@ -1,21 +1,19 @@
 package friendTests;
 
-import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
+import uk.co.socialcalendar.entities.Friend;
+import uk.co.socialcalendar.entities.FriendStatus;
+import uk.co.socialcalendar.useCases.FriendDAO;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-
-import uk.co.socialcalendar.entities.Friend;
-import uk.co.socialcalendar.useCases.FriendDAO;
-import uk.co.socialcalendar.entities.FriendStatus;
+import static org.junit.Assert.*;
 
 public class FriendDAOTest {
 	Friend friend;
-	Friend friend1, friend2, friend3, friend4, friend5, friend6, friend7, friend8;
+	Friend friend1, friend2, friend3, friend4, friend5, friend6, friend7, friend8, pendingFriendRequest;
 	FriendDAO friendDAO;
 	FriendStatus friendStatus;
 	private final static int FRIEND_ID_EXISTENT = 1;
@@ -26,6 +24,7 @@ public class FriendDAOTest {
 	private final static String FRIEND_NAME4 = "NAME4";
 	private final static String FRIEND_NAME5 = "NAME5";
 	private final static String FRIEND_NAME6 = "NAME6";
+	private final static String FRIEND_NAME7 = "NAME7";
 //	private final static String FRIEND_REQUESTEE = "FRIEND_REQUESTEE_EMAIL";
 //	private final static String FRIEND_REQUESTER = "FRIEND_REQUESTER_EMAIL";
 //	private final static String FRIEND_REQUESTER_PRESENT = "FRIEND_REQUESTER_EMAIL_EXISTS";
@@ -60,6 +59,8 @@ public class FriendDAOTest {
 		friend7.setFriendId(7);
 		friend8 = new Friend(FRIEND_NAME1, FRIEND_NAME6,FriendStatus.PENDING);
 		friend8.setFriendId(8);
+		pendingFriendRequest = new Friend(FRIEND_NAME1,FRIEND_NAME7,FriendStatus.PENDING);
+		pendingFriendRequest.setFriendId(9);
 
 		friendDAO.save(friend1);
 		friendDAO.save(friend2);
@@ -69,6 +70,7 @@ public class FriendDAOTest {
 		friendDAO.save(friend6);
 		friendDAO.save(friend7);
 		friendDAO.save(friend8);
+		friendDAO.save(pendingFriendRequest);
 	}
 
 	@Test
@@ -78,25 +80,25 @@ public class FriendDAOTest {
 	
 	@Test
 	public void shouldNotSaveFriendIfRequesteeNameIsNull(){
-		friend.setRequesteeName(null);
+		friend.setBeFriended(null);
 		assertFalse(friendDAO.save(friend));
 	}
 	
 	@Test
 	public void shouldNotSaveFriendIfRequesteeNameIsEmpty(){
-		friend.setRequesteeName("");
+		friend.setBeFriended("");
 		assertFalse(friendDAO.save(friend));
 	}
 
 	@Test
 	public void shouldNotSaveFriendIfRequesterNameIsNull(){
-		friend.setRequesterName("");
+		friend.setRequesterEmail("");
 		assertFalse(friendDAO.save(friend));
 	}
 
 	@Test
 	public void shouldNotSaveFriendIfRequesterNameIsEmpty(){
-		friend.setRequesterName("");
+		friend.setRequesterEmail("");
 		assertFalse(friendDAO.save(friend));
 	}
 
@@ -108,13 +110,15 @@ public class FriendDAOTest {
 	
 	@Test
 	public void canReadFriend(){
-		assertEquals(friend.getFriendId(), friendDAO.read(friend).getFriendId());
+		int friendId = friend.getFriendId();
+		Friend returnedFriend = friendDAO.read(friendId);
+		assertEquals(friend.getFriendId(), returnedFriend.getFriendId());
 	}
 	
 	@Test
 	public void shouldNotReadNonExistentFriend(){
 		friend.setFriendId(FRIEND_ID_NON_EXISTENT);
-		assertNull(friendDAO.read(friend));
+		assertNull(friendDAO.read(-1));
 	}
 
 	@Test
@@ -144,7 +148,7 @@ public class FriendDAOTest {
 	public void returnSeveralPendingFriends(){
 		saveFriends();
 		List<Friend> actualFriendList = friendDAO.getListOfPendingFriendsByRequesterName(FRIEND_NAME1);
-		assertEquals(2, actualFriendList.size());
+		assertEquals(3, actualFriendList.size());
 	}
 
 	@Test
@@ -156,12 +160,28 @@ public class FriendDAOTest {
 	
 	@Test
 	public void shouldAcceptFriendRequest(){
-		assertTrue(friendDAO.acceptFriend(friend1));
+		saveFriends();
+		assertTrue(friendDAO.acceptFriend(pendingFriendRequest.getFriendId()));
+	}
+
+	@Test
+	public void acceptingFriendRequestShouldSetFriendStatusToAccepted(){
+		saveFriends();
+		friendDAO.acceptFriend(pendingFriendRequest.getFriendId());
+		assertEquals(FriendStatus.ACCEPTED,pendingFriendRequest.getStatus());
 	}
 
 	@Test
 	public void shouldDeclineFriendRequest(){
-		assertTrue(friendDAO.declineFriend(friend1));
+		saveFriends();
+		assertTrue(friendDAO.declineFriend(pendingFriendRequest.getFriendId()));
+	}
+
+	@Test
+	public void decliningFriendRequestShouldSetFriendStatusToDeclined(){
+		saveFriends();
+		friendDAO.declineFriend(pendingFriendRequest.getFriendId());
+		assertEquals(FriendStatus.DECLINED,pendingFriendRequest.getStatus());
 	}
 
 	@Test

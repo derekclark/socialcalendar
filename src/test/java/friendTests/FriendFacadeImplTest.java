@@ -1,14 +1,15 @@
 package friendTests;
-import static org.junit.Assert.*;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
 import uk.co.socialcalendar.entities.Friend;
-import uk.co.socialcalendar.useCases.FriendDAO;
-import uk.co.socialcalendar.useCases.FriendFacadeImpl;
 import uk.co.socialcalendar.entities.FriendStatus;
+import uk.co.socialcalendar.useCases.FriendFacadeImpl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class FriendFacadeImplTest {
 	FriendFacadeImpl friendFacade = new FriendFacadeImpl();
@@ -33,7 +34,7 @@ public class FriendFacadeImplTest {
 	Friend userFriendDeclined;
 	Friend nonRelatedFriend;
 
-	FriendDAO friendDAO;
+	InMemoryFriendDAO friendDAO;
 
 	@Before
 	public void setup(){
@@ -44,12 +45,30 @@ public class FriendFacadeImplTest {
 		userFriendPending3 = new Friend(FRIEND_NAME7,FRIEND_NAME1,FriendStatus.PENDING);
 		userFriendDeclined = new Friend(FRIEND_NAME1,FRIEND_NAME2,FriendStatus.DECLINED);
 		nonRelatedFriend = new Friend(FRIEND_NAME2,FRIEND_NAME3,FriendStatus.ACCEPTED);
+		userFriendAccepted1.setFriendId(1);
+		userFriendAccepted2.setFriendId(2);
+		userFriendPending1.setFriendId(3);
+		userFriendPending2.setFriendId(4);
+		userFriendPending3.setFriendId(5);
+		userFriendDeclined.setFriendId(6);
 
 		friendDAO = new InMemoryFriendDAO();
 		friendFacade.setFriendDAO(friendDAO);
 
+		saveFriends();
 
 	}
+
+	private void saveFriends() {
+		friendDAO.save(userFriendAccepted1);
+		friendDAO.save(userFriendAccepted2);
+		friendDAO.save(userFriendPending1);
+		friendDAO.save(userFriendPending2);
+		friendDAO.save(userFriendPending3);
+		friendDAO.save(userFriendDeclined);
+		friendDAO.save(nonRelatedFriend);
+	}
+
 	@Test
 	public void shouldCreateFriendServiceInstance(){
 		assertTrue(friendFacade instanceof FriendFacadeImpl);
@@ -59,27 +78,40 @@ public class FriendFacadeImplTest {
 	public void createFriendRequest(){
 		Friend friendRequest = friendFacade.createFriendRequest
 				(FRIEND_NAME_REQUESTER,FRIEND_NAME_REQUESTEE);
-		assertEquals(FRIEND_NAME_REQUESTER,friendRequest.getRequesterName());
-		assertEquals(FRIEND_NAME_REQUESTEE,friendRequest.getRequesteeName());
+		assertEquals(FRIEND_NAME_REQUESTER,friendRequest.getRequesterEmail());
+		assertEquals(FRIEND_NAME_REQUESTEE,friendRequest.getBeFriended());
 		assertEquals(FRIEND_STATUS_PENDING,friendRequest.getStatus().toString());
 	}
 	
 	@Test
 	public void acceptFriendRequest(){
-		Friend friendRequest = friendFacade.acceptFriendRequest
-				(FRIEND_NAME_REQUESTER,FRIEND_NAME_REQUESTEE);
-		assertEquals(FRIEND_NAME_REQUESTER,friendRequest.getRequesterName());
-		assertEquals(FRIEND_NAME_REQUESTEE,friendRequest.getRequesteeName());
+		Friend friendRequest = friendFacade.acceptFriendRequest(userFriendPending1.getFriendId());
+		assertEquals(FRIEND_NAME1,friendRequest.getRequesterEmail());
+		assertEquals(FRIEND_NAME4,friendRequest.getBeFriended());
 		assertEquals(FRIEND_STATUS_ACCEPTED,friendRequest.getStatus().toString());
 	}
 	
 	@Test
 	public void declineFriendRequest(){
-		Friend friendRequest = friendFacade.declineFriendRequest
-				(FRIEND_NAME_REQUESTER,FRIEND_NAME_REQUESTEE);
-		assertEquals(FRIEND_NAME_REQUESTER,friendRequest.getRequesterName());
-		assertEquals(FRIEND_NAME_REQUESTEE,friendRequest.getRequesteeName());
+		Friend friendRequest = friendFacade.declineFriendRequest(userFriendPending1.getFriendId());
+		assertEquals(FRIEND_NAME1,friendRequest.getRequesterEmail());
+		assertEquals(FRIEND_NAME4,friendRequest.getBeFriended());
 		assertEquals(FRIEND_STATUS_DECLINED, friendRequest.getStatus().toString());
+	}
+
+	@Test
+	public void declineFriendRequestSavesFriendUpdate(){
+		Friend friendRequest = friendFacade.declineFriendRequest(userFriendPending1.getFriendId());
+		assertEquals(FriendStatus.DECLINED, getLastFriendSave().getStatus());
+		assertEquals(userFriendPending1.getFriendId(), getLastFriendSave().getFriendId());
+
+	}
+
+	@Test
+	public void acceptFriendRequestSavesFriendUpdate(){
+		Friend friendRequest = friendFacade.acceptFriendRequest(userFriendPending1.getFriendId());
+		assertEquals(FriendStatus.ACCEPTED, getLastFriendSave().getStatus());
+		assertEquals(userFriendPending1.getFriendId(), getLastFriendSave().getFriendId());
 	}
 
 	@Test
@@ -91,7 +123,6 @@ public class FriendFacadeImplTest {
 	@Test
 	public void getConfirmedFriends(){
 		List<Friend> expectedFriendsList = expectedFriendList();
-		saveFriends();
 		List<Friend> actualFriendList = friendFacade.getConfirmedFriends(FRIEND_NAME1);
 
 		assertEquals(2, actualFriendList.size());
@@ -102,21 +133,12 @@ public class FriendFacadeImplTest {
 	@Test
 	public void getFriendRequests(){
 
-		saveFriends();
+
 		List<Friend> actualFriendRequests = friendFacade.getFriendRequests(FRIEND_NAME1);
 
-		assertEquals(2,actualFriendRequests.size());
-		assertEquals(actualFriendRequests.get(0),userFriendPending2);
-		assertEquals(actualFriendRequests.get(1),userFriendPending3);
-	}
-	private void saveFriends() {
-		friendDAO.save(userFriendAccepted1);
-		friendDAO.save(userFriendAccepted2);
-		friendDAO.save(userFriendPending1);
-		friendDAO.save(userFriendPending2);
-		friendDAO.save(userFriendPending3);
-		friendDAO.save(userFriendDeclined);
-		friendDAO.save(nonRelatedFriend);
+		assertEquals(2, actualFriendRequests.size());
+		assertEquals(actualFriendRequests.get(0), userFriendPending2);
+		assertEquals(actualFriendRequests.get(1), userFriendPending3);
 	}
 
 	private List<Friend> expectedFriendList() {
@@ -128,4 +150,16 @@ public class FriendFacadeImplTest {
 		friendsList.add(nonRelatedFriend);
 		return friendsList;
 	}
+
+	@Test
+	public void getFriendFromId(){
+		Friend actualFriend = friendFacade.getFriend(userFriendAccepted1.getFriendId());
+		assertEquals(actualFriend,userFriendAccepted1);
+	}
+
+	private Friend getLastFriendSave(){
+		List<Friend> allSaves = friendDAO.getListOfSavedFriends();
+		return allSaves.get(allSaves.size() - 1);
+	}
+
 }

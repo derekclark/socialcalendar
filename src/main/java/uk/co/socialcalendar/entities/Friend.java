@@ -4,8 +4,8 @@ package uk.co.socialcalendar.entities;
 public class Friend {
 	
 	int friendId;
-	String requesterName;
-	String requesteeName;
+	String requesterEmail;
+	String beFriended;
 	FriendStatus status;
 	
 	public FriendStatus getStatus() {
@@ -20,26 +20,26 @@ public class Friend {
 		this.status = FriendStatus.UNKNOWN;
 	}
 	
-	public Friend(String requesterName, String requestedName, FriendStatus status){
-		this.requesterName = requesterName;
-		this.requesteeName = requestedName;
+	public Friend(String requesterEmail, String requestedName, FriendStatus status){
+		this.requesterEmail = requesterEmail;
+		this.beFriended = requestedName;
 		this.status = status;
 	}
 
-	public String getRequesterName() {
-		return requesterName;
+	public String getRequesterEmail() {
+		return requesterEmail;
 	}
 
-	public void setRequesterName(String requesterName) {
-		this.requesterName = requesterName;
+	public void setRequesterEmail(String requesterEmail) {
+		this.requesterEmail = requesterEmail;
 	}
 
-	public String getRequesteeName() {
-		return requesteeName;
+	public String getBeFriended() {
+		return beFriended;
 	}
 
-	public void setRequesteeName(String requestedName) {
-		this.requesteeName = requestedName;
+	public void setBeFriended(String requestedName) {
+		this.beFriended = requestedName;
 	}
 
 	public int getFriendId() {

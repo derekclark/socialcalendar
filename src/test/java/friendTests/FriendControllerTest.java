@@ -1,23 +1,19 @@
 package friendTests;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
-
 import uk.co.socialcalendar.entities.Friend;
 import uk.co.socialcalendar.entities.FriendStatus;
-import uk.co.socialcalendar.interfaceAdapters.FriendController;
+import uk.co.socialcalendar.interfaceAdapters.controllers.FriendController;
 import uk.co.socialcalendar.useCases.FriendFacadeImpl;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class FriendControllerTest {
@@ -25,6 +21,7 @@ public class FriendControllerTest {
 	public static final String FRIEND_VIEW = "friend";
 	public static final String USER_ID = "userId";
 	public static final String FRIENDS_PAGE_SECTION = "friends";
+	public static final String ACCEPTED_FRIEND_REQUEST = "NAME2";
 	FriendController friendController;
 	FriendFacadeImpl mockFriendFacade;
 	ModelAndView mav;
@@ -95,4 +92,5 @@ public class FriendControllerTest {
 		Friend expectedFriend = new Friend();
 		assertEquals(mav.getModelMap().get("friend"), expectedFriend);
 	}
+
 }
