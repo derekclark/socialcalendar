@@ -3,6 +3,7 @@ import org.junit.Before;
 import org.junit.Test;
 import uk.co.socialcalendar.entities.Friend;
 import uk.co.socialcalendar.entities.FriendStatus;
+import uk.co.socialcalendar.frameworksAndDrivers.InMemoryFriendDAO;
 import uk.co.socialcalendar.useCases.FriendFacadeImpl;
 
 import java.util.ArrayList;
@@ -79,7 +80,7 @@ public class FriendFacadeImplTest {
 		Friend friendRequest = friendFacade.createFriendRequest
 				(FRIEND_NAME_REQUESTER,FRIEND_NAME_REQUESTEE);
 		assertEquals(FRIEND_NAME_REQUESTER,friendRequest.getRequesterEmail());
-		assertEquals(FRIEND_NAME_REQUESTEE,friendRequest.getBeFriended());
+		assertEquals(FRIEND_NAME_REQUESTEE,friendRequest.getBeFriendedEmail());
 		assertEquals(FRIEND_STATUS_PENDING,friendRequest.getStatus().toString());
 	}
 	
@@ -87,7 +88,7 @@ public class FriendFacadeImplTest {
 	public void acceptFriendRequest(){
 		Friend friendRequest = friendFacade.acceptFriendRequest(userFriendPending1.getFriendId());
 		assertEquals(FRIEND_NAME1,friendRequest.getRequesterEmail());
-		assertEquals(FRIEND_NAME4,friendRequest.getBeFriended());
+		assertEquals(FRIEND_NAME4,friendRequest.getBeFriendedEmail());
 		assertEquals(FRIEND_STATUS_ACCEPTED,friendRequest.getStatus().toString());
 	}
 	
@@ -95,7 +96,7 @@ public class FriendFacadeImplTest {
 	public void declineFriendRequest(){
 		Friend friendRequest = friendFacade.declineFriendRequest(userFriendPending1.getFriendId());
 		assertEquals(FRIEND_NAME1,friendRequest.getRequesterEmail());
-		assertEquals(FRIEND_NAME4,friendRequest.getBeFriended());
+		assertEquals(FRIEND_NAME4,friendRequest.getBeFriendedEmail());
 		assertEquals(FRIEND_STATUS_DECLINED, friendRequest.getStatus().toString());
 	}
 
@@ -129,6 +130,7 @@ public class FriendFacadeImplTest {
 		assertTrue(actualFriendList.contains(userFriendAccepted1));
 		assertTrue(actualFriendList.contains(userFriendAccepted2));
 	}
+
 
 	@Test
 	public void getFriendRequests(){

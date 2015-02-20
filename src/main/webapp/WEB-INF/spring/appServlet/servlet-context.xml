@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+	
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<mvc:annotation-driven />
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+	<mvc:resources mapping="/resources/**" location="/WEB-INF/resources/" />
+	<mvc:resources mapping="/js/**" location="/WEB-INF/js/" />
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+<!--	
+	<context:component-scan base-package="com.socialeggbox.controllers" />
+
+	<context:property-placeholder location="classpath:propertyPlaceholder.properties" />	
+-->
+<!--
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+   		<property name="url" value="${databaseUrl}"/>
+        <property name="username" value="${databaseUsername}"/>
+        <property name="password" value="${databasePassword}"/>
+    </bean>	
+
+-->
+<!--    
+    <bean id="sessionFactory"
+        class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:hibernate.cfg.xml" />
+    </bean>
+     
+    <tx:annotation-driven />
+    <bean id="transactionManager"
+        class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+    -->
+
+	<context:component-scan base-package="uk.co.socialcalendar.interfaceAdapters.controllers" />
+ 
+
+	<bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"></bean>
+
+
+	<bean id="user" class="uk.co.socialcalendar.entities.User" />
+
+	<bean id="friend" class="uk.co.socialcalendar.entities.Friend" />
+	<bean id="stubUserNotification" class="uk.co.socialcalendar.interfaceAdapters.utilities.StubMailNotification" />
+
+	<bean id="inMemoryFriendDAO" class="uk.co.socialcalendar.frameworksAndDrivers.InMemoryFriendDAO" />
+	<bean id="inMemoryUserDAO" class="uk.co.socialcalendar.frameworksAndDrivers.InMemoryUserDAO" />
+
+	<bean id="friendFacadeImpl" class="uk.co.socialcalendar.useCases.FriendFacadeImpl">
+	        <property name="friendDAO" ref="inMemoryFriendDAO"/>
+	</bean>    	
+
+	<bean id="userFacadeImpl" class="uk.co.socialcalendar.useCases.UserFacadeImpl">
+	        <property name="userDAO" ref="inMemoryUserDAO"/>
+	</bean>    	
+
+	<bean id="friendModelFacade" class="uk.co.socialcalendar.interfaceAdapters.models.FriendModelFacade">
+		<property name="userFacade" ref="userFacadeImpl" />
+		<property name="friendFacade" ref="friendFacadeImpl" />
+	</bean>
+
+
+	<bean id="friendController" class="uk.co.socialcalendar.interfaceAdapters.controllers.FriendController">
+	        <property name="friendFacade" ref="friendFacadeImpl"/>
+	        <property name="friendModelFacade" ref="friendModelFacade"/>
+	</bean>    	
+
+	<bean id="friendRequestController" class="uk.co.socialcalendar.interfaceAdapters.controllers.FriendRequestController">
+	        <property name="friendFacade" ref="friendFacadeImpl"/>
+ 	        <property name="userNotification" ref="stubUserNotification"/>
+	</bean>    	
+
+
+</beans>

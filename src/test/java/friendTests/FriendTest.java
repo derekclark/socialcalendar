@@ -39,7 +39,7 @@ public class FriendTest {
 	public void canCreateFriendWithPendingStatus(){
 		Friend friend = new Friend(FRIEND_NAME_REQUESTER, FRIEND_NAME_REQUESTEE, FriendStatus.PENDING);
 		assertEquals(FRIEND_NAME_REQUESTER,friend.getRequesterEmail());
-		assertEquals(FRIEND_NAME_REQUESTEE,friend.getBeFriended());
+		assertEquals(FRIEND_NAME_REQUESTEE,friend.getBeFriendedEmail());
 		assertEquals(FRIEND_STATUS_PENDING,friend.getStatusString());
 	}
 
@@ -47,7 +47,7 @@ public class FriendTest {
 	public void canCreateFriendWithAcceptedStatus(){
 		Friend friend = new Friend(FRIEND_NAME_REQUESTER, FRIEND_NAME_REQUESTEE, FriendStatus.ACCEPTED);
 		assertEquals(FRIEND_NAME_REQUESTER,friend.getRequesterEmail());
-		assertEquals(FRIEND_NAME_REQUESTEE,friend.getBeFriended());
+		assertEquals(FRIEND_NAME_REQUESTEE,friend.getBeFriendedEmail());
 		assertEquals(FRIEND_STATUS_ACCEPTED,friend.getStatusString());
 	}
 
@@ -55,7 +55,7 @@ public class FriendTest {
 	public void canCreateFriendWithDeclinedStatus(){
 		Friend friend = new Friend(FRIEND_NAME_REQUESTER, FRIEND_NAME_REQUESTEE, FriendStatus.DECLINED);
 		assertEquals(FRIEND_NAME_REQUESTER,friend.getRequesterEmail());
-		assertEquals(FRIEND_NAME_REQUESTEE,friend.getBeFriended());
+		assertEquals(FRIEND_NAME_REQUESTEE,friend.getBeFriendedEmail());
 		assertEquals(FRIEND_STATUS_DECLINED,friend.getStatusString());
 	}
 
@@ -67,8 +67,8 @@ public class FriendTest {
 	
 	@Test
 	public void canSetRequesteeName(){
-		friend.setBeFriended(FRIEND_NAME_REQUESTEE);
-		assertEquals(FRIEND_NAME_REQUESTEE,friend.getBeFriended());
+		friend.setBeFriendedEmail(FRIEND_NAME_REQUESTEE);
+		assertEquals(FRIEND_NAME_REQUESTEE,friend.getBeFriendedEmail());
 	}
 	
 	@Test

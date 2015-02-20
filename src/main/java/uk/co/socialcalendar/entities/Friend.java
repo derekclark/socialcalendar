@@ -5,7 +5,7 @@ public class Friend {
 	
 	int friendId;
 	String requesterEmail;
-	String beFriended;
+	String beFriendedEmail;
 	FriendStatus status;
 	
 	public FriendStatus getStatus() {
@@ -22,7 +22,7 @@ public class Friend {
 	
 	public Friend(String requesterEmail, String requestedName, FriendStatus status){
 		this.requesterEmail = requesterEmail;
-		this.beFriended = requestedName;
+		this.beFriendedEmail = requestedName;
 		this.status = status;
 	}
 
@@ -34,12 +34,12 @@ public class Friend {
 		this.requesterEmail = requesterEmail;
 	}
 
-	public String getBeFriended() {
-		return beFriended;
+	public String getBeFriendedEmail() {
+		return beFriendedEmail;
 	}
 
-	public void setBeFriended(String requestedName) {
-		this.beFriended = requestedName;
+	public void setBeFriendedEmail(String requestedName) {
+		this.beFriendedEmail = requestedName;
 	}
 
 	public int getFriendId() {

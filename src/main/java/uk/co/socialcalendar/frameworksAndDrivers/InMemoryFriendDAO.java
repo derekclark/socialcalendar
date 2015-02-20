@@ -1,4 +1,4 @@
-package friendTests;
+package uk.co.socialcalendar.frameworksAndDrivers;
 
 import uk.co.socialcalendar.entities.Friend;
 import uk.co.socialcalendar.entities.FriendStatus;
@@ -28,7 +28,7 @@ public class InMemoryFriendDAO implements FriendDAO{
 	
 	@Override
 	public boolean save(Friend friend) {
-		if (isNotSet(friend.getBeFriended()) || isNotSet(friend.getRequesterEmail()) ){
+		if (isNotSet(friend.getBeFriendedEmail()) || isNotSet(friend.getRequesterEmail()) ){
 			return false;
 		}
 		
@@ -75,7 +75,7 @@ public class InMemoryFriendDAO implements FriendDAO{
 
 		List<Friend> friendList = new ArrayList<Friend>();
 		for (Friend friend: listOfSavedFriends){
-			if (friend.getBeFriended().equals(friendRequesteeName) && friend.getStatus() == FriendStatus.ACCEPTED){
+			if (friend.getBeFriendedEmail().equals(friendRequesteeName) && friend.getStatus() == FriendStatus.ACCEPTED){
 				friendList.add(friend);
 			}
 		}
@@ -113,7 +113,7 @@ public class InMemoryFriendDAO implements FriendDAO{
 	public List<Friend> getFriendRequests(String user) {
 		List<Friend> friendList = new ArrayList<Friend>();
 		for (Friend friend: listOfSavedFriends){
-			if (friend.getBeFriended().equals(user) && friend.getStatus() == FriendStatus.PENDING){
+			if (friend.getBeFriendedEmail().equals(user) && friend.getStatus() == FriendStatus.PENDING){
 				friendList.add(friend);
 			}
 		}

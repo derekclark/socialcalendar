@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+	
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<mvc:annotation-driven />
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+	<mvc:resources mapping="/resources/**" location="/WEB-INF/resources/" />
+	<mvc:resources mapping="/js/**" location="/WEB-INF/js/" />
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	
+	<context:component-scan base-package="com.socialeggbox.controllers" />
+	
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+		<property name="url" value="jdbc:mysql://#{systemEnvironment[OPENSHIFT_MYSQL_DB_HOST]}:#{systemEnvironment[OPENSHIFT_MYSQL_DB_PORT]}/#{systemEnvironment[OPENSHIFT_APP_NAME]}"/>
+        <property name="username" value="#{systemEnvironment[OPENSHIFT_MYSQL_DB_USERNAME]}"/>
+        <property name="password" value="#{systemEnvironment[OPENSHIFT_MYSQL_DB_PASSWORD]}"/>
+
+    </bean>	
+    
+    <bean id="sessionFactory"
+        class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:hibernate.cfg.xml" />
+    </bean>
+     
+    <tx:annotation-driven />
+    <bean id="transactionManager"
+        class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+    
+
+	<bean id="friendService" class="com.socialeggbox.services.FriendService" />
+    <bean id="userServiceBean" class="com.socialeggbox.services.UserService"></bean>
+    <bean id="newsFeedServiceBean" class="com.socialeggbox.services.NewsFeedService"></bean>
+    <bean id="NewsFeedLineServiceServiceBean" class="com.socialeggbox.services.NewsFeedLineService"></bean>
+    <bean id="availabilityServiceBean" class="com.socialeggbox.services.AvailabilityService"></bean>
+    <bean id="pageControllerBean" class="com.socialeggbox.controllers.PageController"></bean>
+    <bean id="sessionAttributesBean" class="com.socialeggbox.services.SessionAttributes"></bean>
+
+    <bean id="friendsBean" class="com.socialeggbox.model.Friends"></bean>
+    <bean id="userfriendsBean" class="com.socialeggbox.model.Users"></bean>
+    <bean id="availabilityBean" class="com.socialeggbox.model.Availability"></bean>
+  
+    <bean id="modelAndViewBean" class="org.springframework.web.servlet.ModelAndView"></bean>
+    <bean id="sendMailSSLBean" class="com.socialeggbox.mail.SendMailSSL"></bean>
+    <bean id="dateUtilitiesBean" class="com.socialeggbox.util.DateUtilities"></bean>
+    <bean id="collectionFunctionsBean" class="com.socialeggbox.util.CollectionFunctions"></bean>
+
+
+	<bean id="usersDao" class="com.socialeggbox.dao.UsersDAOImpl">
+	    <constructor-arg>
+	        <ref bean="sessionFactory" />
+	    </constructor-arg>
+	</bean>
+
+	<bean id="availabilityDao" class="com.socialeggbox.dao.AvailabilityDAOImpl">
+	    <constructor-arg>
+	        <ref bean="sessionFactory" />
+	    </constructor-arg>
+	</bean>    	
+
+
+	<bean id="friendDao" class="com.socialeggbox.dao.FriendDAOImpl">
+	    <constructor-arg>
+	        <ref bean="sessionFactory" />
+	    </constructor-arg>
+	</bean>    	
+
+<!-- DEREK NEED TO replace hard coded values with values from properties file dev.conf in C:\Users\syst3m\workspace\social-calendar\src\main\resources-->
+  <bean name="facebook" class="com.socialeggbox.controllers.Facebook">
+    <constructor-arg name="apiKey" value="316869195141619"/>
+    <constructor-arg name="apiSecret" value="12df5af0e5066be3095ab60810a00929"/>
+    <constructor-arg name="callback" value="http://jbossews-socialcalendar.rhcloud.com/facebook"/>
+  </bean>
+    	
+</beans>

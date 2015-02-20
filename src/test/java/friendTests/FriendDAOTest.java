@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import uk.co.socialcalendar.entities.Friend;
 import uk.co.socialcalendar.entities.FriendStatus;
+import uk.co.socialcalendar.frameworksAndDrivers.InMemoryFriendDAO;
 import uk.co.socialcalendar.useCases.FriendDAO;
 
 import java.util.ArrayList;
@@ -80,13 +81,13 @@ public class FriendDAOTest {
 	
 	@Test
 	public void shouldNotSaveFriendIfRequesteeNameIsNull(){
-		friend.setBeFriended(null);
+		friend.setBeFriendedEmail(null);
 		assertFalse(friendDAO.save(friend));
 	}
 	
 	@Test
 	public void shouldNotSaveFriendIfRequesteeNameIsEmpty(){
-		friend.setBeFriended("");
+		friend.setBeFriendedEmail("");
 		assertFalse(friendDAO.save(friend));
 	}
 

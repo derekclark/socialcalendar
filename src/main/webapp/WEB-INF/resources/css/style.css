@@ -1,0 +1,332 @@
+/*Amended 09/11/14 12:34*/
+
+body{
+  font-family: calibri;
+}
+
+.middle-pane{
+}
+
+#right-pane{
+  position:fixed;
+  top:13%;
+  right:0%;
+}
+
+.right-pane img{
+  width:90%;
+  padding-bottom:10px;
+}
+.logo a:link{
+  color:inherit;
+  text-decoration: none;
+}
+.logo a:visited{
+  color:red;
+  text-decoration: none;}
+
+
+.logo a:hover{
+  color:red;
+  text-decoration: none;
+}
+
+.logo a:active{
+  color:red;
+  text-decoration: none; 
+}
+
+.logo{
+  font-family:calibri;
+  font-weight: bold;
+  font-size: 3em;
+  color:#00C100;
+}
+
+img.user-picture {
+  text-align:right;
+}
+
+td.user-picture{
+  width: 10px;
+}
+
+.black-link a:link{
+  color:black;
+  text-decoration: none;
+}
+
+table.section-format{
+  text-align: center;
+}
+
+
+.confirm-availability td{
+  padding:20px;
+}
+
+.confirm-availability{
+  line-height: 100%;
+}
+
+.section-text a:visited{
+  color:black;
+  text-decoration: none;
+}
+
+.section-format a:visited{
+  color:black;
+  text-decoration: none;
+}
+
+
+.navbar-side-element a:link{
+  color:white;
+  text-decoration: none;
+}
+.navbar-side-element a:visited{
+  color:white;
+  text-decoration: none;
+}
+
+.navbar-bottom-element a:link{
+  color:white;
+  text-decoration: none;
+}
+.navbar-bottom-element a:visited{
+  color:white;
+  text-decoration: none;
+}
+
+#ok-image{
+  width:10%;
+}
+
+.logout{
+  float:right;text-align:right;
+  padding-right: 5px;
+}
+
+.salutation{
+  font-size: 1.2em;
+}
+
+
+.section-header{
+  font-size: 1.5em;
+}
+
+.section-text{
+  font-size: 1em;
+  padding-left:2%;
+  padding-right:2%;
+}
+.error-text{
+  color: red;
+}
+
+td{ 
+/*  padding:0px;
+  text-align:center; */
+}
+tr{
+/*  text-align:center; */
+}
+table.section-format{
+  width:100%;
+  border:0;
+}
+
+.page-header{
+  font-size: 1.2em;
+  border-bottom-width: 1.2em;
+  border-bottom-color:#00C100;
+  text-align: left;
+}
+
+.table-header{
+  width:100%;
+  border:0;
+}
+
+.welcome{
+  text-align:right;
+  padding-right: 5px;
+}
+
+
+.confirm-availability-yes{
+  color:#07dc06;
+}
+.confirm-availability-no{
+  color:red;
+}
+.confirm-availability-maybe{
+  color:#ff9900;
+}
+.select-friends{
+  font-size: 1.2em;  
+}
+.datetimeField{
+  width:100%;
+}
+button .full-width{
+  width:100%;
+  display:block;
+}
+.btn {
+  width:3em;
+}
+
+.btn-accept{
+  background-color: hsl(108, 100%, 30%) !important;
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#32ff00", endColorstr="#1e9900");
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#32ff00), to(#1e9900));
+  background-image: -moz-linear-gradient(top, #32ff00, #1e9900);
+  background-image: -ms-linear-gradient(top, #32ff00, #1e9900);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #32ff00), color-stop(100%, #1e9900));
+  background-image: -webkit-linear-gradient(top, #32ff00, #1e9900);
+  background-image: -o-linear-gradient(top, #32ff00, #1e9900);
+  background-image: linear-gradient(#32ff00, #1e9900);
+  border-color: #1e9900 #1e9900 hsl(108, 100%, 25%);
+  color: #fff !important;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.33);
+  -webkit-font-smoothing: antialiased;
+}
+
+.btn-decline {
+  background-color: hsl(5, 100%, 30%) !important;
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ff1500", endColorstr="#990c00");
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#ff1500), to(#990c00));
+  background-image: -moz-linear-gradient(top, #ff1500, #990c00);
+  background-image: -ms-linear-gradient(top, #ff1500, #990c00);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ff1500), color-stop(100%, #990c00));
+  background-image: -webkit-linear-gradient(top, #ff1500, #990c00);
+  background-image: -o-linear-gradient(top, #ff1500, #990c00);
+  background-image: linear-gradient(#ff1500, #990c00);
+  border-color: #990c00 #990c00 hsl(5, 100%, 25%);
+  color: #fff !important;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.33);
+  -webkit-font-smoothing: antialiased;
+}
+
+
+.page-footer{
+  font-size: 1em;
+}
+
+
+
+
+/*2 properties below centralise navbar list*/
+.navbar .nav{
+    float: none;
+    text-align: center;
+}
+.navbar .nav > li{
+    float: none;
+    display: inline-block;
+}
+
+/*navbar colour*/
+.navbar-custom {
+    background-color:#00C100;
+
+}
+
+
+/*active color setting*/
+.navbar-custom .navbar-nav > .active > a, .navbar-nav > .active > a:hover, .navbar-nav > .active > a:focus {
+    color: black;
+}
+.navbar-custom .navbar-brand {
+    color:#eeeeee;
+}
+
+/*navbar text, font & padding - normal mode*/
+.navbar .nav > li > a, .navbar .nav > li > a:first-letter,
+.navbar .nav > li.current-menu-item > a, 
+.navbar .nav > li.current-menu-ancestor > a {
+display:        inline;
+color:          #ffffff;                        
+font-family:    calibri;
+font-size:      1.5em;
+padding:        5px 30px;
+
+}
+
+/*vertically align text to center*/ 
+.navbar-nav li a {
+ line-height: 50px;
+}
+
+/*hover link color*/
+.navbar-custom > li > a:hover {
+    background-color: orange;
+    color: black;
+}
+
+/*media queries*/
+/*wide resolution*/
+@media screen and (max-width: 770px)   {
+ #left-pane table{
+    max-width:60%;
+    font-size: 1em;
+ } 
+}
+
+@media screen and (max-width: 1424px)   {
+  #right-pane{
+    display:block;
+ } 
+
+ #left-pane table{
+    max-width:70%;
+    color:black;
+ } 
+}
+
+
+/*small resolution*/
+@media screen and (max-width: 600px)   {
+  .grid_1,
+.grid_2,
+.grid_3,
+.grid_4,
+.grid_5,
+.grid_6,
+.grid_7,
+.grid_8,
+.grid_9,
+.grid_10,
+.grid_11,
+.grid_12 {
+  width:100%;
+}
+ #right-pane{
+  display:none;
+  padding-left:15px;
+ } 
+ 
+ .logo{
+  font-size: 1.5em
+ }
+
+
+.welcome{
+  display:none;
+}
+
+.navbar .nav > li > a, .navbar .nav > li > a:first-letter,
+.navbar .nav > li.current-menu-item > a, 
+.navbar .nav > li.current-menu-ancestor > a {
+display:        inline;
+color:          #ffffff;                        
+font-family:    calibri;
+font-size:      1em;
+padding:        5px 10px;
+}
+
+}

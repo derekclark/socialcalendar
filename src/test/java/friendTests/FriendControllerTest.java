@@ -2,12 +2,19 @@ package friendTests;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.ui.ExtendedModelMap;
+import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
 import uk.co.socialcalendar.entities.Friend;
 import uk.co.socialcalendar.entities.FriendStatus;
 import uk.co.socialcalendar.interfaceAdapters.controllers.FriendController;
+import uk.co.socialcalendar.interfaceAdapters.models.FriendModel;
+import uk.co.socialcalendar.interfaceAdapters.models.FriendModelFacade;
 import uk.co.socialcalendar.useCases.FriendFacadeImpl;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,28 +32,86 @@ public class FriendControllerTest {
 	FriendController friendController;
 	FriendFacadeImpl mockFriendFacade;
 	ModelAndView mav;
+	FriendModelFacade mockFriendModelFacade;
+
+	Model model;
+
+	HttpServletRequest mockHttpServletRequest;
+	HttpServletResponse mockHttpServletResponse;
+	HttpSession mockSession;
 
 	@Before
 	public void setup(){
 		friendController = new FriendController();
 		mockFriendFacade = mock(FriendFacadeImpl.class);
+		mockFriendModelFacade = mock(FriendModelFacade.class);
 		friendController.setFriendFacade(mockFriendFacade);
+		friendController.setFriendModelFacade(mockFriendModelFacade);
+		setupHttpSessions();
 	}
-	
+
+	public void setupHttpSessions(){
+		model = new ExtendedModelMap();
+		mockHttpServletRequest = mock(HttpServletRequest.class);
+		mockHttpServletResponse = mock(HttpServletResponse.class);
+		mockSession = mock(HttpSession.class);
+		when(mockHttpServletRequest.getSession()).thenReturn(mockSession);
+		when(mockSession.getAttribute("USER_NAME")).thenReturn(USER_ID);
+
+	}
 	@Test
 	public void friendPageRendersFriendView(){
-		mav = friendController.friendPage(USER_ID);
+		mav = friendController.friendPage(model, mockHttpServletRequest, mockHttpServletResponse);
 		assertEquals(FRIEND_VIEW,mav.getViewName());
 	}
 
 	@Test
-	public void friendPageShowsExpectedFriendList(){
-		List<Friend> expectedFriendList = setFriendExpectedAcceptedList();
-		when(mockFriendFacade.getConfirmedFriends(anyString())).thenReturn(expectedFriendList);
+	public void friendPageShowsFriendList(){
+//		List<Friend> expectedFriendList = setFriendExpectedAcceptedList();
+		List<FriendModel>expectedFriendModelList = new ArrayList<FriendModel>();
+		FriendModel friendModel = new FriendModel();
+		friendModel.setName("name");
+		friendModel.setEmail("email");
+		friendModel.setFriendId(1);
+		friendModel.setFacebookId("123");
+		expectedFriendModelList.add(friendModel);
 
-		mav = friendController.friendPage(USER_ID);
 
-		assertEquals(mav.getModelMap().get("friendList"), expectedFriendList);
+//		when(mockFriendFacade.getConfirmedFriends(anyString())).thenReturn(expectedFriendList);
+		when(mockFriendModelFacade.getFriendModelList(anyString())).thenReturn(expectedFriendModelList);
+
+
+		mav = friendController.friendPage(model, mockHttpServletRequest, mockHttpServletResponse);
+
+		assertEquals(mav.getModelMap().get("friendList"), expectedFriendModelList);
+	}
+
+
+
+
+	@Test
+	public void friendPageShouldShowFriendRequests(){
+		List<Friend> expectedFriendRequests = setExpectedRequestList();
+
+		when(mockFriendFacade.getFriendRequests(anyString())).thenReturn(expectedFriendRequests);
+
+		mav = friendController.friendPage(model, mockHttpServletRequest, mockHttpServletResponse);
+		assertEquals(mav.getModelMap().get("friendRequests"), expectedFriendRequests);
+
+	}
+
+
+	@Test
+	public void friendPageShouldSetSectionAsFriends(){
+		mav = friendController.friendPage(model, mockHttpServletRequest, mockHttpServletResponse);
+		assertEquals(mav.getModelMap().get("section"), FRIENDS_PAGE_SECTION);
+	}
+
+	@Test
+	public void modelShouldIncludeEmptyFriendObject(){
+		mav = friendController.friendPage(model, mockHttpServletRequest, mockHttpServletResponse);
+		assertEquals(mav.getModelMap().get("friend"), new FriendModel());
+
 	}
 
 	private List<Friend> setFriendExpectedAcceptedList() {
@@ -56,17 +121,6 @@ public class FriendControllerTest {
 		return expectedFriendList;
 	}
 
-	@Test
-	public void friendPageShouldShowFriendRequests(){
-		List<Friend> expectedFriendRequests = setExpectedRequestList();
-
-		when(mockFriendFacade.getFriendRequests(anyString())).thenReturn(expectedFriendRequests);
-
-		mav = friendController.friendPage(USER_ID);
-		assertEquals(mav.getModelMap().get("friendRequests"), expectedFriendRequests);
-
-	}
-
 	private List<Friend> setExpectedRequestList() {
 		List<Friend> expectedFriendRequests = new ArrayList<Friend>();
 		expectedFriendRequests.add(new Friend("name2",USER_ID, FriendStatus.PENDING));
@@ -74,23 +128,5 @@ public class FriendControllerTest {
 		return expectedFriendRequests;
 	}
 
-	@Test
-	public void friendPageShouldSetSectionAsFriends(){
-		mav = friendController.friendPage(USER_ID);
-		assertEquals(mav.getModelMap().get("section"), FRIENDS_PAGE_SECTION);
-	}
-
-	@Test
-	public void addFriendPageShouldSetSectionAsFriends(){
-		mav = friendController.addFriend(USER_ID);
-		assertEquals(mav.getModelMap().get("section"), FRIENDS_PAGE_SECTION);
-	}
-
-	@Test
-	public void addFriendPageShouldShowEmptyFriendObject(){
-		mav = friendController.addFriend(USER_ID);
-		Friend expectedFriend = new Friend();
-		assertEquals(mav.getModelMap().get("friend"), expectedFriend);
-	}
 
 }

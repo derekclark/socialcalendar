@@ -1,9 +1,7 @@
 package uk.co.socialcalendar.useCases;
 
 import uk.co.socialcalendar.entities.Friend;
-
 import java.util.List;
-
 import static uk.co.socialcalendar.entities.FriendStatus.*;
 
 public class FriendFacadeImpl implements FriendFacade {
