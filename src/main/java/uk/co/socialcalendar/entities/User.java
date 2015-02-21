@@ -5,6 +5,15 @@ public class User {
     private String name;
     private String facebookId;
 
+    public User(){
+
+    }
+    public User(String email, String name, String facebookId){
+        this.email = email;
+        this.name = name;
+        this.facebookId = facebookId;
+    }
+
     public String getEmail() {
         return email;
     }

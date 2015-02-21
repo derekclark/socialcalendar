@@ -26,14 +26,17 @@ public class FriendModelFacade {
         List<FriendModel> friendModelList = new ArrayList<FriendModel>();
 
         for (Friend f : friendList){
-            FriendModel friendModel = new FriendModel();
-
             User user = userFacade.getUser(f.getBeFriendedEmail());
+            FriendModel friendModel = new FriendModel();
             friendModel.setFacebookId(user.getFacebookId());
+            if (friendModel.getFacebookId().isEmpty()){
+                friendModel.setHasFacebookId(false);
+            }else {
+                friendModel.setHasFacebookId(true);
+            }
             friendModel.setEmail(user.getEmail());
             friendModel.setFriendId(f.getFriendId());
             friendModel.setName(user.getName());
-
             friendModelList.add(friendModel);
         }
 

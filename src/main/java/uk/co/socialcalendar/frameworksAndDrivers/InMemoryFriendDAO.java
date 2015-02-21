@@ -10,15 +10,10 @@ import java.util.List;
 public class InMemoryFriendDAO implements FriendDAO{
 	private static final String BEFRIENDED1 = "befriendedEmail1";
 	private static final String BEFRIENDED2 = "befriendedEmail2";
-	private static final String REQUESTER1 = "requester1";
-	private static final String REQUESTER2 = "requester2";
-
+	private static final String REQUESTER1 = "userEmail1";
+	private static final String REQUESTER2 = "userEmail2";
 
 	List<Friend> listOfSavedFriends = new ArrayList<Friend>();
-
-
-	Friend existentFriend;
-	
 	public InMemoryFriendDAO(){
 	}
 	
@@ -55,11 +50,14 @@ public class InMemoryFriendDAO implements FriendDAO{
 	}
 
 	@Override
-	public List<Friend> getListOfConfirmedFriendsByRequesterName(String friendRequesterName) {
-
+	public List<Friend> getListOfConfirmedFriendsByRequester(String requesterEmail) {
+		System.out.println("in inmemoryFriendDAO getconfirmedfriendsbyrequester for " + requesterEmail);
+		for (Friend f:listOfSavedFriends){
+			System.out.println("saved friend=" + f.getRequesterEmail());
+		}
 		List<Friend> friendList = new ArrayList<Friend>();
 		for (Friend friend: listOfSavedFriends){
-			if (friend.getRequesterEmail().equals(friendRequesterName) && friend.getStatus() == FriendStatus.ACCEPTED){
+			if (friend.getRequesterEmail().equals(requesterEmail) && friend.getStatus() == FriendStatus.ACCEPTED){
 				friendList.add(friend);
 			}
 		}
@@ -67,11 +65,11 @@ public class InMemoryFriendDAO implements FriendDAO{
 	}
 
 	@Override
-	public List<Friend> getListOfConfirmedFriendsByRequesteeName(String friendRequesteeName) {
+	public List<Friend> getListOfConfirmedFriendsByBeFriended(String beFriendedEmail) {
 
 		List<Friend> friendList = new ArrayList<Friend>();
 		for (Friend friend: listOfSavedFriends){
-			if (friend.getBeFriendedEmail().equals(friendRequesteeName) && friend.getStatus() == FriendStatus.ACCEPTED){
+			if (friend.getBeFriendedEmail().equals(beFriendedEmail) && friend.getStatus() == FriendStatus.ACCEPTED){
 				friendList.add(friend);
 			}
 		}
@@ -79,10 +77,10 @@ public class InMemoryFriendDAO implements FriendDAO{
 	}
 
 	@Override
-	public List<Friend> getListOfPendingFriendsByRequesterName(String friendRequesterName) {
+	public List<Friend> getListOfPendingFriendsByRequester(String requesterEmail) {
 		List<Friend> friendList = new ArrayList<Friend>();
 		for (Friend friend: listOfSavedFriends){
-			if (friend.getRequesterEmail().equals(friendRequesterName) && friend.getStatus() == FriendStatus.PENDING){
+			if (friend.getRequesterEmail().equals(requesterEmail) && friend.getStatus() == FriendStatus.PENDING){
 				friendList.add(friend);
 			}
 		}
@@ -121,13 +119,18 @@ public class InMemoryFriendDAO implements FriendDAO{
 	}
 
 	public void populate(){
-		Friend friend = new Friend(REQUESTER1, BEFRIENDED1, FriendStatus.ACCEPTED);
-		friend.setFriendId(1);
-		save(friend);
-		friend = new Friend(REQUESTER2, BEFRIENDED2, FriendStatus.ACCEPTED);
-		friend.setFriendId(2);
-		save(friend);
+		save(createFriend(new Friend(REQUESTER1, BEFRIENDED1, FriendStatus.ACCEPTED), 1));
+		save(createFriend(new Friend(REQUESTER2, BEFRIENDED2, FriendStatus.ACCEPTED), 2));
+		save(createFriend(new Friend(REQUESTER2, REQUESTER1, FriendStatus.ACCEPTED), 3));
+		System.out.println("populating friend inmemory database with " + listOfSavedFriends.size() + " friends");
+		for (Friend f: listOfSavedFriends){
+			System.out.println(f.getFriendId());
+		}
+	}
 
+	private Friend createFriend(Friend friend, int friendId){
+		friend.setFriendId(friendId);
+		return friend;
 	}
 
 }

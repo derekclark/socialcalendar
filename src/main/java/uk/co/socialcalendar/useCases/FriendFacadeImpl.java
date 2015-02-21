@@ -32,8 +32,8 @@ public class FriendFacadeImpl implements FriendFacade {
 	}
 
 	public List<Friend> getConfirmedFriends(String user) {
-		List<Friend> returnList = friendDAO.getListOfConfirmedFriendsByRequesterName(user);
-		returnList.addAll(friendDAO.getListOfConfirmedFriendsByRequesteeName(user));
+		List<Friend> returnList = friendDAO.getListOfConfirmedFriendsByRequester(user);
+		returnList.addAll(friendDAO.getListOfConfirmedFriendsByBeFriended(user));
 		return returnList;
 	}
 

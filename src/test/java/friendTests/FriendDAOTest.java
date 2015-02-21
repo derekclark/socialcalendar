@@ -26,18 +26,10 @@ public class FriendDAOTest {
 	private final static String FRIEND_NAME5 = "NAME5";
 	private final static String FRIEND_NAME6 = "NAME6";
 	private final static String FRIEND_NAME7 = "NAME7";
-//	private final static String FRIEND_REQUESTEE = "FRIEND_REQUESTEE_EMAIL";
-//	private final static String FRIEND_REQUESTER = "FRIEND_REQUESTER_EMAIL";
-//	private final static String FRIEND_REQUESTER_PRESENT = "FRIEND_REQUESTER_EMAIL_EXISTS";
 	private final static String FRIEND_REQUESTER_NOT_PRESENT = "FRIEND_REQUESTER_EMAIL_NOT_EXIST";
-//	private static final String FRIEND_EMAIL_DOES_NOT_EXIST = "DOES NOT EXIST";
-	
+
 	@Before
 	public void setup(){
-//		pendingFriend = new Friend(FRIEND_REQUESTER, FRIEND_REQUESTEE,FriendStatus.PENDING);
-//		nonExistentFriend = new Friend(FRIEND_REQUESTER, FRIEND_REQUESTEE,FriendStatus.PENDING);
-//		existentFriend = new Friend(FRIEND_EMAIL_DOES_NOT_EXIST, FRIEND_EMAIL_DOES_NOT_EXIST,FriendStatus.PENDING);
-//		existentFriend.setFriendId(FRIEND_ID_EXISTENT);
 		friend = new Friend(FRIEND_NAME1,FRIEND_NAME2,FriendStatus.ACCEPTED);
 		friend.setFriendId(1);
 		friendDAO = new InMemoryFriendDAO();
@@ -111,6 +103,7 @@ public class FriendDAOTest {
 	
 	@Test
 	public void canReadFriend(){
+		saveFriends();
 		int friendId = friend.getFriendId();
 		Friend returnedFriend = friendDAO.read(friendId);
 		assertEquals(friend.getFriendId(), returnedFriend.getFriendId());
@@ -130,8 +123,8 @@ public class FriendDAOTest {
 	@Test
 	public void returnSeveralConfirmedFriendsWhereUserIsFriendRequesterAndRequestee(){
 		saveFriends();
-		List<Friend> actualFriendList = friendDAO.getListOfConfirmedFriendsByRequesterName(FRIEND_NAME1);
-		actualFriendList.addAll(friendDAO.getListOfConfirmedFriendsByRequesteeName(FRIEND_NAME1));
+		List<Friend> actualFriendList = friendDAO.getListOfConfirmedFriendsByRequester(FRIEND_NAME1);
+		actualFriendList.addAll(friendDAO.getListOfConfirmedFriendsByBeFriended(FRIEND_NAME1));
 		assertEquals(friend1.getFriendId(), actualFriendList.get(0).getFriendId());
 		assertEquals(friend2.getFriendId(), actualFriendList.get(1).getFriendId());
 		assertEquals(friend6.getFriendId(), actualFriendList.get(2).getFriendId());
@@ -141,21 +134,21 @@ public class FriendDAOTest {
 	@Test
 	public void returnNoConfirmedFriends(){
 		saveFriends();
-		List<Friend> actualFriendList = friendDAO.getListOfConfirmedFriendsByRequesterName(FRIEND_REQUESTER_NOT_PRESENT);
+		List<Friend> actualFriendList = friendDAO.getListOfConfirmedFriendsByRequester(FRIEND_REQUESTER_NOT_PRESENT);
 		assertEquals(0, actualFriendList.size());
 	}
 	
 	@Test
 	public void returnSeveralPendingFriends(){
 		saveFriends();
-		List<Friend> actualFriendList = friendDAO.getListOfPendingFriendsByRequesterName(FRIEND_NAME1);
+		List<Friend> actualFriendList = friendDAO.getListOfPendingFriendsByRequester(FRIEND_NAME1);
 		assertEquals(3, actualFriendList.size());
 	}
 
 	@Test
 	public void returnNoPendingFriends(){
 		saveFriends();
-		List<Friend> actualFriendList = friendDAO.getListOfPendingFriendsByRequesterName(FRIEND_REQUESTER_NOT_PRESENT);
+		List<Friend> actualFriendList = friendDAO.getListOfPendingFriendsByRequester(FRIEND_REQUESTER_NOT_PRESENT);
 		assertEquals(0, actualFriendList.size());
 	}
 	

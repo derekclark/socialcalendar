@@ -16,6 +16,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static uk.co.socialcalendar.entities.FriendStatus.ACCEPTED;
 
 public class FriendModelFacadeTest {
     FriendModelFacade friendModelFacade;
@@ -35,10 +36,12 @@ public class FriendModelFacadeTest {
     public final static String FACEBOOK_ID2 = "456";
     public final static String FRIEND_NAME2 = "friendName2";
 
+    FriendModel friendModel;
 
     @Before
     public void setup(){
         friendModelFacade = new FriendModelFacade();
+        friendModel = new FriendModel();
         mockUserFacade = mock(UserFacade.class);
         mockFriendFacade = mock(FriendFacade.class);
         friendModelFacade.setFriendFacade(mockFriendFacade);
@@ -46,11 +49,77 @@ public class FriendModelFacadeTest {
     }
 
     @Test
+    public void setsEmail(){
+        create1FriendWithFacebookId();
+        List<FriendModel> actualFriendModelList = friendModelFacade.getFriendModelList(USER_EMAIL1);
+        assertEquals(BEFRIENDED_EMAIL1, actualFriendModelList.get(0).getEmail());
+    }
+
+    @Test
+    public void setsFriendId(){
+        create1FriendWithFacebookId();
+        List<FriendModel> actualFriendModelList = friendModelFacade.getFriendModelList(USER_EMAIL1);
+        assertEquals(FRIEND_ID1, actualFriendModelList.get(0).getFriendId());
+    }
+
+    @Test
+    public void setsName(){
+        create1FriendWithFacebookId();
+        List<FriendModel> actualFriendModelList = friendModelFacade.getFriendModelList(USER_EMAIL1);
+        assertEquals(FRIEND_NAME1, actualFriendModelList.get(0).getName());
+    }
+
+    @Test
+    public void setsHasFacebookIdIfUserHasOne(){
+        create1FriendWithFacebookId();
+        List<FriendModel> actualFriendModelList = friendModelFacade.getFriendModelList(USER_EMAIL1);
+        assertEquals(true, actualFriendModelList.get(0).isHasFacebookId());
+    }
+
+    @Test
+    public void setsHasFacebookIdToFalseIfUserDoesntHaveOne(){
+        create1FriendWithNoFacebookId();
+        List<FriendModel> actualFriendModelList = friendModelFacade.getFriendModelList(USER_EMAIL1);
+        assertEquals(false, actualFriendModelList.get(0).isHasFacebookId());
+    }
+
+    @Test
     public void canPopulate2FriendsInModelList(){
         create2Friends();
-        List<FriendModel>expectedFriendModelList = create2FriendModels();
+        List<FriendModel> expectedFriendModelList = create2FriendModels();
         List<FriendModel> actualFriendModelList = friendModelFacade.getFriendModelList(USER_EMAIL1);
         assertEquals(expectedFriendModelList, actualFriendModelList);
+    }
+
+    private void create1FriendWithFacebookId() {
+        friendList = createAListOf1Friend();
+        when(mockFriendFacade.getConfirmedFriends(USER_EMAIL1)).thenReturn(friendList);
+        create1UserWithFacebookId();
+        when(mockUserFacade.getUser(BEFRIENDED_EMAIL1)).thenReturn(user1);
+        when(mockUserFacade.getUser(BEFRIENDED_EMAIL2)).thenReturn(user2);
+    }
+
+    private void create1FriendWithNoFacebookId() {
+        friendList = createAListOf1Friend();
+        when(mockFriendFacade.getConfirmedFriends(USER_EMAIL1)).thenReturn(friendList);
+        create1UserWithNoFacebookId();
+        when(mockUserFacade.getUser(BEFRIENDED_EMAIL1)).thenReturn(user1);
+        when(mockUserFacade.getUser(BEFRIENDED_EMAIL2)).thenReturn(user2);
+    }
+
+    public List<Friend> createAListOf1Friend(){
+        List<Friend> friendList = new ArrayList<Friend>();
+        friendList.add(createFriend(FRIEND_ID1, USER_EMAIL1, BEFRIENDED_EMAIL1, ACCEPTED));
+        return friendList;
+
+    }
+
+    public void create1UserWithFacebookId(){
+        user1 = new User(BEFRIENDED_EMAIL1, FRIEND_NAME1, FACEBOOK_ID1);
+    }
+
+    public void create1UserWithNoFacebookId(){
+        user1 = new User(BEFRIENDED_EMAIL1, FRIEND_NAME1, "");
     }
 
     private void create2Friends() {
@@ -63,50 +132,36 @@ public class FriendModelFacadeTest {
 
     public List<Friend> createAListOf2Friends(){
         List<Friend> friendList = new ArrayList<Friend>();
-        Friend friend = new Friend();
-        friend.setRequesterEmail(USER_EMAIL1);
-        friend.setBeFriendedEmail(BEFRIENDED_EMAIL1);
-        friend.setStatus(FriendStatus.ACCEPTED);
-        friend.setFriendId(FRIEND_ID1);
-        friendList.add(friend);
-
-        friend.setRequesterEmail(USER_EMAIL2);
-        friend.setBeFriendedEmail(BEFRIENDED_EMAIL2);
-        friend.setStatus(FriendStatus.ACCEPTED);
-        friend.setFriendId(FRIEND_ID2);
-        friendList.add(friend);
-
+        friendList.add(createFriend(FRIEND_ID1, USER_EMAIL1, BEFRIENDED_EMAIL1, ACCEPTED));
+        friendList.add(createFriend(FRIEND_ID2, USER_EMAIL2, BEFRIENDED_EMAIL2, ACCEPTED));
         return friendList;
+    }
 
+    private Friend createFriend(int friendId, String requesterEmail, String beFriendedEmail, FriendStatus status){
+        Friend friend = new Friend(requesterEmail, beFriendedEmail, status);
+        friend.setFriendId(friendId);
+        return friend;
     }
 
     public void create2Users(){
-        user1 = new User();
-        user1.setName(FRIEND_NAME1);
-        user1.setFacebookId(FACEBOOK_ID1);
-        user1.setEmail(BEFRIENDED_EMAIL1);
+        user1 = new User(BEFRIENDED_EMAIL1, FRIEND_NAME1, FACEBOOK_ID1);
+        user2 = new User(BEFRIENDED_EMAIL2, FRIEND_NAME2, FACEBOOK_ID2);
+    }
 
-        user2 = new User();
-        user2.setName(FRIEND_NAME2);
-        user2.setFacebookId(FACEBOOK_ID2);
-        user2.setEmail(BEFRIENDED_EMAIL2);
+    private FriendModel createFriendModel(int id, String email, String name, String facebookId, boolean hasFacebookId){
+        FriendModel friendModel = new FriendModel();
+        friendModel.setFriendId(id);
+        friendModel.setFacebookId(facebookId);
+        friendModel.setEmail(email);
+        friendModel.setName(name);
+        friendModel.setHasFacebookId(hasFacebookId);
+        return friendModel;
     }
 
     public List<FriendModel> create2FriendModels(){
         List<FriendModel> expectedFriendModelList = new ArrayList<FriendModel>();
-        FriendModel friendModel = new FriendModel();
-        friendModel.setFriendId(FRIEND_ID1);
-        friendModel.setFacebookId(FACEBOOK_ID1);
-        friendModel.setEmail(BEFRIENDED_EMAIL1);
-        friendModel.setName(FRIEND_NAME1);
-        expectedFriendModelList.add(friendModel);
-
-        friendModel.setFriendId(FRIEND_ID2);
-        friendModel.setFacebookId(FACEBOOK_ID2);
-        friendModel.setEmail(BEFRIENDED_EMAIL2);
-        friendModel.setName(FRIEND_NAME2);
-        expectedFriendModelList.add(friendModel);
-
+        expectedFriendModelList.add(createFriendModel(FRIEND_ID1, BEFRIENDED_EMAIL1, FRIEND_NAME1, FACEBOOK_ID1, true));
+        expectedFriendModelList.add(createFriendModel(FRIEND_ID2, BEFRIENDED_EMAIL2, FRIEND_NAME2, FACEBOOK_ID2, false));
         return expectedFriendModelList;
     }
 }

@@ -9,9 +9,9 @@ public interface FriendDAO {
 	public boolean save(Friend friend);
 	public Friend read(int friendId);
 	public boolean update(Friend friend);
-	public List<Friend> getListOfConfirmedFriendsByRequesterName(String friendRequesterName);
-	public List<Friend> getListOfConfirmedFriendsByRequesteeName(String friendRequesterName);
-	public List<Friend> getListOfPendingFriendsByRequesterName(String friendRequesterName);
+	public List<Friend> getListOfConfirmedFriendsByRequester(String friendRequesterEmail);
+	public List<Friend> getListOfConfirmedFriendsByBeFriended(String friendBeFriendedEmail);
+	public List<Friend> getListOfPendingFriendsByRequester(String friendRequesterName);
 	public boolean acceptFriend(int friendId);
 	public boolean declineFriend(int friendId);
 	List<Friend> getFriendRequests(String user);

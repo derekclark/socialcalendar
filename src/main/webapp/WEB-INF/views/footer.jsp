@@ -7,7 +7,7 @@
 </body>
 
     <c:choose>
-        <c:when test="${not empty username}">
+        <c:when test="${not empty userName}">
 			<br>
 			<br>
 			<br>

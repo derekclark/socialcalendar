@@ -55,38 +55,55 @@
 	<context:component-scan base-package="uk.co.socialcalendar.interfaceAdapters.controllers" />
 
 	<bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"></bean>
+
+	<!-- ENTITIES -->
+	<bean id="user" class="uk.co.socialcalendar.entities.User" />
+	<bean id="friend" class="uk.co.socialcalendar.entities.Friend" />
+
+	<!-- MODELS -->
+	<bean id="friendModel" class="uk.co.socialcalendar.interfaceAdapters.models.FriendModel" />
  
 	<!--Test Doubles -->
 	<bean id="authentication" class="uk.co.socialcalendar.interfaceAdapters.utilities.FakeAuthentication" />
-	<bean id="inMemoryFriendDAO" class="uk.co.socialcalendar.frameworksAndDrivers.InMemoryFriendDAO" />
-	<bean id="inMemoryUserDAO" class="uk.co.socialcalendar.frameworksAndDrivers.InMemoryUserDAO" />
+	<bean id="inMemoryFriendDAO" class="uk.co.socialcalendar.frameworksAndDrivers.InMemoryFriendDAO">
+	</bean>
+	<bean id="inMemoryUserDAO" class="uk.co.socialcalendar.frameworksAndDrivers.InMemoryUserDAO">
+	</bean>
 	<bean id="userNotification" class="uk.co.socialcalendar.interfaceAdapters.utilities.StubMailNotification" />
 
 
 
-	<bean id="user" class="uk.co.socialcalendar.entities.User" />
-
-	<bean id="friend" class="uk.co.socialcalendar.entities.Friend" />
 
 
+	<!-- FACADES -->
 	<bean id="friendFacadeImpl" class="uk.co.socialcalendar.useCases.FriendFacadeImpl">
 	        <property name="friendDAO" ref="inMemoryFriendDAO"/>
 	</bean>    	
 
-	<bean id="userFacadeImpl" class="uk.co.socialcalendar.useCases.UserFacadeImpl">
+	<bean id="userFacade" class="uk.co.socialcalendar.useCases.UserFacadeImpl">
 	        <property name="userDAO" ref="inMemoryUserDAO"/>
 	</bean>    	
 
 	<bean id="friendModelFacade" class="uk.co.socialcalendar.interfaceAdapters.models.FriendModelFacade">
-		<property name="userFacade" ref="userFacadeImpl" />
+		<property name="userFacade" ref="userFacade" />
 		<property name="friendFacade" ref="friendFacadeImpl" />
 	</bean>
 
+	<bean id="authenticationFacade" class="uk.co.socialcalendar.interfaceAdapters.utilities.AuthenticationFacade">
+	        <property name="authentication" ref="authentication"/>
+	</bean>
 
+	<!-- CONTROLLERS -->
 	<bean id="friendController" class="uk.co.socialcalendar.interfaceAdapters.controllers.FriendController">
 	        <property name="friendFacade" ref="friendFacadeImpl"/>
 	        <property name="friendModelFacade" ref="friendModelFacade"/>
-	        <property name="authentication" ref="authentication"/>	        
+	        <property name="authenticationFacade" ref="authenticationFacade"/>	        
+	        <property name="userFacade" ref="userFacade"/>	        
+	</bean>    	
+
+	<bean id="fakeLoginController" class="uk.co.socialcalendar.interfaceAdapters.controllers.FakeLoginController">
+	        <property name="userDAO" ref="inMemoryUserDAO"/>
+	        <property name="friendDAO" ref="inMemoryFriendDAO"/>
 	</bean>    	
 
 	<bean id="friendRequestController" class="uk.co.socialcalendar.interfaceAdapters.controllers.FriendRequestController">

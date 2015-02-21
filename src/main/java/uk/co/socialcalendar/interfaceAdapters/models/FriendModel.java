@@ -5,14 +5,15 @@ public class FriendModel {
     private String facebookId;
     private String email;
     private String name;
+    private boolean hasFacebookId;
 
     public FriendModel(){
         this.facebookId="";
         this.friendId=0;
         this.email="";
         this.name="";
-
     }
+
     public String getName() {
         return name;
     }
@@ -47,6 +48,13 @@ public class FriendModel {
         this.email = email;
     }
 
+    public boolean isHasFacebookId() {
+        return hasFacebookId;
+    }
+
+    public void setHasFacebookId(boolean hasFacebookId) {
+        this.hasFacebookId = hasFacebookId;
+    }
 
     public boolean equals(Object obj){
         if (this == obj){

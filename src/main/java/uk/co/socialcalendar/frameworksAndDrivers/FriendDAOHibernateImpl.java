@@ -43,21 +43,21 @@
 //	}
 //
 //	@Override
-//	public List<Friend> getListOfConfirmedFriendsByRequesterName(String friendRequesterName) {
+//	public List<Friend> getListOfConfirmedFriendsByRequester(String friendRequesterName) {
 //
 //		List<Friend> friendList = new ArrayList<Friend>();
 //		return friendList;
 //	}
 //
 //	@Override
-//	public List<Friend> getListOfConfirmedFriendsByRequesteeName(String friendRequesteeName) {
+//	public List<Friend> getListOfConfirmedFriendsByBeFriended(String friendRequesteeName) {
 //
 //		List<Friend> friendList = new ArrayList<Friend>();
 //		return friendList;
 //	}
 //
 //	@Override
-//	public List<Friend> getListOfPendingFriendsByRequesterName(String friendRequesterName) {
+//	public List<Friend> getListOfPendingFriendsByRequester(String friendRequesterName) {
 //		List<Friend> friendList = new ArrayList<Friend>();
 //		return friendList;
 //	}
