@@ -88,7 +88,6 @@ public class InMemoryFriendDAO implements FriendDAO{
 		return friendList;
 	}
 
-
 	@Override
 	public boolean acceptFriend(int friendId) {
 		Friend friend=read(friendId);

@@ -34,15 +34,19 @@ public class InMemoryUserDAO implements UserDAO {
 
     @Override
     public boolean save(User user) {
-        listOfUsers.add(user);
+        if (getUser(user.getEmail()) == null) {
+            listOfUsers.add(user);
+        }else {
+            return false;
+        }
         return true;
     }
 
     public void populate(){
-        listOfUsers.add(new User(USER_EMAIL1, USER_NAME1, FACEBOOK_ID1));
-        listOfUsers.add(new User(USER_EMAIL2, USER_NAME2, FACEBOOK_ID2));
-        listOfUsers.add(new User(BEFRIENDED1, USER_NAME3, FACEBOOK_ID3));
-        listOfUsers.add(new User(BEFRIENDED2, USER_NAME4, FACEBOOK_ID4));
+        save(new User(USER_EMAIL1, USER_NAME1, FACEBOOK_ID1));
+        save(new User(USER_EMAIL2, USER_NAME2, FACEBOOK_ID2));
+        save(new User(BEFRIENDED1, USER_NAME3, FACEBOOK_ID3));
+        save(new User(BEFRIENDED2, USER_NAME4, FACEBOOK_ID4));
 
         System.out.println("populating user in memory database with " + listOfUsers.size() + " users");
         for (User u:listOfUsers){

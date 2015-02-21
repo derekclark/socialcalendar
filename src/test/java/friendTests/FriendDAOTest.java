@@ -117,8 +117,12 @@ public class FriendDAOTest {
 
 	@Test
 	public void canUpdateFriend(){
+
 		assertTrue(friendDAO.update(friend));
+		//check value has changed!!!!!!!!!!!!!!!
+		fail();
 	}
+
 
 	@Test
 	public void returnSeveralConfirmedFriendsWhereUserIsFriendRequesterAndRequestee(){
