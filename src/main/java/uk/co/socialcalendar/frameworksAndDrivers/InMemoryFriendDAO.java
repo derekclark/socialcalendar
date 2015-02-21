@@ -8,11 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InMemoryFriendDAO implements FriendDAO{
-	private final static int FRIEND_ID = 1;
-	private final static String FRIEND_REQUESTEE = "john.smith@mail.com";
-	private final static String FRIEND_REQUESTER = "jill.sullivan@mail.com";
-	private final static String FRIEND_PENDING_STATUS = "PENDING";
-
+	private static final String BEFRIENDED1 = "befriendedEmail1";
+	private static final String BEFRIENDED2 = "befriendedEmail2";
+	private static final String REQUESTER1 = "requester1";
+	private static final String REQUESTER2 = "requester2";
 
 
 	List<Friend> listOfSavedFriends = new ArrayList<Friend>();
@@ -21,9 +20,6 @@ public class InMemoryFriendDAO implements FriendDAO{
 	Friend existentFriend;
 	
 	public InMemoryFriendDAO(){
-		existentFriend = new Friend(FRIEND_REQUESTER, FRIEND_REQUESTEE,FriendStatus.PENDING);
-		existentFriend.setFriendId(FRIEND_ID);
-		listOfSavedFriends.add(existentFriend);
 	}
 	
 	@Override
@@ -124,5 +120,14 @@ public class InMemoryFriendDAO implements FriendDAO{
 		return listOfSavedFriends;
 	}
 
+	public void populate(){
+		Friend friend = new Friend(REQUESTER1, BEFRIENDED1, FriendStatus.ACCEPTED);
+		friend.setFriendId(1);
+		save(friend);
+		friend = new Friend(REQUESTER2, BEFRIENDED2, FriendStatus.ACCEPTED);
+		friend.setFriendId(2);
+		save(friend);
+
+	}
 
 }

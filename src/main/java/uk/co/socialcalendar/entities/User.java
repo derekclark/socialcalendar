@@ -1,6 +1,9 @@
 package uk.co.socialcalendar.entities;
 
 public class User {
+    private String email;
+    private String name;
+    private String facebookId;
 
     public String getEmail() {
         return email;
@@ -10,7 +13,6 @@ public class User {
         this.email = email;
     }
 
-    private String email;
 
     public String getName() {
         return name;
@@ -20,7 +22,6 @@ public class User {
         this.name = name;
     }
 
-    private String name;
 
     public String getFacebookId() {
         return facebookId;
@@ -29,7 +30,5 @@ public class User {
     public void setFacebookId(String facebookId) {
         this.facebookId = facebookId;
     }
-
-    private String facebookId;
 
 }

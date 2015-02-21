@@ -6,6 +6,13 @@ public class FriendModel {
     private String email;
     private String name;
 
+    public FriendModel(){
+        this.facebookId="";
+        this.friendId=0;
+        this.email="";
+        this.name="";
+
+    }
     public String getName() {
         return name;
     }
@@ -13,6 +20,7 @@ public class FriendModel {
     public void setName(String name) {
         this.name = name;
     }
+
 
 
     public void setFriendId(int friendId) {

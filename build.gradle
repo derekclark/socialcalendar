@@ -18,7 +18,7 @@ apply plugin: 'tomcat'
 apply plugin: 'idea'
 
 jar {
-    baseName = 'hibernate-tutorial'
+    baseName = 'socialcalendar'
     version =  '0.1.0'
 }
 

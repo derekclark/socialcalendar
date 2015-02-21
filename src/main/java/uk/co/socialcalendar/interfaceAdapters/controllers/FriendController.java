@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import uk.co.socialcalendar.interfaceAdapters.models.FriendModel;
 import uk.co.socialcalendar.interfaceAdapters.models.FriendModelFacade;
+import uk.co.socialcalendar.interfaceAdapters.utilities.AuthenticationFacade;
 import uk.co.socialcalendar.useCases.FriendFacade;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,11 +15,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @Controller
-
-
 public class FriendController{
 	FriendFacade friendFacade;
 	FriendModelFacade friendModelFacade;
+	AuthenticationFacade authenticationFacade;
+
+	public void setAuthenticationFacade(AuthenticationFacade authenticationFacade) {
+		this.authenticationFacade = authenticationFacade;
+	}
+
 
 	public void setFriendModelFacade(FriendModelFacade friendModelFacade) {
 		this.friendModelFacade = friendModelFacade;
@@ -38,6 +43,8 @@ public class FriendController{
 		mav.addObject("friendList",friendModelFacade.getFriendModelList(loggedInUser));
 		mav.addObject("friendRequests",friendFacade.getFriendRequests(loggedInUser));
 		mav.addObject("section","friends");
+		mav.addAllObjects(authenticationFacade.getAuthenticationAttrbutes());
+
 		mav.addObject("friend", new FriendModel());
 		return mav;
 	}
