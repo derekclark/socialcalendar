@@ -19,6 +19,8 @@ public class InMemoryFriendDAO implements FriendDAO{
 	
 	@Override
 	public boolean save(Friend friend) {
+
+		if (isAlreadyPresent(friend)) return false;
 		if (isNotSet(friend.getBeFriendedEmail()) || isNotSet(friend.getRequesterEmail()) ){
 			return false;
 		}
@@ -29,7 +31,16 @@ public class InMemoryFriendDAO implements FriendDAO{
 		this.listOfSavedFriends.add(friend);
 		return true;
 	}
-		
+
+	private boolean isAlreadyPresent(Friend friend) {
+		for (Friend f:listOfSavedFriends){
+			if (f.getFriendId() == friend.getFriendId()){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public boolean isNotSet(String value){
 		return (value == null || value.isEmpty());
 	}
@@ -45,8 +56,15 @@ public class InMemoryFriendDAO implements FriendDAO{
 	}
 
 	@Override
-	public boolean update(Friend friend) {
-		return true;
+	public boolean updateStatus(int friendId, FriendStatus status) {
+		for (Friend f: listOfSavedFriends){
+			if (f.getFriendId() == friendId){
+				f.setStatus(status);
+				return true;
+			}
+
+		}
+		return false;
 	}
 
 	@Override
@@ -121,7 +139,7 @@ public class InMemoryFriendDAO implements FriendDAO{
 		save(createFriend(new Friend(REQUESTER1, BEFRIENDED1, FriendStatus.ACCEPTED), 1));
 		save(createFriend(new Friend(REQUESTER2, BEFRIENDED2, FriendStatus.ACCEPTED), 2));
 		save(createFriend(new Friend(REQUESTER2, REQUESTER1, FriendStatus.ACCEPTED), 3));
-		System.out.println("populating friend inmemory database with " + listOfSavedFriends.size() + " friends");
+		System.out.println("populating friend in memory database with " + listOfSavedFriends.size() + " friends");
 		for (Friend f: listOfSavedFriends){
 			System.out.println(f.getFriendId());
 		}

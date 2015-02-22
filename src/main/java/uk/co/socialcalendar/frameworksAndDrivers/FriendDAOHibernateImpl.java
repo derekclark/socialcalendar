@@ -38,7 +38,7 @@
 //	}
 //
 //	@Override
-//	public boolean update(Friend friend) {
+//	public boolean updateStatus(Friend friend) {
 //		return true;
 //	}
 //

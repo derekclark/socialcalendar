@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
-
 public class FriendDAOTest {
 	Friend friend;
 	Friend friend1, friend2, friend3, friend4, friend5, friend6, friend7, friend8, pendingFriendRequest;
@@ -116,13 +115,12 @@ public class FriendDAOTest {
 	}
 
 	@Test
-	public void canUpdateFriend(){
-
-		assertTrue(friendDAO.update(friend));
-		//check value has changed!!!!!!!!!!!!!!!
-		fail();
+	public void canUpdateFriendStatus(){
+		saveFriends();
+		friendDAO.updateStatus(pendingFriendRequest.getFriendId(), FriendStatus.DECLINED);
+		Friend updatedFriend = friendDAO.read(pendingFriendRequest.getFriendId());
+		assertEquals(FriendStatus.DECLINED, updatedFriend.getStatus());
 	}
-
 
 	@Test
 	public void returnSeveralConfirmedFriendsWhereUserIsFriendRequesterAndRequestee(){

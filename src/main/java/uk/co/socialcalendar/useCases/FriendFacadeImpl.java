@@ -17,18 +17,14 @@ public class FriendFacadeImpl implements FriendFacade {
 		return new Friend(requesterName, requesteeName, PENDING);
 	}
 
-	public Friend acceptFriendRequest(int friendId) {
-		Friend friend = friendDAO.read(friendId);
-		friend.setStatus(ACCEPTED);
-		friendDAO.save(friend);
-		return friend;
+	public boolean acceptFriendRequest(int friendId) {
+		friendDAO.updateStatus(friendId, ACCEPTED);
+		return true;
 	}
 
-	public Friend declineFriendRequest(int friendId) {
-		Friend friend = friendDAO.read(friendId);
-		friend.setStatus(DECLINED);
-		friendDAO.save(friend);
-		return friend;
+	public boolean declineFriendRequest(int friendId) {
+		friendDAO.updateStatus(friendId, DECLINED);
+		return true;
 	}
 
 	public List<Friend> getConfirmedFriends(String user) {

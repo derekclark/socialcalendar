@@ -85,34 +85,17 @@ public class FriendFacadeImplTest {
 	}
 	
 	@Test
-	public void acceptFriendRequest(){
-		Friend friendRequest = friendFacade.acceptFriendRequest(userFriendPending1.getFriendId());
-		assertEquals(FRIEND_NAME1,friendRequest.getRequesterEmail());
-		assertEquals(FRIEND_NAME4,friendRequest.getBeFriendedEmail());
-		assertEquals(FRIEND_STATUS_ACCEPTED,friendRequest.getStatus().toString());
-	}
-	
-	@Test
-	public void declineFriendRequest(){
-		Friend friendRequest = friendFacade.declineFriendRequest(userFriendPending1.getFriendId());
-		assertEquals(FRIEND_NAME1,friendRequest.getRequesterEmail());
-		assertEquals(FRIEND_NAME4,friendRequest.getBeFriendedEmail());
-		assertEquals(FRIEND_STATUS_DECLINED, friendRequest.getStatus().toString());
-	}
-
-	@Test
 	public void declineFriendRequestSavesFriendUpdate(){
-		Friend friendRequest = friendFacade.declineFriendRequest(userFriendPending1.getFriendId());
-		assertEquals(FriendStatus.DECLINED, getLastFriendSave().getStatus());
-		assertEquals(userFriendPending1.getFriendId(), getLastFriendSave().getFriendId());
+		assertTrue(friendFacade.declineFriendRequest(userFriendPending1.getFriendId()));
+		assertEquals(FriendStatus.DECLINED, friendDAO.read(userFriendPending1.getFriendId()).getStatus());
 
 	}
 
 	@Test
 	public void acceptFriendRequestSavesFriendUpdate(){
-		Friend friendRequest = friendFacade.acceptFriendRequest(userFriendPending1.getFriendId());
-		assertEquals(FriendStatus.ACCEPTED, getLastFriendSave().getStatus());
-		assertEquals(userFriendPending1.getFriendId(), getLastFriendSave().getFriendId());
+		assertTrue(friendFacade.acceptFriendRequest(userFriendPending1.getFriendId()));
+		assertEquals(FriendStatus.ACCEPTED, friendDAO.read(userFriendPending1.getFriendId()).getStatus());
+
 	}
 
 	@Test
@@ -159,9 +142,5 @@ public class FriendFacadeImplTest {
 		assertEquals(actualFriend,userFriendAccepted1);
 	}
 
-	private Friend getLastFriendSave(){
-		List<Friend> allSaves = friendDAO.getListOfSavedFriends();
-		return allSaves.get(allSaves.size() - 1);
-	}
 
 }
