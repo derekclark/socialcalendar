@@ -14,7 +14,7 @@
     function validate(){
       document.getElementById('invalidEmailAddress').style.display = "none";
       $("#result").text("");
-      var email = $("#friendEmail").val();
+      var email = $("#beFriendedEmail").val();
       if (validateEmail(email)) {
         return true;
       } else {
@@ -75,7 +75,7 @@
 
 
         <c:choose>
-            <c:when test="${not empty friendRequestList}">
+            <c:when test="${not empty friendRequests}">
     
               <img id="question-image" src="${context}/resources/img/question.png">    
               <hr>
@@ -88,11 +88,11 @@
                               <th align="left">Requester</th>
                               <th><th>
                           </tr>
-                          <c:forEach var="friend" items="${friendRequestList}">
+                          <c:forEach var="friend" items="${friendRequests}">
                               <tr>
-                                  <td><c:out value="${friend.ownerEmail}" /></td>
-                                  <td><input type=button class="btn-accept" onClick="location.href='acceptFriendRequest?id=${friend.id}'" value="Accept">
-                       						<input type=button class="btn-decline" onClick="location.href='declineFriendRequest?id=${friend.id}'" value="Decline">
+                                  <td><c:out value="${friend.requesterEmail}" /></td>
+                                  <td><input type=button class="btn-accept" onClick="location.href='acceptFriendRequest?id=${friend.friendId}'" value="Accept">
+                       						<input type=button class="btn-decline" onClick="location.href='declineFriendRequest?id=${friend.friendId}'" value="Decline">
                                   </td>
                               </tr>
                           </c:forEach>

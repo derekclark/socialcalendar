@@ -7,7 +7,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
 import uk.co.socialcalendar.entities.Friend;
 import uk.co.socialcalendar.entities.FriendStatus;
+import uk.co.socialcalendar.interfaceAdapters.controllers.FriendCommonModel;
 import uk.co.socialcalendar.interfaceAdapters.controllers.FriendRequestController;
+import uk.co.socialcalendar.interfaceAdapters.utilities.SessionAttributes;
 import uk.co.socialcalendar.interfaceAdapters.utilities.StubMailNotification;
 import uk.co.socialcalendar.useCases.FriendFacadeImpl;
 
@@ -15,10 +17,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import java.io.UnsupportedEncodingException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
@@ -38,6 +40,9 @@ public class FriendRequestControllerTest {
     HttpServletResponse mockHttpServletResponse;
     HttpSession mockSession;
 
+    SessionAttributes sessionAttributes;
+    FriendCommonModel mockFriendCommonModel;
+
     @Before
     public void setup(){
         controller = new FriendRequestController();
@@ -46,8 +51,14 @@ public class FriendRequestControllerTest {
         friend = new Friend("NAME1","NAME2", FriendStatus.PENDING);
         friend.setFriendId(1);
 
+        sessionAttributes = new SessionAttributes();
+        mockFriendCommonModel = mock(FriendCommonModel.class);
+        controller.setSessionAttributes(sessionAttributes);
+        controller.setFriendCommonModel(mockFriendCommonModel);
+
         setupTestDoubles();
         setupHttpSessions();
+        createExpectedModelAndView();
     }
 
     public void setupTestDoubles(){
@@ -63,6 +74,20 @@ public class FriendRequestControllerTest {
         when(mockHttpServletRequest.getSession()).thenReturn(mockSession);
         when(mockSession.getAttribute("USER_NAME")).thenReturn(USER_ID);
 
+    }
+
+    private ModelAndView createExpectedModelAndView() {
+        ModelAndView expectedMav = new ModelAndView("friend");
+        expectedMav.addObject("section","friends");
+        expectedMav.addObject("newFriend","");
+        expectedMav.addObject("friendList","");
+        expectedMav.addObject("userName","");
+        expectedMav.addObject("friendRequests","");
+        expectedMav.addObject("isAuthenticated","");
+        expectedMav.addObject("oauthToken","");
+        expectedMav.addObject("userFacebookId","");
+        when(mockFriendCommonModel.getCommonModelAttributes(anyString())).thenReturn(expectedMav);
+        return expectedMav;
     }
 
 
@@ -130,6 +155,7 @@ public class FriendRequestControllerTest {
 
     @Test
     public void decliningFriendRequestSendsNotification() throws ServletException, UnsupportedEncodingException {
+
         mav = controller.declineFriendRequest(friend.getFriendId(), model, mockHttpServletRequest, mockHttpServletResponse);
         assertEquals(1, stubMailNotification.getMessagesSent());
     }
@@ -151,5 +177,40 @@ public class FriendRequestControllerTest {
         mav = controller.declineFriendRequest(friend.getFriendId(), model, mockHttpServletRequest, mockHttpServletResponse);
         verify(mockFriendFacade, times(1)).declineFriendRequest(anyInt());
     }
+
+    @Test
+    public void acceptFriendRendersFriendView() throws ServletException, UnsupportedEncodingException {
+
+        mav = controller.acceptFriendRequest(friend.getFriendId(), model, mockHttpServletRequest, mockHttpServletResponse);
+        assertEquals(FRIEND_VIEW,mav.getViewName());
+    }
+
+    @Test
+    public void acceptFriendRequestPopulatesAllModelAttributes() throws ServletException, UnsupportedEncodingException {
+
+        mav = controller.acceptFriendRequest(friend.getFriendId(), model, mockHttpServletRequest, mockHttpServletResponse);
+        assertNotNull(mav.getModelMap().get("newFriend"));
+        assertNotNull(mav.getModelMap().get("friendList"));
+        assertNotNull(mav.getModelMap().get("userName"));
+        assertNotNull(mav.getModelMap().get("friendRequests"));
+        assertNotNull(mav.getModelMap().get("isAuthenticated"));
+        assertNotNull(mav.getModelMap().get("oauthToken"));
+        assertNotNull(mav.getModelMap().get("userFacebookId"));
+    }
+
+    @Test
+    public void declineFriendRequestPopulatesAllModelAttributes() throws ServletException, UnsupportedEncodingException {
+
+        mav = controller.declineFriendRequest(friend.getFriendId(), model, mockHttpServletRequest, mockHttpServletResponse);
+        assertNotNull(mav.getModelMap().get("newFriend"));
+        assertNotNull(mav.getModelMap().get("friendList"));
+        assertNotNull(mav.getModelMap().get("userName"));
+        assertNotNull(mav.getModelMap().get("friendRequests"));
+        assertNotNull(mav.getModelMap().get("isAuthenticated"));
+        assertNotNull(mav.getModelMap().get("oauthToken"));
+        assertNotNull(mav.getModelMap().get("userFacebookId"));
+    }
+
+
 
 }

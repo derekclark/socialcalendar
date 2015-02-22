@@ -62,6 +62,17 @@
 
 	<!-- MODELS -->
 	<bean id="friendModel" class="uk.co.socialcalendar.interfaceAdapters.models.FriendModel" />
+	<bean id="friendModelFacade" class="uk.co.socialcalendar.interfaceAdapters.models.FriendModelFacade">
+		<property name="userFacade" ref="userFacade" />
+		<property name="friendFacade" ref="friendFacadeImpl" />
+	</bean>
+
+	<bean id="friendCommonModel" class="uk.co.socialcalendar.interfaceAdapters.controllers.FriendCommonModel">
+			<property name="userFacade" ref="userFacade" />
+			<property name="friendFacade" ref="friendFacadeImpl" />
+			<property name="friendModelFacade" ref="friendModelFacade" />
+			<property name="authenticationFacade" ref="authenticationFacade" />
+	</bean>
  
 	<!--Test Doubles -->
 	<bean id="authentication" class="uk.co.socialcalendar.interfaceAdapters.utilities.FakeAuthentication" />
@@ -84,21 +95,22 @@
 	        <property name="userDAO" ref="inMemoryUserDAO"/>
 	</bean>    	
 
-	<bean id="friendModelFacade" class="uk.co.socialcalendar.interfaceAdapters.models.FriendModelFacade">
-		<property name="userFacade" ref="userFacade" />
-		<property name="friendFacade" ref="friendFacadeImpl" />
-	</bean>
 
 	<bean id="authenticationFacade" class="uk.co.socialcalendar.interfaceAdapters.utilities.AuthenticationFacade">
 	        <property name="authentication" ref="authentication"/>
 	</bean>
 
+	<bean id="sessionAttributes" class="uk.co.socialcalendar.interfaceAdapters.utilities.SessionAttributes" />
+
 	<!-- CONTROLLERS -->
 	<bean id="friendController" class="uk.co.socialcalendar.interfaceAdapters.controllers.FriendController">
-	        <property name="friendFacade" ref="friendFacadeImpl"/>
-	        <property name="friendModelFacade" ref="friendModelFacade"/>
-	        <property name="authenticationFacade" ref="authenticationFacade"/>	        
-	        <property name="userFacade" ref="userFacade"/>	        
+	        <property name="friendCommonModel" ref="friendCommonModel"/>
+	        <property name="sessionAttributes" ref="sessionAttributes"/>	        
+	</bean>    	
+
+	<bean id="addFriendController" class="uk.co.socialcalendar.interfaceAdapters.controllers.AddFriendController">
+	        <property name="friendCommonModel" ref="friendCommonModel"/>
+	        <property name="sessionAttributes" ref="sessionAttributes"/>	        
 	</bean>    	
 
 	<bean id="fakeLoginController" class="uk.co.socialcalendar.interfaceAdapters.controllers.FakeLoginController">
@@ -108,7 +120,9 @@
 
 	<bean id="friendRequestController" class="uk.co.socialcalendar.interfaceAdapters.controllers.FriendRequestController">
 	        <property name="friendFacade" ref="friendFacadeImpl"/>
+	        <property name="friendCommonModel" ref="friendCommonModel"/>
  	        <property name="userNotification" ref="userNotification"/>
+ 	        <property name="sessionAttributes" ref="sessionAttributes"/>
 	</bean>    	
 
 

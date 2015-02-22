@@ -8,19 +8,29 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import uk.co.socialcalendar.entities.Friend;
 import uk.co.socialcalendar.entities.FriendStatus;
+import uk.co.socialcalendar.interfaceAdapters.utilities.SessionAttributes;
 import uk.co.socialcalendar.interfaceAdapters.utilities.UserNotification;
 import uk.co.socialcalendar.useCases.FriendFacade;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 
 @Controller
 public class FriendRequestController {
     FriendFacade friendFacade;
     UserNotification userNotification;
+    SessionAttributes sessionAttributes;
+    FriendCommonModel friendCommonModel;
+
+    public void setSessionAttributes(SessionAttributes sessionAttributes) {
+        this.sessionAttributes = sessionAttributes;
+    }
+
+    public void setFriendCommonModel(FriendCommonModel friendCommonModel) {
+        this.friendCommonModel = friendCommonModel;
+    }
 
     public void setUserNotification(UserNotification userNotification) {
         this.userNotification = userNotification;
@@ -36,18 +46,14 @@ public class FriendRequestController {
              Model m,
              HttpServletRequest request, HttpServletResponse response) throws ServletException, UnsupportedEncodingException {
 
-        HttpSession session = request.getSession();
-        String loggedInUser = (String) session.getAttribute("USER_NAME");
+        String loggedInUser = sessionAttributes.getLoggedInUserId(request);
+        ModelAndView mav = friendCommonModel.getCommonModelAttributes(loggedInUser);
 
-        ModelAndView mav = new ModelAndView("friend");
         Friend friend = friendFacade.getFriend(friendId);
-
         String requester=friend.getRequesterEmail();
         mav.addObject("message", "You have just accepted a friend request from " + requester);
-        mav.addObject("section", "friends");
 
         friendFacade.acceptFriendRequest(friendId);
-
         notifyUser(friend);
         return mav;
     }
@@ -57,18 +63,14 @@ public class FriendRequestController {
             (@RequestParam(value="id", required=false,defaultValue="") int friendId,
              Model m,
              HttpServletRequest request, HttpServletResponse response) throws ServletException, UnsupportedEncodingException {
-        HttpSession session = request.getSession();
-        String loggedInUser = (String) session.getAttribute("USER_NAME");
+        String loggedInUser = sessionAttributes.getLoggedInUserId(request);
+        ModelAndView mav = friendCommonModel.getCommonModelAttributes(loggedInUser);
 
-        ModelAndView mav = new ModelAndView("friend");
         Friend friend = friendFacade.getFriend(friendId);
         String requester=friend.getRequesterEmail();
         mav.addObject("message", "You have just declined a friend request from " + requester);
-        mav.addObject("section", "friends");
 
         friendFacade.declineFriendRequest(friendId);
-
-
         notifyUser(friend);
         return mav;
     }

@@ -6,37 +6,41 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
-import uk.co.socialcalendar.entities.Friend;
+import uk.co.socialcalendar.entities.User;
 import uk.co.socialcalendar.interfaceAdapters.controllers.AddFriendController;
-import uk.co.socialcalendar.useCases.FriendFacadeImpl;
+import uk.co.socialcalendar.interfaceAdapters.controllers.FriendCommonModel;
+import uk.co.socialcalendar.interfaceAdapters.utilities.SessionAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.*;
 
 @Controller
 public class AddFriendControllerTest {
+    public static final String FRIEND_VIEW = "friend";
+    public static final String USER_ID = "userId";
     AddFriendController controller;
-    FriendFacadeImpl mockFriendFacade;
     ModelAndView mav;
+    SessionAttributes sessionAttributes;
+    FriendCommonModel mockFriendCommonModel;
     Model model;
-
     HttpServletRequest mockHttpServletRequest;
     HttpServletResponse mockHttpServletResponse;
     HttpSession mockSession;
-    public static final String USER_ID = "userId";
-    public static final String FRIENDS_PAGE_SECTION = "friends";
-
+    User user;
 
     @Before
     public void setup(){
         controller = new AddFriendController();
-        mockFriendFacade = mock(FriendFacadeImpl.class);
-        controller.setFriendFacade(mockFriendFacade);
+        sessionAttributes = new SessionAttributes();
+        mockFriendCommonModel = mock(FriendCommonModel.class);
+        controller.setSessionAttributes(sessionAttributes);
+        controller.setFriendCommonModel(mockFriendCommonModel);
         setupHttpSessions();
     }
 
@@ -46,21 +50,51 @@ public class AddFriendControllerTest {
         mockHttpServletResponse = mock(HttpServletResponse.class);
         mockSession = mock(HttpSession.class);
         when(mockHttpServletRequest.getSession()).thenReturn(mockSession);
-        when(mockSession.getAttribute("USER_NAME")).thenReturn(USER_ID);
+        when(mockSession.getAttribute("USER_ID")).thenReturn(USER_ID);
 
+    }
+
+
+    @Test
+    public void addFriendRendersFriendView(){
+        createExpectedModelAndView();
+
+        mav = controller.addFriend(model, mockHttpServletRequest, mockHttpServletResponse);
+        assertEquals(FRIEND_VIEW,mav.getViewName());
     }
 
     @Test
-    public void addFriendPageShouldSetSectionAsFriends(){
+    public void populateSectionAttribute(){
+        createExpectedModelAndView();
+
         mav = controller.addFriend(model, mockHttpServletRequest, mockHttpServletResponse);
-        assertEquals(mav.getModelMap().get("section"), FRIENDS_PAGE_SECTION);
+        assertNotNull(mav.getModelMap().get("section"));
+    }
+
+    private ModelAndView createExpectedModelAndView() {
+        ModelAndView expectedMav = new ModelAndView("friend");
+        expectedMav.addObject("section", "");
+        expectedMav.addObject("newFriend","");
+        expectedMav.addObject("friendList","");
+        expectedMav.addObject("userName","");
+        expectedMav.addObject("friendRequests","");
+        expectedMav.addObject("isAuthenticated","");
+        expectedMav.addObject("oauthToken","");
+        expectedMav.addObject("userFacebookId","");
+        when(mockFriendCommonModel.getCommonModelAttributes(anyString())).thenReturn(expectedMav);
+        return expectedMav;
     }
 
     @Test
-    public void addFriendPageShouldShowEmptyFriendObject(){
+    public void allModelAttributesArePopulated(){
+        createExpectedModelAndView();
         mav = controller.addFriend(model, mockHttpServletRequest, mockHttpServletResponse);
-        Friend expectedFriend = new Friend();
-        assertEquals(mav.getModelMap().get("friend"), expectedFriend);
+        assertNotNull(mav.getModelMap().get("newFriend"));
+        assertNotNull(mav.getModelMap().get("friendList"));
+        assertNotNull(mav.getModelMap().get("userName"));
+        assertNotNull(mav.getModelMap().get("friendRequests"));
+        assertNotNull(mav.getModelMap().get("isAuthenticated"));
+        assertNotNull(mav.getModelMap().get("oauthToken"));
+        assertNotNull(mav.getModelMap().get("userFacebookId"));
     }
-
 }

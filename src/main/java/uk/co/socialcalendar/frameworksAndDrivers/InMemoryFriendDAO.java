@@ -8,10 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InMemoryFriendDAO implements FriendDAO{
-	private static final String BEFRIENDED1 = "befriendedEmail1";
-	private static final String BEFRIENDED2 = "befriendedEmail2";
-	private static final String REQUESTER1 = "userEmail1";
-	private static final String REQUESTER2 = "userEmail2";
+	private static final String EMAIL1 = "userEmail1";
+	private static final String EMAIL2 = "userEmail2";
+	private static final String EMAIL3 = "userEmail3";
+	private static final String EMAIL4 = "userEmail4";
+	private static final String EMAIL5 = "userEmail5";
 
 	List<Friend> listOfSavedFriends = new ArrayList<Friend>();
 	public InMemoryFriendDAO(){
@@ -136,9 +137,10 @@ public class InMemoryFriendDAO implements FriendDAO{
 	}
 
 	public void populate(){
-		save(createFriend(new Friend(REQUESTER1, BEFRIENDED1, FriendStatus.ACCEPTED), 1));
-		save(createFriend(new Friend(REQUESTER2, BEFRIENDED2, FriendStatus.ACCEPTED), 2));
-		save(createFriend(new Friend(REQUESTER2, REQUESTER1, FriendStatus.ACCEPTED), 3));
+		save(createFriend(new Friend(EMAIL1, EMAIL3, FriendStatus.ACCEPTED), 1));
+		save(createFriend(new Friend(EMAIL4, EMAIL2, FriendStatus.ACCEPTED), 2));
+		save(createFriend(new Friend(EMAIL4, EMAIL1, FriendStatus.ACCEPTED), 3));
+		save(createFriend(new Friend(EMAIL5, EMAIL1, FriendStatus.PENDING), 4));
 		System.out.println("populating friend in memory database with " + listOfSavedFriends.size() + " friends");
 		for (Friend f: listOfSavedFriends){
 			System.out.println(f.getFriendId());
