@@ -27,7 +27,8 @@ public class FriendController{
 	public ModelAndView friendPage(Model m,
 								   HttpServletRequest request, HttpServletResponse response) {
 		String loggedInUser = sessionAttributes.getLoggedInUserId(request);
-		ModelAndView mav = friendCommonModel.getCommonModelAttributes(loggedInUser);
+		ModelAndView mav = new ModelAndView("friend");
+		mav.addAllObjects(friendCommonModel.getCommonModelAttributes(loggedInUser));
 		return mav;
 	}
 

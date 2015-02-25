@@ -169,15 +169,15 @@ public class FriendCommonModelTest {
     public void returnsAllAttributes(){
         Map<String, Object> actualModelMap = createAuthenticationModel();
         when(mockAuthenticationFacade.getAuthenticationAttrbutes()).thenReturn(actualModelMap);
-        mav = friendCommonModel.getCommonModelAttributes(USER_ID);
-        assertNotNull(mav.getModelMap().get("userName"));
-        assertNotNull(mav.getModelMap().get("friendList"));
-        assertNotNull(mav.getModelMap().get("friendRequests"));
-        assertNotNull(mav.getModelMap().get("isAuthenticated"));
-        assertNotNull(mav.getModelMap().get("oauthToken"));
-        assertNotNull(mav.getModelMap().get("userFacebookId"));
-        assertNotNull(mav.getModelMap().get("newFriend"));
-        assertNotNull(mav.getModelMap().get("section"));
-        assertEquals(mav.getViewName(),FRIEND_VIEW);
+
+        Map<String, Object> actualMap = friendCommonModel.getCommonModelAttributes(USER_ID);
+        assertNotNull(actualMap.get("userName"));
+        assertNotNull(actualMap.get("friendList"));
+        assertNotNull(actualMap.get("friendRequests"));
+        assertNotNull(actualMap.get("isAuthenticated"));
+        assertNotNull(actualMap.get("oauthToken"));
+        assertNotNull(actualMap.get("userFacebookId"));
+        assertNotNull(actualMap.get("newFriend"));
+        assertNotNull(actualMap.get("section"));
     }
 }

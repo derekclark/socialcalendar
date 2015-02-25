@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -76,31 +78,26 @@ public class FriendRequestControllerTest {
 
     }
 
-    private ModelAndView createExpectedModelAndView() {
-        ModelAndView expectedMav = new ModelAndView("friend");
-        expectedMav.addObject("section","friends");
-        expectedMav.addObject("newFriend","");
-        expectedMav.addObject("friendList","");
-        expectedMav.addObject("userName","");
-        expectedMav.addObject("friendRequests","");
-        expectedMav.addObject("isAuthenticated","");
-        expectedMav.addObject("oauthToken","");
-        expectedMav.addObject("userFacebookId","");
-        when(mockFriendCommonModel.getCommonModelAttributes(anyString())).thenReturn(expectedMav);
-        return expectedMav;
+    private Map<String, Object> createExpectedModelAndView() {
+        Map<String, Object> expectedMap = new HashMap<String, Object>();
+        expectedMap.put("section", "");
+        expectedMap.put("newFriend", "");
+        expectedMap.put("friendList", "");
+        expectedMap.put("userName", "");
+        expectedMap.put("friendRequests", "");
+        expectedMap.put("isAuthenticated", "");
+        expectedMap.put("oauthToken", "");
+        expectedMap.put("userFacebookId", "");
+        when(mockFriendCommonModel.getCommonModelAttributes(anyString())).thenReturn(expectedMap);
+        return expectedMap;
     }
+
 
 
     @Test
     public void acceptingFriendRequestShouldShowAcceptedConfirmationMessage() throws ServletException, UnsupportedEncodingException {
         mav = controller.acceptFriendRequest(friend.getFriendId(), model, mockHttpServletRequest, mockHttpServletResponse);
         assertEquals(mav.getModelMap().get("message"), "You have just accepted a friend request from " + friend.getRequesterEmail());
-    }
-
-    @Test
-    public void acceptingFriendRequestShouldSetSectionAsFriends() throws ServletException, UnsupportedEncodingException {
-        mav = controller.acceptFriendRequest(friend.getFriendId(), model, mockHttpServletRequest, mockHttpServletResponse);
-        assertEquals(mav.getModelMap().get("section"), FRIENDS_PAGE_SECTION);
     }
 
     @Test
@@ -113,12 +110,6 @@ public class FriendRequestControllerTest {
     public void decliningFriendRequestShouldShowDeclinedConfirmationMessage() throws ServletException, UnsupportedEncodingException {
         mav = controller.declineFriendRequest(friend.getFriendId(), model, mockHttpServletRequest, mockHttpServletResponse);
         assertEquals(mav.getModelMap().get("message"), "You have just declined a friend request from " + friend.getRequesterEmail());
-    }
-
-    @Test
-    public void decliningFriendRequestShouldSetSectionAsFriends() throws ServletException, UnsupportedEncodingException {
-        mav = controller.declineFriendRequest(friend.getFriendId(), model, mockHttpServletRequest, mockHttpServletResponse);
-        assertEquals(mav.getModelMap().get("section"), FRIENDS_PAGE_SECTION);
     }
 
     @Test
@@ -196,6 +187,7 @@ public class FriendRequestControllerTest {
         assertNotNull(mav.getModelMap().get("isAuthenticated"));
         assertNotNull(mav.getModelMap().get("oauthToken"));
         assertNotNull(mav.getModelMap().get("userFacebookId"));
+        assertNotNull(mav.getModelMap().get("section"));
     }
 
     @Test
@@ -209,6 +201,7 @@ public class FriendRequestControllerTest {
         assertNotNull(mav.getModelMap().get("isAuthenticated"));
         assertNotNull(mav.getModelMap().get("oauthToken"));
         assertNotNull(mav.getModelMap().get("userFacebookId"));
+        assertNotNull(mav.getModelMap().get("section"));
     }
 
 

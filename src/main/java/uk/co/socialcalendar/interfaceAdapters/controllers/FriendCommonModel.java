@@ -1,6 +1,5 @@
 package uk.co.socialcalendar.interfaceAdapters.controllers;
 
-import org.springframework.web.servlet.ModelAndView;
 import uk.co.socialcalendar.entities.Friend;
 import uk.co.socialcalendar.interfaceAdapters.models.FriendModelFacade;
 import uk.co.socialcalendar.interfaceAdapters.utilities.AuthenticationFacade;
@@ -32,14 +31,14 @@ public class FriendCommonModel {
         this.userFacade = userFacade;
     }
 
-    public ModelAndView getCommonModelAttributes(String loggedInUser) {
-        ModelAndView mav = new ModelAndView("friend");
-        mav.addAllObjects(getFriendList(loggedInUser));
-        mav.addAllObjects(getFriendRequests(loggedInUser));
-        mav.addAllObjects(getSection());
-        mav.addAllObjects(getUserName(loggedInUser));
-        mav.addAllObjects(authenticationFacade.getAuthenticationAttrbutes());
-        mav.addAllObjects(getNewFriend());
+    public Map<String, Object> getCommonModelAttributes(String loggedInUser) {
+        Map<String, Object> mav = new HashMap<String, Object>();
+        mav.putAll(getFriendList(loggedInUser));
+        mav.putAll(getFriendRequests(loggedInUser));
+        mav.putAll(getSection());
+        mav.putAll(getUserName(loggedInUser));
+        mav.putAll(authenticationFacade.getAuthenticationAttrbutes());
+        mav.putAll(getNewFriend());
         return mav;
     }
 

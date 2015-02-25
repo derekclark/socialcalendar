@@ -47,7 +47,8 @@ public class FriendRequestController {
              HttpServletRequest request, HttpServletResponse response) throws ServletException, UnsupportedEncodingException {
 
         String loggedInUser = sessionAttributes.getLoggedInUserId(request);
-        ModelAndView mav = friendCommonModel.getCommonModelAttributes(loggedInUser);
+        ModelAndView mav = new ModelAndView("friend");
+        mav.addAllObjects(friendCommonModel.getCommonModelAttributes(loggedInUser));
 
         Friend friend = friendFacade.getFriend(friendId);
         String requester=friend.getRequesterEmail();
@@ -64,7 +65,8 @@ public class FriendRequestController {
              Model m,
              HttpServletRequest request, HttpServletResponse response) throws ServletException, UnsupportedEncodingException {
         String loggedInUser = sessionAttributes.getLoggedInUserId(request);
-        ModelAndView mav = friendCommonModel.getCommonModelAttributes(loggedInUser);
+        ModelAndView mav = new ModelAndView("friend");
+        mav.addAllObjects(friendCommonModel.getCommonModelAttributes(loggedInUser));
 
         Friend friend = friendFacade.getFriend(friendId);
         String requester=friend.getRequesterEmail();
