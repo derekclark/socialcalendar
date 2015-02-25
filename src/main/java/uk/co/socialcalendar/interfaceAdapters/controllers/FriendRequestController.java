@@ -11,7 +11,6 @@ import uk.co.socialcalendar.entities.FriendStatus;
 import uk.co.socialcalendar.interfaceAdapters.utilities.SessionAttributes;
 import uk.co.socialcalendar.interfaceAdapters.utilities.UserNotification;
 import uk.co.socialcalendar.useCases.FriendFacade;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -45,17 +44,14 @@ public class FriendRequestController {
             (@RequestParam(value="id", required=false,defaultValue="") int friendId,
              Model m,
              HttpServletRequest request, HttpServletResponse response) throws ServletException, UnsupportedEncodingException {
-
         String loggedInUser = sessionAttributes.getLoggedInUserId(request);
-        ModelAndView mav = new ModelAndView("friend");
-        mav.addAllObjects(friendCommonModel.getCommonModelAttributes(loggedInUser));
+        ModelAndView mav = getModelAndView(loggedInUser);
 
         Friend friend = friendFacade.getFriend(friendId);
-        String requester=friend.getRequesterEmail();
-        mav.addObject("message", "You have just accepted a friend request from " + requester);
+        notifyUser(friend);
+        mav.addObject("message", "You have just accepted a friend request from " + friend.getRequesterEmail());
 
         friendFacade.acceptFriendRequest(friendId);
-        notifyUser(friend);
         return mav;
     }
 
@@ -65,15 +61,19 @@ public class FriendRequestController {
              Model m,
              HttpServletRequest request, HttpServletResponse response) throws ServletException, UnsupportedEncodingException {
         String loggedInUser = sessionAttributes.getLoggedInUserId(request);
-        ModelAndView mav = new ModelAndView("friend");
-        mav.addAllObjects(friendCommonModel.getCommonModelAttributes(loggedInUser));
+        ModelAndView mav = getModelAndView(loggedInUser);
 
         Friend friend = friendFacade.getFriend(friendId);
-        String requester=friend.getRequesterEmail();
-        mav.addObject("message", "You have just declined a friend request from " + requester);
+        notifyUser(friend);
+        mav.addObject("message", "You have just declined a friend request from " + friend.getRequesterEmail());
 
         friendFacade.declineFriendRequest(friendId);
-        notifyUser(friend);
+        return mav;
+    }
+
+    private ModelAndView getModelAndView(String loggedInUser) {
+        ModelAndView mav = new ModelAndView("friend");
+        mav.addAllObjects(friendCommonModel.getCommonModelAttributes(loggedInUser));
         return mav;
     }
 
@@ -81,7 +81,6 @@ public class FriendRequestController {
     public boolean notifyUser(Friend friend) {
         String senderEmail = friend.getBeFriendedEmail();
         String recipientEmail = friend.getRequesterEmail();
-
         String message="", subject="";
 
         if (friend.getStatus() == FriendStatus.ACCEPTED) {
