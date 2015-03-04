@@ -20,9 +20,9 @@ public class Friend {
 		this.status = FriendStatus.UNKNOWN;
 	}
 	
-	public Friend(String requesterEmail, String requestedName, FriendStatus status){
+	public Friend(String requesterEmail, String beFriendedEmail, FriendStatus status){
 		this.requesterEmail = requesterEmail;
-		this.beFriendedEmail = requestedName;
+		this.beFriendedEmail = beFriendedEmail;
 		this.status = status;
 	}
 

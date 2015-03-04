@@ -1,81 +1,94 @@
-//package uk.co.socialcalendar.frameworksAndDrivers;
-//
-//import uk.co.socialcalendar.entities.Friend;
-//import uk.co.socialcalendar.entities.FriendStatus;
-//import uk.co.socialcalendar.useCases.FriendDAO;
-//
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//public class FriendDAOHibernateImpl implements FriendDAO {
-//
-//	public FriendDAOHibernateImpl(){
-//
-//	}
-//
-//	public Object setQueryStringOwnersAcceptedFriends(String ownerEmail) {
-//		return "select friendEmail from Friend "
-//				+ "where ownerEmail = " + ownerEmail + " and status = " + FriendStatus.ACCEPTED;
-//	}
-//
-//	public Object setQueryStringOwneesAcceptedFriends(String friendEmail) {
-//		return "select ownerEmail from Friends "
-//				+ "where friendEmail = " + friendEmail + " and status = " + FriendStatus.ACCEPTED;
-//	}
-//
-//	@Override
-//	public boolean save(Friend friend) {
-//		return true;
-//	}
-//
-//	public boolean isNotSet(String value){
-//		return (value == null || value.isEmpty());
-//	}
-//
-//	@Override
-//	public Friend read(Friend friendToFind) {
-//		return null;
-//	}
-//
-//	@Override
-//	public boolean updateStatus(Friend friend) {
-//		return true;
-//	}
-//
-//	@Override
-//	public List<Friend> getListOfConfirmedFriendsByRequester(String friendRequesterName) {
-//
-//		List<Friend> friendList = new ArrayList<Friend>();
-//		return friendList;
-//	}
-//
-//	@Override
-//	public List<Friend> getListOfConfirmedFriendsByBeFriended(String friendRequesteeName) {
-//
-//		List<Friend> friendList = new ArrayList<Friend>();
-//		return friendList;
-//	}
-//
-//	@Override
-//	public List<Friend> getListOfPendingFriendsByRequester(String friendRequesterName) {
-//		List<Friend> friendList = new ArrayList<Friend>();
-//		return friendList;
-//	}
-//
-//	@Override
-//	public boolean acceptFriend(Friend friendOne) {
-//		return true;
-//	}
-//
-//	@Override
-//	public boolean declineFriend(Friend friendOne) {
-//		return true;
-//	}
-//
-//	@Override
-//	public List<Friend> getFriendRequests(String user) {
-//		return null;
-//	}
-//
-//
-//}
+package uk.co.socialcalendar.frameworksAndDrivers;
+
+import org.hibernate.*;
+import uk.co.socialcalendar.entities.Friend;
+import uk.co.socialcalendar.entities.FriendStatus;
+import uk.co.socialcalendar.interfaceAdapters.models.FriendValidator;
+import uk.co.socialcalendar.useCases.FriendDAO;
+
+import java.util.List;
+
+public class FriendDAOHibernateImpl implements FriendDAO {
+
+    SessionFactory sessionFactory;
+
+    FriendValidator friendValidator;
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+        friendValidator = new FriendValidator();
+    }
+
+    public FriendDAOHibernateImpl(){
+
+	}
+
+    @Override
+    public boolean save(Friend friend) {
+        if (!canUpdate(friend)){
+            return false;
+        }
+
+        Session session = sessionFactory.getCurrentSession();
+        session.save(friend);
+        return true;
+    }
+
+    public boolean canUpdate(Friend friend) {
+        if (friendValidator.validBefriendedEmail(friend) &&
+                friendValidator.validId(friend) &&
+                friendValidator.validRequesterEmail(friend) &&
+                friendValidator.validStatus(friend)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean validFriendId(Friend friend){
+        if (friend.getFriendId() == 0){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    @Override
+    public Friend read(int friendId) {
+        return null;
+    }
+
+    @Override
+    public boolean updateStatus(int friendId, FriendStatus status) {
+        return false;
+    }
+
+    @Override
+    public List<Friend> getListOfConfirmedFriendsByRequester(String friendRequesterEmail) {
+        return null;
+    }
+
+    @Override
+    public List<Friend> getListOfConfirmedFriendsByBeFriended(String friendBeFriendedEmail) {
+        return null;
+    }
+
+    @Override
+    public List<Friend> getListOfPendingFriendsByRequester(String friendRequesterName) {
+        return null;
+    }
+
+    @Override
+    public boolean acceptFriend(int friendId) {
+        return false;
+    }
+
+    @Override
+    public boolean declineFriend(int friendId) {
+        return false;
+    }
+
+    @Override
+    public List<Friend> getFriendRequests(String user) {
+        return null;
+    }
+}
