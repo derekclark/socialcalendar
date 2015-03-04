@@ -1,6 +1,7 @@
 package uk.co.socialcalendar.frameworksAndDrivers;
 
-import org.hibernate.*;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import uk.co.socialcalendar.entities.Friend;
 import uk.co.socialcalendar.entities.FriendStatus;
 import uk.co.socialcalendar.interfaceAdapters.models.FriendValidator;
@@ -8,14 +9,22 @@ import uk.co.socialcalendar.useCases.FriendDAO;
 
 import java.util.List;
 
+import static uk.co.socialcalendar.entities.FriendStatus.ACCEPTED;
+import static uk.co.socialcalendar.entities.FriendStatus.DECLINED;
+
 public class FriendDAOHibernateImpl implements FriendDAO {
 
     SessionFactory sessionFactory;
 
+
     FriendValidator friendValidator;
+
+    public void setFriendValidator(FriendValidator friendValidator) {
+        this.friendValidator = friendValidator;
+    }
+
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
-        friendValidator = new FriendValidator();
     }
 
     public FriendDAOHibernateImpl(){
@@ -44,17 +53,9 @@ public class FriendDAOHibernateImpl implements FriendDAO {
         }
     }
 
-    public boolean validFriendId(Friend friend){
-        if (friend.getFriendId() == 0){
-            return false;
-        } else {
-            return true;
-        }
-    }
-
     @Override
     public Friend read(int friendId) {
-        return null;
+        return (Friend) sessionFactory.getCurrentSession().get(Friend.class, friendId);
     }
 
     @Override
@@ -79,12 +80,20 @@ public class FriendDAOHibernateImpl implements FriendDAO {
 
     @Override
     public boolean acceptFriend(int friendId) {
-        return false;
+        Friend friend = read(friendId);
+        friend.setStatus(ACCEPTED);
+        sessionFactory.getCurrentSession().update(friend);
+
+        return true;
     }
 
     @Override
     public boolean declineFriend(int friendId) {
-        return false;
+        Friend friend = read(friendId);
+        friend.setStatus(DECLINED);
+        sessionFactory.getCurrentSession().update(friend);
+
+        return true;
     }
 
     @Override

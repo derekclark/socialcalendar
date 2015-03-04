@@ -4,14 +4,17 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import uk.co.socialcalendar.entities.Friend;
 import uk.co.socialcalendar.frameworksAndDrivers.FriendDAOHibernateImpl;
+import uk.co.socialcalendar.interfaceAdapters.models.FriendValidator;
 
+import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
-import static uk.co.socialcalendar.entities.FriendStatus.ACCEPTED;
-import static uk.co.socialcalendar.entities.FriendStatus.UNKNOWN;
+import static uk.co.socialcalendar.entities.FriendStatus.*;
+
 
 public class FriendDAOHibernateImplTest {
 
@@ -20,6 +23,7 @@ public class FriendDAOHibernateImplTest {
     FriendDAOHibernateImpl friendDAOImpl;
     Friend friend;
     Friend emptyFriend;
+    FriendValidator friendValidator;
 	private final static String REQUESTER_EMAIL = "requesterEmail";
     private final static String BEFRIENDED_EMAIL = "befriendedEmail";
 
@@ -32,9 +36,11 @@ public class FriendDAOHibernateImplTest {
         friend = new Friend(REQUESTER_EMAIL, BEFRIENDED_EMAIL, ACCEPTED);
         friend.setFriendId(FRIEND_ID);
         emptyFriend = new Friend();
+        friendValidator = new FriendValidator();
 
         mockSessionFactory = mock(SessionFactory.class);
         friendDAOImpl.setSessionFactory(mockSessionFactory);
+        friendDAOImpl.setFriendValidator(friendValidator);
         mockSession = mock(Session.class);
         setupMocks();
 	}
@@ -105,7 +111,60 @@ public class FriendDAOHibernateImplTest {
         emptyFriend.setFriendId(FRIEND_ID);
         assertFalse(friendDAOImpl.save(emptyFriend));
     }
-    
+
+    @Test
+    public void willReadFriend(){
+        friend = new Friend(REQUESTER_EMAIL, BEFRIENDED_EMAIL, ACCEPTED);
+        friend.setFriendId(FRIEND_ID);
+
+        when(mockSession.get(Friend.class, FRIEND_ID)).thenReturn(friend);
+        assertEquals(friend, friendDAOImpl.read(FRIEND_ID));
+    }
+
+    @Test
+    public void willAcceptFriend(){
+        friend = new Friend(REQUESTER_EMAIL, BEFRIENDED_EMAIL, PENDING);
+        friend.setFriendId(FRIEND_ID);
+        when(mockSession.get(Friend.class, FRIEND_ID)).thenReturn(friend);
+
+        assertTrue(friendDAOImpl.acceptFriend(FRIEND_ID));
+    }
+
+    @Test
+    public void acceptFriendSetsStatusToAccepted(){
+        friend = new Friend(REQUESTER_EMAIL, BEFRIENDED_EMAIL, PENDING);
+        friend.setFriendId(FRIEND_ID);
+        when(mockSession.get(Friend.class, FRIEND_ID)).thenReturn(friend);
+
+        friendDAOImpl.acceptFriend(FRIEND_ID);
+
+        ArgumentCaptor<Friend> argument = ArgumentCaptor.forClass(Friend.class);
+        verify(mockSessionFactory.getCurrentSession()).update(argument.capture());
+        assertEquals(ACCEPTED, argument.getValue().getStatus());
+    }
+
+    @Test
+    public void willDeclineFriend(){
+        friend = new Friend(REQUESTER_EMAIL, BEFRIENDED_EMAIL, PENDING);
+        friend.setFriendId(FRIEND_ID);
+        when(mockSession.get(Friend.class, FRIEND_ID)).thenReturn(friend);
+
+        assertTrue(friendDAOImpl.declineFriend(FRIEND_ID));
+    }
+
+    @Test
+    public void declineFriendSetsStatusToDeclined(){
+        friend = new Friend(REQUESTER_EMAIL, BEFRIENDED_EMAIL, PENDING);
+        friend.setFriendId(FRIEND_ID);
+        when(mockSession.get(Friend.class, FRIEND_ID)).thenReturn(friend);
+
+        friendDAOImpl.declineFriend(FRIEND_ID);
+
+        ArgumentCaptor<Friend> argument = ArgumentCaptor.forClass(Friend.class);
+        verify(mockSessionFactory.getCurrentSession()).update(argument.capture());
+        assertEquals(DECLINED, argument.getValue().getStatus());
+    }
+
 //	@Test
 //	public void testSettingQueryStringForGettingAnOwnersAcceptedFriends(){
 //		String expectedString = "select friendEmail from Friend "
