@@ -93,7 +93,7 @@ public class FriendModelFacadeTest {
 
     private void create1FriendWithFacebookId() {
         friendList = createAListOf1Friend();
-        when(mockFriendFacade.getConfirmedFriends(USER_EMAIL1)).thenReturn(friendList);
+        when(mockFriendFacade.getMyAcceptedFriends(USER_EMAIL1)).thenReturn(friendList);
         create1UserWithFacebookId();
         when(mockUserFacade.getUser(BEFRIENDED_EMAIL1)).thenReturn(user1);
         when(mockUserFacade.getUser(BEFRIENDED_EMAIL2)).thenReturn(user2);
@@ -101,7 +101,7 @@ public class FriendModelFacadeTest {
 
     private void create1FriendWithNoFacebookId() {
         friendList = createAListOf1Friend();
-        when(mockFriendFacade.getConfirmedFriends(USER_EMAIL1)).thenReturn(friendList);
+        when(mockFriendFacade.getMyAcceptedFriends(USER_EMAIL1)).thenReturn(friendList);
         create1UserWithNoFacebookId();
         when(mockUserFacade.getUser(BEFRIENDED_EMAIL1)).thenReturn(user1);
         when(mockUserFacade.getUser(BEFRIENDED_EMAIL2)).thenReturn(user2);
@@ -124,7 +124,7 @@ public class FriendModelFacadeTest {
 
     private void create2Friends() {
         friendList = createAListOf2Friends();
-        when(mockFriendFacade.getConfirmedFriends(USER_EMAIL1)).thenReturn(friendList);
+        when(mockFriendFacade.getMyAcceptedFriends(USER_EMAIL1)).thenReturn(friendList);
         create2Users();
         when(mockUserFacade.getUser(BEFRIENDED_EMAIL1)).thenReturn(user1);
         when(mockUserFacade.getUser(BEFRIENDED_EMAIL2)).thenReturn(user2);

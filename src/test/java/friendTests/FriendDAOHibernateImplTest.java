@@ -1,5 +1,6 @@
 package friendTests;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Before;
@@ -29,6 +30,7 @@ public class FriendDAOHibernateImplTest {
 
     SessionFactory mockSessionFactory;
     Session mockSession;
+    Query mockQuery;
     
 	@Before
 	public void setup(){
@@ -42,6 +44,7 @@ public class FriendDAOHibernateImplTest {
         friendDAOImpl.setSessionFactory(mockSessionFactory);
         friendDAOImpl.setFriendValidator(friendValidator);
         mockSession = mock(Session.class);
+        mockQuery = mock(Query.class);
         setupMocks();
 	}
 
@@ -122,56 +125,52 @@ public class FriendDAOHibernateImplTest {
     }
 
     @Test
-    public void willAcceptFriend(){
+    public void canUpdateStatus(){
         friend = new Friend(REQUESTER_EMAIL, BEFRIENDED_EMAIL, PENDING);
         friend.setFriendId(FRIEND_ID);
         when(mockSession.get(Friend.class, FRIEND_ID)).thenReturn(friend);
 
-        assertTrue(friendDAOImpl.acceptFriend(FRIEND_ID));
-    }
-
-    @Test
-    public void acceptFriendSetsStatusToAccepted(){
-        friend = new Friend(REQUESTER_EMAIL, BEFRIENDED_EMAIL, PENDING);
-        friend.setFriendId(FRIEND_ID);
-        when(mockSession.get(Friend.class, FRIEND_ID)).thenReturn(friend);
-
-        friendDAOImpl.acceptFriend(FRIEND_ID);
-
-        ArgumentCaptor<Friend> argument = ArgumentCaptor.forClass(Friend.class);
-        verify(mockSessionFactory.getCurrentSession()).update(argument.capture());
-        assertEquals(ACCEPTED, argument.getValue().getStatus());
-    }
-
-    @Test
-    public void willDeclineFriend(){
-        friend = new Friend(REQUESTER_EMAIL, BEFRIENDED_EMAIL, PENDING);
-        friend.setFriendId(FRIEND_ID);
-        when(mockSession.get(Friend.class, FRIEND_ID)).thenReturn(friend);
-
-        assertTrue(friendDAOImpl.declineFriend(FRIEND_ID));
-    }
-
-    @Test
-    public void declineFriendSetsStatusToDeclined(){
-        friend = new Friend(REQUESTER_EMAIL, BEFRIENDED_EMAIL, PENDING);
-        friend.setFriendId(FRIEND_ID);
-        when(mockSession.get(Friend.class, FRIEND_ID)).thenReturn(friend);
-
-        friendDAOImpl.declineFriend(FRIEND_ID);
+        friendDAOImpl.updateStatus(FRIEND_ID, DECLINED);
 
         ArgumentCaptor<Friend> argument = ArgumentCaptor.forClass(Friend.class);
         verify(mockSessionFactory.getCurrentSession()).update(argument.capture());
         assertEquals(DECLINED, argument.getValue().getStatus());
     }
 
-//	@Test
-//	public void testSettingQueryStringForGettingAnOwnersAcceptedFriends(){
-//		String expectedString = "select friendEmail from Friend "
-//				+ "where ownerEmail = " + REQUESTER_EMAIL + " and status = " + FriendStatus.ACCEPTED;
-//		assertEquals(expectedString, friendDAOImpl.setQueryStringOwnersAcceptedFriends(REQUESTER_EMAIL) );
-//	}
-//
+
+	@Test
+	public void testSettingQueryStringForGettingMyAcceptedFriendsWhereIAmOwner(){
+		String expectedString = "select beFriendedEmail from Friend "
+				+ "where requesterEmail = " + REQUESTER_EMAIL + " and status = " + ACCEPTED;
+		assertEquals(expectedString, friendDAOImpl.queryStringForMyAcceptedFriendsWhereIAmOwner(REQUESTER_EMAIL) );
+	}
+
+    @Test
+    public void testSettingQueryStringForGettingMyAcceptedFriendsWhereIAmNotOwner(){
+        String expectedString = "select requesterEmail from Friend "
+                + "where beFriendedEmail = " + REQUESTER_EMAIL + " and status = " + ACCEPTED;
+        assertEquals(expectedString, friendDAOImpl.queryStringForMyAcceptedFriendsWhereIAmNotOwner(REQUESTER_EMAIL) );
+    }
+
+    @Test
+    public void getListOfMyAcceptedFriends(){
+        when(mockSessionFactory.getCurrentSession().createQuery(anyString())).thenReturn(mockQuery);
+        friendDAOImpl.getMyAcceptedFriends(REQUESTER_EMAIL);
+
+        String expectedQueryStringGetMyFriendsWhereIAmOwner = "select beFriendedEmail from Friend "
+                + "where requesterEmail = " + REQUESTER_EMAIL + " and status = ACCEPTED";
+
+        String expectedQueryStringGetMyFriendsWhereIAmNotOwner = "select requesterEmail from Friend "
+                + "where beFriendedEmail = " + REQUESTER_EMAIL + " and status = ACCEPTED";
+
+        verify(mockSessionFactory.getCurrentSession(), times(1)).createQuery(expectedQueryStringGetMyFriendsWhereIAmOwner);
+        verify(mockSessionFactory.getCurrentSession(), times(1)).createQuery(expectedQueryStringGetMyFriendsWhereIAmNotOwner);
+    }
+
+    @Test
+    public void canUpdateStatusToAccepted(){
+
+    }
 //	@Test
 //	public void testSettingQueryStringForGettingAnOwneesAcceptedFriends(){
 //		String expectedString = "select ownerEmail from Friends "

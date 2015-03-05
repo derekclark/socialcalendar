@@ -123,10 +123,9 @@ public class FriendDAOTest {
 	}
 
 	@Test
-	public void returnSeveralConfirmedFriendsWhereUserIsFriendRequesterAndRequestee(){
+	public void returnMyAcceptedFriends(){
 		saveFriends();
-		List<Friend> actualFriendList = friendDAO.getListOfConfirmedFriendsByRequester(FRIEND_NAME1);
-		actualFriendList.addAll(friendDAO.getListOfConfirmedFriendsByBeFriended(FRIEND_NAME1));
+		List<Friend> actualFriendList = friendDAO.getMyAcceptedFriends(FRIEND_NAME1);
 		assertEquals(friend1.getFriendId(), actualFriendList.get(0).getFriendId());
 		assertEquals(friend2.getFriendId(), actualFriendList.get(1).getFriendId());
 		assertEquals(friend6.getFriendId(), actualFriendList.get(2).getFriendId());
@@ -134,9 +133,9 @@ public class FriendDAOTest {
 	}
 	
 	@Test
-	public void returnNoConfirmedFriends(){
+	public void returnNoAcceptedFriends(){
 		saveFriends();
-		List<Friend> actualFriendList = friendDAO.getListOfConfirmedFriendsByRequester(FRIEND_REQUESTER_NOT_PRESENT);
+		List<Friend> actualFriendList = friendDAO.getMyAcceptedFriends(FRIEND_REQUESTER_NOT_PRESENT);
 		assertEquals(0, actualFriendList.size());
 	}
 	
@@ -157,26 +156,26 @@ public class FriendDAOTest {
 	@Test
 	public void shouldAcceptFriendRequest(){
 		saveFriends();
-		assertTrue(friendDAO.acceptFriend(pendingFriendRequest.getFriendId()));
+		assertTrue(friendDAO.updateStatus(pendingFriendRequest.getFriendId(), FriendStatus.ACCEPTED));
 	}
 
 	@Test
 	public void acceptingFriendRequestShouldSetFriendStatusToAccepted(){
 		saveFriends();
-		friendDAO.acceptFriend(pendingFriendRequest.getFriendId());
+		friendDAO.updateStatus(pendingFriendRequest.getFriendId(), FriendStatus.ACCEPTED);
 		assertEquals(FriendStatus.ACCEPTED,pendingFriendRequest.getStatus());
 	}
 
 	@Test
 	public void shouldDeclineFriendRequest(){
 		saveFriends();
-		assertTrue(friendDAO.declineFriend(pendingFriendRequest.getFriendId()));
+		assertTrue(friendDAO.updateStatus(pendingFriendRequest.getFriendId(), FriendStatus.DECLINED));
 	}
 
 	@Test
 	public void decliningFriendRequestShouldSetFriendStatusToDeclined(){
 		saveFriends();
-		friendDAO.declineFriend(pendingFriendRequest.getFriendId());
+		friendDAO.updateStatus(pendingFriendRequest.getFriendId(), FriendStatus.DECLINED);
 		assertEquals(FriendStatus.DECLINED,pendingFriendRequest.getStatus());
 	}
 

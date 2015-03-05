@@ -69,29 +69,24 @@ public class InMemoryFriendDAO implements FriendDAO{
 	}
 
 	@Override
-	public List<Friend> getListOfConfirmedFriendsByRequester(String requesterEmail) {
-		System.out.println("in inmemoryFriendDAO getconfirmedfriendsbyrequester for " + requesterEmail);
+	public List<Friend> getMyAcceptedFriends(String email) {
+		System.out.println("in inMemoryFriendDAO getMyAcceptedFriends for " + email);
 		for (Friend f:listOfSavedFriends){
 			System.out.println("saved friend=" + f.getRequesterEmail());
 		}
 		List<Friend> friendList = new ArrayList<Friend>();
 		for (Friend friend: listOfSavedFriends){
-			if (friend.getRequesterEmail().equals(requesterEmail) && friend.getStatus() == FriendStatus.ACCEPTED){
+			if (friend.getRequesterEmail().equals(email) && friend.getStatus() == FriendStatus.ACCEPTED){
 				friendList.add(friend);
 			}
 		}
-		return friendList;
-	}
 
-	@Override
-	public List<Friend> getListOfConfirmedFriendsByBeFriended(String beFriendedEmail) {
-
-		List<Friend> friendList = new ArrayList<Friend>();
 		for (Friend friend: listOfSavedFriends){
-			if (friend.getBeFriendedEmail().equals(beFriendedEmail) && friend.getStatus() == FriendStatus.ACCEPTED){
+			if (friend.getBeFriendedEmail().equals(email) && friend.getStatus() == FriendStatus.ACCEPTED){
 				friendList.add(friend);
 			}
 		}
+
 		return friendList;
 	}
 
@@ -105,20 +100,6 @@ public class InMemoryFriendDAO implements FriendDAO{
 		}
 
 		return friendList;
-	}
-
-	@Override
-	public boolean acceptFriend(int friendId) {
-		Friend friend=read(friendId);
-		friend.setStatus(FriendStatus.ACCEPTED);
-		return true;
-	}
-
-	@Override
-	public boolean declineFriend(int friendId) {
-		Friend friend=read(friendId);
-		friend.setStatus(FriendStatus.DECLINED);
-		return true;
 	}
 
 	@Override

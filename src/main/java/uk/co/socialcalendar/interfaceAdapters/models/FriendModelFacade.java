@@ -22,7 +22,7 @@ public class FriendModelFacade {
     }
 
     public List<FriendModel> getFriendModelList(String userEmail){
-        List<Friend> friendList = friendFacade.getConfirmedFriends(userEmail);
+        List<Friend> friendList = friendFacade.getMyAcceptedFriends(userEmail);
         List<FriendModel> friendModelList = new ArrayList<FriendModel>();
 
         for (Friend f : friendList){

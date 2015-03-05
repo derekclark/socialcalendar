@@ -107,7 +107,7 @@ public class FriendFacadeImplTest {
 	@Test
 	public void getConfirmedFriends(){
 		List<Friend> expectedFriendsList = expectedFriendList();
-		List<Friend> actualFriendList = friendFacade.getConfirmedFriends(FRIEND_NAME1);
+		List<Friend> actualFriendList = friendFacade.getMyAcceptedFriends(FRIEND_NAME1);
 
 		assertEquals(2, actualFriendList.size());
 		assertTrue(actualFriendList.contains(userFriendAccepted1));

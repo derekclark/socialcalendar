@@ -1,5 +1,6 @@
 package uk.co.socialcalendar.frameworksAndDrivers;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import uk.co.socialcalendar.entities.Friend;
@@ -9,15 +10,12 @@ import uk.co.socialcalendar.useCases.FriendDAO;
 
 import java.util.List;
 
-import static uk.co.socialcalendar.entities.FriendStatus.ACCEPTED;
-import static uk.co.socialcalendar.entities.FriendStatus.DECLINED;
-
 public class FriendDAOHibernateImpl implements FriendDAO {
-
     SessionFactory sessionFactory;
-
-
     FriendValidator friendValidator;
+
+    public FriendDAOHibernateImpl(){
+    }
 
     public void setFriendValidator(FriendValidator friendValidator) {
         this.friendValidator = friendValidator;
@@ -27,9 +25,6 @@ public class FriendDAOHibernateImpl implements FriendDAO {
         this.sessionFactory = sessionFactory;
     }
 
-    public FriendDAOHibernateImpl(){
-
-	}
 
     @Override
     public boolean save(Friend friend) {
@@ -60,17 +55,20 @@ public class FriendDAOHibernateImpl implements FriendDAO {
 
     @Override
     public boolean updateStatus(int friendId, FriendStatus status) {
-        return false;
+        Friend friend = read(friendId);
+        friend.setStatus(status);
+        sessionFactory.getCurrentSession().update(friend);
+        return true;
     }
 
     @Override
-    public List<Friend> getListOfConfirmedFriendsByRequester(String friendRequesterEmail) {
-        return null;
-    }
-
-    @Override
-    public List<Friend> getListOfConfirmedFriendsByBeFriended(String friendBeFriendedEmail) {
-        return null;
+    public List<Friend> getMyAcceptedFriends(String email) {
+        @SuppressWarnings("unchecked")
+        Query query = sessionFactory.getCurrentSession().createQuery(queryStringForMyAcceptedFriendsWhereIAmOwner(email));
+        List<Friend> returnSQLList = query.list();
+        query = sessionFactory.getCurrentSession().createQuery(queryStringForMyAcceptedFriendsWhereIAmNotOwner(email));
+        returnSQLList.addAll(query.list());
+        return returnSQLList;
     }
 
     @Override
@@ -79,25 +77,18 @@ public class FriendDAOHibernateImpl implements FriendDAO {
     }
 
     @Override
-    public boolean acceptFriend(int friendId) {
-        Friend friend = read(friendId);
-        friend.setStatus(ACCEPTED);
-        sessionFactory.getCurrentSession().update(friend);
-
-        return true;
-    }
-
-    @Override
-    public boolean declineFriend(int friendId) {
-        Friend friend = read(friendId);
-        friend.setStatus(DECLINED);
-        sessionFactory.getCurrentSession().update(friend);
-
-        return true;
-    }
-
-    @Override
     public List<Friend> getFriendRequests(String user) {
         return null;
     }
+
+    public String queryStringForMyAcceptedFriendsWhereIAmOwner(String email){
+        return "select beFriendedEmail from Friend "
+                + "where requesterEmail = " + email + " and status = ACCEPTED";
+    }
+
+    public String queryStringForMyAcceptedFriendsWhereIAmNotOwner(String email){
+        return "select requesterEmail from Friend "
+                + "where beFriendedEmail = " + email + " and status = ACCEPTED";
+    }
+
 }
