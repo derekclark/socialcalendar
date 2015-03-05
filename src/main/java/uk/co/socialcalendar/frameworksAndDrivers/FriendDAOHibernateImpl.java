@@ -7,7 +7,6 @@ import uk.co.socialcalendar.entities.Friend;
 import uk.co.socialcalendar.entities.FriendStatus;
 import uk.co.socialcalendar.interfaceAdapters.models.FriendValidator;
 import uk.co.socialcalendar.useCases.FriendDAO;
-
 import java.util.List;
 
 public class FriendDAOHibernateImpl implements FriendDAO {
@@ -25,13 +24,11 @@ public class FriendDAOHibernateImpl implements FriendDAO {
         this.sessionFactory = sessionFactory;
     }
 
-
     @Override
     public boolean save(Friend friend) {
         if (!canUpdate(friend)){
             return false;
         }
-
         Session session = sessionFactory.getCurrentSession();
         session.save(friend);
         return true;
@@ -90,5 +87,4 @@ public class FriendDAOHibernateImpl implements FriendDAO {
         return "select requesterEmail from Friend "
                 + "where beFriendedEmail = " + email + " and status = ACCEPTED";
     }
-
 }

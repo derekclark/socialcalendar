@@ -8,9 +8,6 @@
   	<property name="hibernate.hbm2ddl.auto">update</property>
     <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
     <property name="show_sql">false</property>  
-    <mapping class="com.socialeggbox.model.Users"/>
-    <mapping class="com.socialeggbox.model.Friends"/>
-    <mapping class="com.socialeggbox.model.Availability"/>
-    <mapping class="com.socialeggbox.model.Message"/>
+    <mapping class="uk.co.socialcalendar.frameworksAndDrivers.FriendHibernateModel"/>
   </session-factory>
 </hibernate-configuration>
