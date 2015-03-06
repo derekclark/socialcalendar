@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:mvc="http://www.springframework.org/schema/mvc"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.springframework.org/schema/beans"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:tx="http://www.springframework.org/schema/tx"
+        xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+                http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+                http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<bean id="friendController" class="uk.co.socialcalendar.interfaceAdapters.controllers.FriendController">
+                <property name="friendCommonModel" ref="friendCommonModel"/>
+                <property name="sessionAttributes" ref="sessionAttributes"/>	        
+	</bean>    	
+
+	<bean id="addFriendController" class="uk.co.socialcalendar.interfaceAdapters.controllers.AddFriendController">
+                <property name="friendCommonModel" ref="friendCommonModel"/>
+                <property name="sessionAttributes" ref="sessionAttributes"/>	        
+	</bean>    	
+
+	<bean id="fakeLoginController" class="uk.co.socialcalendar.interfaceAdapters.controllers.FakeLoginController">
+                <property name="userDAO" ref="inMemoryUserDAO"/>
+                <property name="friendDAO" ref="inMemoryFriendDAO"/>
+	</bean>    	
+
+	<bean id="friendRequestController" class="uk.co.socialcalendar.interfaceAdapters.controllers.FriendRequestController">
+                <property name="friendFacade" ref="friendFacadeImpl"/>
+                <property name="friendCommonModel" ref="friendCommonModel"/>
+                <property name="userNotification" ref="userNotification"/>
+                <property name="sessionAttributes" ref="sessionAttributes"/>
+        </bean>
+</beans>

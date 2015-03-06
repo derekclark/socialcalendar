@@ -9,120 +9,12 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
-	
-	<!-- Enables the Spring MVC @Controller programming model -->
-	<mvc:annotation-driven />
-
-	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
-	<mvc:resources mapping="/resources/**" location="/WEB-INF/resources/" />
-	<mvc:resources mapping="/js/**" location="/WEB-INF/js/" />
-
-	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
-	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="prefix" value="/WEB-INF/views/" />
-		<property name="suffix" value=".jsp" />
-	</bean>
-
-	<context:component-scan base-package="uk.co.socialcalendar.interfaceAdapters.controllers" />
-	<context:property-placeholder location="classpath:propertyPlaceholder.properties" />	
-
-	<bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping" />
-
-	<!-- ENTITIES -->
-	<bean id="user" class="uk.co.socialcalendar.entities.User" />
-	<bean id="friend" class="uk.co.socialcalendar.entities.Friend" />
-
-	<!-- MODELS -->
-	<bean id="friendModel" class="uk.co.socialcalendar.interfaceAdapters.models.FriendModel" />
-	<bean id="friendModelFacade" class="uk.co.socialcalendar.interfaceAdapters.models.FriendModelFacade">
-		<property name="userFacade" ref="userFacade" />
-		<property name="friendFacade" ref="friendFacadeImpl" />
-	</bean>
-	
-	<bean id="friendValidator" class="uk.co.socialcalendar.interfaceAdapters.models.FriendValidator" />
-
-	<bean id="friendCommonModel" class="uk.co.socialcalendar.interfaceAdapters.controllers.FriendCommonModel">
-		<property name="userFacade" ref="userFacade" />
-		<property name="friendFacade" ref="friendFacadeImpl" />
-		<property name="friendModelFacade" ref="friendModelFacade" />
-		<property name="authenticationFacade" ref="authenticationFacade" />
-	</bean>
- 
-	<!--Test Doubles -->
-	<bean id="authentication" class="uk.co.socialcalendar.interfaceAdapters.utilities.FakeAuthentication" />
-	<bean id="inMemoryFriendDAO" class="uk.co.socialcalendar.frameworksAndDrivers.InMemoryFriendDAO" />
-	<bean id="inMemoryUserDAO" class="uk.co.socialcalendar.frameworksAndDrivers.InMemoryUserDAO" />
-	<bean id="userNotification" class="uk.co.socialcalendar.interfaceAdapters.utilities.StubMailNotification" />
-
-
-	<!--database -->
-	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-   		<property name="url" value="${databaseUrl}"/>
-        <property name="username" value="${databaseUsername}"/>
-        <property name="password" value="${databasePassword}"/>
-    </bean>	
-
-	<bean id="sessionFactory"
-        class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-        <property name="dataSource" ref="dataSource" />
-		<property name="configLocation" value="classpath:hibernate.cfg.xml" />
-    </bean>
-
-    <tx:annotation-driven />
-    <bean id="transactionManager"
-        class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-  	    <constructor-arg>
-	        <ref bean="sessionFactory" />
-	    </constructor-arg>
-    </bean>
-
-	<bean id="friendDAOHibernateImpl" class="uk.co.socialcalendar.frameworksAndDrivers.FriendDAOHibernateImpl">
-		<property name="sessionFactory" ref="sessionFactory" />
-		<property name="friendValidator" ref="friendValidator" />
-	</bean>
-
-
-
-	<!-- FACADES -->
-	<bean id="friendFacadeImpl" class="uk.co.socialcalendar.useCases.FriendFacadeImpl">
-        <property name="friendDAO" ref="inMemoryFriendDAO"/>
-	</bean>    	
-
-	<bean id="userFacade" class="uk.co.socialcalendar.useCases.UserFacadeImpl">
-        <property name="userDAO" ref="inMemoryUserDAO"/>
-	</bean>    	
-
-
-	<bean id="authenticationFacade" class="uk.co.socialcalendar.interfaceAdapters.utilities.AuthenticationFacade">
-        <property name="authentication" ref="authentication"/>
-	</bean>
-
-	<bean id="sessionAttributes" class="uk.co.socialcalendar.interfaceAdapters.utilities.SessionAttributes" />
-
-	<!-- CONTROLLERS -->
-	<bean id="friendController" class="uk.co.socialcalendar.interfaceAdapters.controllers.FriendController">
-        <property name="friendCommonModel" ref="friendCommonModel"/>
-        <property name="sessionAttributes" ref="sessionAttributes"/>	        
-	</bean>    	
-
-	<bean id="addFriendController" class="uk.co.socialcalendar.interfaceAdapters.controllers.AddFriendController">
-        <property name="friendCommonModel" ref="friendCommonModel"/>
-        <property name="sessionAttributes" ref="sessionAttributes"/>	        
-	</bean>    	
-
-	<bean id="fakeLoginController" class="uk.co.socialcalendar.interfaceAdapters.controllers.FakeLoginController">
-        <property name="userDAO" ref="inMemoryUserDAO"/>
-        <property name="friendDAO" ref="inMemoryFriendDAO"/>
-	</bean>    	
-
-	<bean id="friendRequestController" class="uk.co.socialcalendar.interfaceAdapters.controllers.FriendRequestController">
-        <property name="friendFacade" ref="friendFacadeImpl"/>
-        <property name="friendCommonModel" ref="friendCommonModel"/>
-        <property name="userNotification" ref="userNotification"/>
-        <property name="sessionAttributes" ref="sessionAttributes"/>
-	</bean>    	
-
-
+	<import resource="general-config.xml"/>	
+	<import resource="entities-beans.xml"/>	
+    <import resource="models-beans.xml"/>
+    <import resource="facades-beans.xml"/>
+    <import resource="controllers-beans.xml"/>
+    <import resource="database-FakeInMemory-beans.xml"/>
+    <import resource="authentication-fake-beans.xml"/>
+    <import resource="MailNotification-fake-beans.xml"/>
 </beans>
