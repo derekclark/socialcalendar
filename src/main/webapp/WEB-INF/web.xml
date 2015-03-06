@@ -13,7 +13,7 @@
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
-			/WEB-INF/spring/appServlet/servlet-context.xml
+			classpath:servlet-context.xml
 <!--			/WEB-INF/spring/root-context.xml
 -->
 <!--        	/WEB-INF/spring/spring-security.xml
@@ -43,7 +43,7 @@
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
 			<param-value>
-				/WEB-INF/spring/appServlet/servlet-context.xml
+				classpath:servlet-context.xml
 <!--		        /WEB-INF/spring/spring-security.xml
 -->
 			</param-value>

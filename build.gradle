@@ -108,9 +108,17 @@ task copyLocalPropertyFile(type: Copy) {
     }
 }
 
+task copyLocalSpringFile(type: Copy) {
+    from 'src/main/resources/spring-profiles/servlet-context-LOCAL.xml'
+    into 'src/main/resources'
+    rename { String fileName ->
+        fileName.replace('-LOCAL','')
+    }
+}
+
 
 task runLocal (type: GradleBuild){
-  tasks=['copyLocalPropertyFile','clean','tomcatrunwar']  
+  tasks=['copyLocalPropertyFile','copyLocalSpringFile','clean','tomcatrunwar']
 }
 
 task createRHWar (type: GradleBuild){
