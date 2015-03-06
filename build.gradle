@@ -108,17 +108,17 @@ task copyLocalPropertyFile(type: Copy) {
     }
 }
 
-task copyLocalSpringFile(type: Copy) {
-    from 'src/main/resources/spring-profiles/servlet-context-LOCAL.xml'
+task copyLocalMockedSpringFile(type: Copy) {
+    from 'src/main/resources/spring-profiles/servlet-context-LOCALMOCKED.xml'
     into 'src/main/resources'
     rename { String fileName ->
-        fileName.replace('-LOCAL','')
+        fileName.replace('-LOCALMOCKED','')
     }
 }
 
 
-task runLocal (type: GradleBuild){
-  tasks=['copyLocalPropertyFile','copyLocalSpringFile','clean','tomcatrunwar']
+task runLocalMocked (type: GradleBuild){
+  tasks=['copyLocalPropertyFile','copyLocalMockedSpringFile','clean','tomcatrunwar']
 }
 
 task createRHWar (type: GradleBuild){

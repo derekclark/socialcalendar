@@ -30,8 +30,11 @@
 	    </constructor-arg>
     </bean>
 
-	<bean id="friendDAOHibernateImpl" class="uk.co.socialcalendar.frameworksAndDrivers.FriendDAOHibernateImpl">
+	<bean id="friendDAO" class="uk.co.socialcalendar.frameworksAndDrivers.FriendDAOHibernateImpl">
 		<property name="sessionFactory" ref="sessionFactory" />
 		<property name="friendValidator" ref="friendValidator" />
 	</bean>
+
+    <!--USERDAO IS STILL FAKED - CHANGE THIS!!!! -->
+    <bean id="userDAO" class="uk.co.socialcalendar.frameworksAndDrivers.InMemoryUserDAO" />
 </beans>

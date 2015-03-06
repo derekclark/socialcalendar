@@ -10,11 +10,11 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
 	<bean id="friendFacadeImpl" class="uk.co.socialcalendar.useCases.FriendFacadeImpl">
-        <property name="friendDAO" ref="inMemoryFriendDAO"/>
+        <property name="friendDAO" ref="friendDAO"/>
 	</bean>    	
 
 	<bean id="userFacade" class="uk.co.socialcalendar.useCases.UserFacadeImpl">
-        <property name="userDAO" ref="inMemoryUserDAO"/>
+        <property name="userDAO" ref="userDAO"/>
 	</bean>    	
 
 

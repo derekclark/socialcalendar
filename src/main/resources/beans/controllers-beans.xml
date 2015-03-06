@@ -19,10 +19,6 @@
                 <property name="sessionAttributes" ref="sessionAttributes"/>	        
 	</bean>    	
 
-	<bean id="fakeLoginController" class="uk.co.socialcalendar.interfaceAdapters.controllers.FakeLoginController">
-                <property name="userDAO" ref="inMemoryUserDAO"/>
-                <property name="friendDAO" ref="inMemoryFriendDAO"/>
-	</bean>    	
 
 	<bean id="friendRequestController" class="uk.co.socialcalendar.interfaceAdapters.controllers.FriendRequestController">
                 <property name="friendFacade" ref="friendFacadeImpl"/>
