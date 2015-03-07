@@ -5,8 +5,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import uk.co.socialcalendar.frameworksAndDrivers.InMemoryFriendDAO;
-import uk.co.socialcalendar.frameworksAndDrivers.InMemoryUserDAO;
+import uk.co.socialcalendar.useCases.FriendDAO;
+import uk.co.socialcalendar.useCases.UserDAO;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,14 +14,14 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 public class FakeLoginController {
-    InMemoryUserDAO userDAO;
-    InMemoryFriendDAO friendDAO;
+    UserDAO userDAO;
+    FriendDAO friendDAO;
 
-    public void setUserDAO(InMemoryUserDAO userDAO) {
+    public void setUserDAO(UserDAO userDAO) {
         this.userDAO = userDAO;
     }
 
-    public void setFriendDAO(InMemoryFriendDAO friendDAO) {
+    public void setFriendDAO(FriendDAO friendDAO) {
         this.friendDAO = friendDAO;
     }
 
@@ -38,8 +38,8 @@ public class FakeLoginController {
 
         ModelAndView mav = new ModelAndView("login");
         mav.addObject("username","derek clark");
-        userDAO.populate();
-        friendDAO.populate();
+//        userDAO.populate();
+//        friendDAO.populate();
 
         return mav;
     }

@@ -11,7 +11,7 @@
 
 	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-   		<property name="url" value="${databaseUrl}"/>
+   		<property name="url" value="jdbc:mysql://localhost:3306/socialeggbox"/>
         <property name="username" value="${databaseUsername}"/>
         <property name="password" value="${databasePassword}"/>
     </bean>	
@@ -23,11 +23,9 @@
     </bean>
 
     <tx:annotation-driven />
-    <bean id="transactionManager"
+        <bean id="transactionManager"
         class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-  	    <constructor-arg>
-	        <ref bean="sessionFactory" />
-	    </constructor-arg>
+        <property name="sessionFactory" ref="sessionFactory" />
     </bean>
 
 	<bean id="friendDAO" class="uk.co.socialcalendar.frameworksAndDrivers.FriendDAOHibernateImpl">

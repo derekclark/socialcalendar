@@ -7,6 +7,8 @@ import uk.co.socialcalendar.entities.Friend;
 import uk.co.socialcalendar.entities.FriendStatus;
 import uk.co.socialcalendar.interfaceAdapters.models.FriendValidator;
 import uk.co.socialcalendar.useCases.FriendDAO;
+
+import javax.transaction.Transactional;
 import java.util.List;
 
 public class FriendDAOHibernateImpl implements FriendDAO {
@@ -25,6 +27,7 @@ public class FriendDAOHibernateImpl implements FriendDAO {
     }
 
     @Override
+    @Transactional
     public boolean save(Friend friend) {
         if (!canUpdate(friend)){
             return false;
@@ -46,11 +49,13 @@ public class FriendDAOHibernateImpl implements FriendDAO {
     }
 
     @Override
+    @Transactional
     public Friend read(int friendId) {
         return (Friend) sessionFactory.getCurrentSession().get(Friend.class, friendId);
     }
 
     @Override
+    @Transactional
     public boolean updateStatus(int friendId, FriendStatus status) {
         Friend friend = read(friendId);
         friend.setStatus(status);
@@ -59,6 +64,7 @@ public class FriendDAOHibernateImpl implements FriendDAO {
     }
 
     @Override
+    @Transactional
     public List<Friend> getMyAcceptedFriends(String email) {
         @SuppressWarnings("unchecked")
         Query query = sessionFactory.getCurrentSession().createQuery(queryStringForMyAcceptedFriendsWhereIAmOwner(email));
@@ -69,22 +75,31 @@ public class FriendDAOHibernateImpl implements FriendDAO {
     }
 
     @Override
-    public List<Friend> getListOfPendingFriendsByRequester(String friendRequesterName) {
-        return null;
+    @Transactional
+    public List<Friend> getListOfPendingFriendsByRequester(String email) {
+        Query query = sessionFactory.getCurrentSession().createQuery(queryStringForMyPendingFriends(email));
+        List<Friend> returnSQLList = query.list();
+        return returnSQLList;
     }
 
     @Override
+    @Transactional
     public List<Friend> getFriendRequests(String user) {
         return null;
     }
 
     public String queryStringForMyAcceptedFriendsWhereIAmOwner(String email){
-        return "select beFriendedEmail from Friend "
-                + "where requesterEmail = " + email + " and status = ACCEPTED";
+        return "select BEFRIENDED_EMAIL from FriendHibernateModel "
+                + "where REQUESTER_EMAIL = " + email + " and STATUS = ACCEPTED";
     }
 
     public String queryStringForMyAcceptedFriendsWhereIAmNotOwner(String email){
-        return "select requesterEmail from Friend "
-                + "where beFriendedEmail = " + email + " and status = ACCEPTED";
+        return "select REQUESTER_EMAIL from FriendHibernateModel "
+                + "where BEFRIENDED_EMAIL = " + email + " and STATUS = ACCEPTED";
+    }
+
+    public String queryStringForMyPendingFriends(String email){
+        return "from FriendHibernateModel "
+                + "where REQUESTER_EMAIL = " + email + " and status = PENDING";
     }
 }
