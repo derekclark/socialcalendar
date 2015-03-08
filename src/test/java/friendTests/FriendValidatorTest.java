@@ -87,18 +87,4 @@ public class FriendValidatorTest {
         assertTrue(friendValidator.validStatus(friend));
     }
 
-    @Test
-    public void zeroIdIsInvalid(){
-        friend = new Friend(REQUESTER_EMAIL, BEFRIENDED_EMAIL, ACCEPTED);
-        friend.setFriendId(0);
-        assertFalse(friendValidator.validId(friend));
-    }
-
-    @Test
-    public void greaterThanZeroIdIsValid(){
-        friend = new Friend(REQUESTER_EMAIL, BEFRIENDED_EMAIL, ACCEPTED);
-        friend.setFriendId(FRIEND_ID);
-        assertTrue(friendValidator.validId(friend));
-    }
-
 }

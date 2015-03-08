@@ -41,7 +41,6 @@ public class FriendDAOHibernateImpl implements FriendDAO {
 
     public boolean canUpdate(Friend friend) {
         if (friendValidator.validBefriendedEmail(friend) &&
-                friendValidator.validId(friend) &&
                 friendValidator.validRequesterEmail(friend) &&
                 friendValidator.validStatus(friend)) {
             return true;
@@ -97,16 +96,37 @@ public class FriendDAOHibernateImpl implements FriendDAO {
 
     @Override
     @Transactional
-    public List<Friend> getListOfPendingFriendsByRequester(String email) {
-        Query query = queryStringForMyPendingFriends(email);
+    public List<Friend> getMyFriendInvites(String email) {
+        Query query = queryStringForMyFriendInvites(email);
         List<Friend> returnSQLList = query.list();
         return returnSQLList;
     }
 
     @Override
     @Transactional
-    public List<Friend> getFriendRequests(String user) {
-        return null;
+    public boolean doesFriendshipExist(String email1, String email2) {
+        if (read(email1, email2)){
+            return true;
+        }
+        if (read(email2, email1)){
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean read(String email1, String email2){
+        Query query = sessionFactory.getCurrentSession().createQuery
+                ("from FriendHibernateModel where REQUESTER_EMAIL = :email1 and BEFRIENDED_EMAIL = :email2");
+        query.setParameter("email1", email1);
+        query.setParameter("email2", email2);
+
+        List<FriendHibernateModel> returnSQLList = query.list();
+        if (returnSQLList.size()>0){
+            return true;
+        }
+        return false;
+
     }
 
     public Query queryMyAcceptedFriendsWhereIAmOwner(String email){
@@ -125,9 +145,9 @@ public class FriendDAOHibernateImpl implements FriendDAO {
         return query;
     }
 
-    public Query queryStringForMyPendingFriends(String email){
+    public Query queryStringForMyFriendInvites(String email){
         Query query = sessionFactory.getCurrentSession().createQuery
-                ("from FriendHibernateModel where REQUESTER_EMAIL = :email and STATUS = :status");
+                ("from FriendHibernateModel where BEFRIENDED_EMAIL = :email and STATUS = :status");
         query.setParameter("email", email);
         query.setParameter("status", PENDING.toString());
         return query;

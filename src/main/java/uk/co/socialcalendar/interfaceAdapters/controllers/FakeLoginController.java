@@ -79,16 +79,19 @@ public class FakeLoginController {
         }
     }
     public void populateFriends(){
-        friendDAO.save(createFriend(new Friend(EMAIL1, EMAIL3, FriendStatus.ACCEPTED), 1));
-        friendDAO.save(createFriend(new Friend(EMAIL4, EMAIL2, FriendStatus.ACCEPTED), 2));
-        friendDAO.save(createFriend(new Friend(EMAIL4, EMAIL1, FriendStatus.ACCEPTED), 3));
-        friendDAO.save(createFriend(new Friend(EMAIL5, EMAIL1, FriendStatus.PENDING), 4));
+        writeFriends(new Friend(EMAIL1, EMAIL3, FriendStatus.ACCEPTED));
+        writeFriends(new Friend(EMAIL4, EMAIL2, FriendStatus.ACCEPTED));
+        writeFriends(new Friend(EMAIL4, EMAIL1, FriendStatus.ACCEPTED));
+        writeFriends(new Friend(EMAIL5, EMAIL1, FriendStatus.PENDING));
         System.out.println("populated 4 friends");
     }
 
-    private Friend createFriend(Friend friend, int friendId){
-        friend.setFriendId(friendId);
-        return friend;
+    public void writeFriends(Friend friend){
+        if (!friendDAO.doesFriendshipExist(friend.getRequesterEmail(), friend.getBeFriendedEmail())){
+            System.out.println("creating friend=" + friend.getRequesterEmail());
+            friendDAO.save(friend);
+        }
     }
+
 
 }

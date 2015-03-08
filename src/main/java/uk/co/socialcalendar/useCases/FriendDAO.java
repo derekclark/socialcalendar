@@ -10,6 +10,6 @@ public interface FriendDAO {
 	public Friend read(int friendId);
 	public boolean updateStatus(int friendId, FriendStatus status);
 	public List<Friend> getMyAcceptedFriends(String email);
-	public List<Friend> getListOfPendingFriendsByRequester(String name);
-	List<Friend> getFriendRequests(String user);
+	public List<Friend> getMyFriendInvites(String name);
+	public boolean doesFriendshipExist(String email1, String email2);
 }

@@ -26,10 +26,4 @@ public class FriendValidator {
         return true;
     }
 
-    public boolean validId(Friend friend){
-        if (friend.getFriendId() == 0){
-            return false;
-        }
-        return true;
-    }
 }

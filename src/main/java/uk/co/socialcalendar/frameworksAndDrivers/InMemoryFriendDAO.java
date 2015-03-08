@@ -91,10 +91,10 @@ public class InMemoryFriendDAO implements FriendDAO{
 	}
 
 	@Override
-	public List<Friend> getListOfPendingFriendsByRequester(String requesterEmail) {
+	public List<Friend> getMyFriendInvites(String requesterEmail) {
 		List<Friend> friendList = new ArrayList<Friend>();
 		for (Friend friend: listOfSavedFriends){
-			if (friend.getRequesterEmail().equals(requesterEmail) && friend.getStatus() == FriendStatus.PENDING){
+			if (friend.getBeFriendedEmail().equals(requesterEmail) && friend.getStatus() == FriendStatus.PENDING){
 				friendList.add(friend);
 			}
 		}
@@ -103,15 +103,11 @@ public class InMemoryFriendDAO implements FriendDAO{
 	}
 
 	@Override
-	public List<Friend> getFriendRequests(String user) {
-		List<Friend> friendList = new ArrayList<Friend>();
-		for (Friend friend: listOfSavedFriends){
-			if (friend.getBeFriendedEmail().equals(user) && friend.getStatus() == FriendStatus.PENDING){
-				friendList.add(friend);
-			}
-		}
-		return friendList;
-	};
+	public boolean doesFriendshipExist(String email1, String email2) {
+		return false;
+	}
+
+	;
 
 	public List<Friend> getListOfSavedFriends() {
 		return listOfSavedFriends;

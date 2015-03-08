@@ -79,12 +79,6 @@ public class FriendDAOHibernateImplTest {
     }
 
     @Test
-    public void willNotSaveFriendWithZeroId(){
-        emptyFriend.setFriendId(0);
-        assertFalse(friendDAOImpl.save(emptyFriend));
-    }
-
-    @Test
     public void willNotSaveFriendWithNullRequesterEmail(){
         emptyFriend = new Friend(null, BEFRIENDED_EMAIL, ACCEPTED);
         emptyFriend.setFriendId(FRIEND_ID);
@@ -217,11 +211,11 @@ public class FriendDAOHibernateImplTest {
 
     @Test
     public void queryForMyPendingFriends(){
-        String expectedString = queryStringGetMyPendingFriends();
+        String expectedString = queryStringGetMyFriendInvites();
 
         when(mockSessionFactory.getCurrentSession().createQuery(anyString())).thenReturn(mockQuery);
 
-        Query query = friendDAOImpl.queryStringForMyPendingFriends(REQUESTER_EMAIL);
+        Query query = friendDAOImpl.queryStringForMyFriendInvites(REQUESTER_EMAIL);
         ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class);
         verify(mockSessionFactory.getCurrentSession()).createQuery(argument.capture());
         assertEquals(expectedString, argument.getValue());
@@ -237,25 +231,25 @@ public class FriendDAOHibernateImplTest {
                 + "where BEFRIENDED_EMAIL = :email and STATUS = :status";
     }
 
-    private String queryStringGetMyPendingFriends() {
+    private String queryStringGetMyFriendInvites() {
         return "from FriendHibernateModel "
-                    + "where REQUESTER_EMAIL = :email and STATUS = :status";
+                    + "where BEFRIENDED_EMAIL = :email and STATUS = :status";
     }
 
     @Test
-    public void shouldGetListOfMyPendingFriends(){
+    public void shouldGetListOfMyFriendInvitations(){
         when(mockSessionFactory.getCurrentSession().createQuery(anyString())).thenReturn(mockQuery);
-        List<Friend> myPendingFriends = getListOfMyPendingFriends();
-        when(mockQuery.list()).thenReturn(myPendingFriends);
+        List<Friend> myFriendInvites = getListOfMyFriendInvites();
+        when(mockQuery.list()).thenReturn(myFriendInvites);
 
-        assertEquals(myPendingFriends, friendDAOImpl.getListOfPendingFriendsByRequester(REQUESTER_EMAIL));
+        assertEquals(myFriendInvites, friendDAOImpl.getMyFriendInvites(REQUESTER_EMAIL));
     }
 
-    private List<Friend> getListOfMyPendingFriends() {
-        List<Friend> myPendingFriends = new ArrayList<Friend>();
-        myPendingFriends.add(new Friend(REQUESTER_EMAIL, "user1", PENDING));
-        myPendingFriends.add(new Friend(REQUESTER_EMAIL, "user2", PENDING));
-        return myPendingFriends;
+    private List<Friend> getListOfMyFriendInvites() {
+        List<Friend> myFriendInvites = new ArrayList<Friend>();
+        myFriendInvites.add(new Friend(REQUESTER_EMAIL, "user1", PENDING));
+        myFriendInvites.add(new Friend(REQUESTER_EMAIL, "user2", PENDING));
+        return myFriendInvites;
     }
 
     @Test
@@ -278,6 +272,50 @@ public class FriendDAOHibernateImplTest {
         assertEquals(actual.getRequesterEmail(),expected.getRequesterEmail());
         assertEquals(actual.getBeFriendedEmail(), expected.getBeFriendedEmail());
 
+    }
+
+    @Test
+    public void shouldReturnTrueIfFriendshipExistsWhenIAmOwnerOfFriendship(){
+        String email1 = "email1";
+        String email2 = "email2";
+        when(mockSessionFactory.getCurrentSession().createQuery(anyString())).thenReturn(mockQuery);
+
+        List<FriendHibernateModel> emptyList = new ArrayList<FriendHibernateModel>();
+        List<FriendHibernateModel> notEmptyList = new ArrayList<FriendHibernateModel>();
+        notEmptyList.add(new FriendHibernateModel(friend));
+
+        when(mockQuery.list()).thenReturn(notEmptyList).thenReturn(emptyList);
+
+        assertTrue(friendDAOImpl.doesFriendshipExist(email1, email2));
+    }
+
+    @Test
+    public void shouldReturnTrueIfFriendshipExistsWhenIAmNotOwnerOfFriendship(){
+        String email1 = "email1";
+        String email2 = "email2";
+        when(mockSessionFactory.getCurrentSession().createQuery(anyString())).thenReturn(mockQuery);
+
+        List<FriendHibernateModel> emptyList = new ArrayList<FriendHibernateModel>();
+        List<FriendHibernateModel> notEmptyList = new ArrayList<FriendHibernateModel>();
+        notEmptyList.add(new FriendHibernateModel(friend));
+
+        when(mockQuery.list()).thenReturn(emptyList).thenReturn(notEmptyList);
+
+        assertTrue(friendDAOImpl.doesFriendshipExist(email1, email2));
+    }
+
+    @Test
+    public void shouldReturnFalseIfFriendshipDoesNotExist(){
+        String email1 = "email1";
+        String email2 = "email2";
+        when(mockSessionFactory.getCurrentSession().createQuery(anyString())).thenReturn(mockQuery);
+
+        List<FriendHibernateModel> emptyList = new ArrayList<FriendHibernateModel>();
+        List<FriendHibernateModel> notEmptyList = new ArrayList<FriendHibernateModel>();
+        notEmptyList.add(new FriendHibernateModel(friend));
+
+        when(mockQuery.list()).thenReturn(emptyList);
+        assertFalse(friendDAOImpl.doesFriendshipExist(email1, email2));
     }
 
 }
