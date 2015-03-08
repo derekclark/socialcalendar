@@ -21,12 +21,12 @@ public class FriendModelFacade {
         this.userFacade = userFacade;
     }
 
-    public List<FriendModel> getFriendModelList(String userEmail){
-        List<Friend> friendList = friendFacade.getMyAcceptedFriends(userEmail);
+    public List<FriendModel> getFriendModelList(String myEmail){
+        List<Friend> friendList = friendFacade.getMyAcceptedFriends(myEmail);
         List<FriendModel> friendModelList = new ArrayList<FriendModel>();
 
         for (Friend f : friendList){
-            User user = userFacade.getUser(f.getBeFriendedEmail());
+            User user = userFacade.getUser(returnFriendsEmailNotMine(f, myEmail));
             FriendModel friendModel = new FriendModel();
             friendModel.setFacebookId(user.getFacebookId());
             if (friendModel.getFacebookId() == null || friendModel.getFacebookId().isEmpty()){
@@ -41,5 +41,14 @@ public class FriendModelFacade {
         }
 
         return friendModelList;
+    }
+
+    public String returnFriendsEmailNotMine(Friend friend, String myEmail) {
+        if (friend.getRequesterEmail() != myEmail){
+            return friend.getRequesterEmail();
+        } else {
+            return friend.getBeFriendedEmail();
+        }
+
     }
 }
