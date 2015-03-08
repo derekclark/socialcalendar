@@ -27,26 +27,21 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class FriendCommonModelTest {
-    public static final String EMAIL = "email";
-    public static final String NAME = "name";
-    public static final String FACEBOOK_ID = "facebookId";
-    FriendCommonModel friendCommonModel;
 
+    FriendCommonModel friendCommonModel;
     FriendFacade mockFriendFacade;
     AuthenticationFacade mockAuthenticationFacade;
     UserFacade mockUserFacade;
     FriendModelFacade mockFriendModelFacade;
-
     ModelAndView mav;
     User user;
-
-    public static final String FRIEND_VIEW = "friend";
+    public static final String EMAIL = "email";
+    public static final String NAME = "name";
+    public static final String FACEBOOK_ID = "facebookId";
     public static final String USER_ID = "userId";
     public static final String FRIENDS_PAGE_SECTION = "friends";
-    public static final String ACCEPTED_FRIEND_REQUEST = "NAME2";
     public static final String USER_FACEBOOK_ID = "123";
     public static final String OAUTH_TOKEN = "456";
-
 
     @Before
     public void setup(){

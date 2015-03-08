@@ -24,31 +24,40 @@ public class FriendModelFacade {
     public List<FriendModel> getFriendModelList(String myEmail){
         List<Friend> friendList = friendFacade.getMyAcceptedFriends(myEmail);
         List<FriendModel> friendModelList = new ArrayList<FriendModel>();
-
         for (Friend f : friendList){
-            User user = userFacade.getUser(returnFriendsEmailNotMine(f, myEmail));
-            FriendModel friendModel = new FriendModel();
-            friendModel.setFacebookId(user.getFacebookId());
-            if (friendModel.getFacebookId() == null || friendModel.getFacebookId().isEmpty()){
-                friendModel.setHasFacebookId(false);
-            }else {
-                friendModel.setHasFacebookId(true);
-            }
-            friendModel.setEmail(user.getEmail());
-            friendModel.setFriendId(f.getFriendId());
-            friendModel.setName(user.getName());
-            friendModelList.add(friendModel);
+            System.out.println("requester="+f.getRequesterEmail() + " befriended=" + f.getBeFriendedEmail() + " me=" + myEmail);
+            friendModelList.add(populateModel(myEmail, f));
         }
-
         return friendModelList;
     }
 
+    private FriendModel populateModel(String myEmail, Friend f) {
+        String u = returnFriendsEmailNotMine(f, myEmail);
+        System.out.println("your email not mine = " + u);
+        User user = userFacade.getUser(u);
+        System.out.println("user = " + user.getName());
+        FriendModel friendModel = new FriendModel();
+        friendModel.setFacebookId(user.getFacebookId());
+        setHasFacebookId(friendModel);
+        friendModel.setEmail(user.getEmail());
+        friendModel.setFriendId(f.getFriendId());
+        friendModel.setName(user.getName());
+        return friendModel;
+    }
+
+    private void setHasFacebookId(FriendModel friendModel) {
+        if (friendModel.getFacebookId() == null || friendModel.getFacebookId().isEmpty()){
+            friendModel.setHasFacebookId(false);
+        }else {
+            friendModel.setHasFacebookId(true);
+        }
+    }
+
     public String returnFriendsEmailNotMine(Friend friend, String myEmail) {
-        if (friend.getRequesterEmail() != myEmail){
+        if (!friend.getRequesterEmail().equals(myEmail)){
             return friend.getRequesterEmail();
         } else {
             return friend.getBeFriendedEmail();
         }
-
     }
 }
