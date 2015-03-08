@@ -60,9 +60,12 @@ public class FriendDAOHibernateImpl implements FriendDAO {
     @Override
     @Transactional
     public boolean updateStatus(int friendId, FriendStatus status) {
-        Friend friend = read(friendId);
-        friend.setStatus(status);
-        sessionFactory.getCurrentSession().update(convertToFriendHibernateModel(friend));
+        FriendHibernateModel friendHibernateModel =
+                (FriendHibernateModel) sessionFactory.getCurrentSession().get(FriendHibernateModel.class, friendId);
+
+        friendHibernateModel.setStatus(status);
+
+        sessionFactory.getCurrentSession().update(friendHibernateModel);
         return true;
     }
 
