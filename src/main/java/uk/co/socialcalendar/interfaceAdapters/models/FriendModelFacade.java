@@ -29,7 +29,7 @@ public class FriendModelFacade {
             User user = userFacade.getUser(f.getBeFriendedEmail());
             FriendModel friendModel = new FriendModel();
             friendModel.setFacebookId(user.getFacebookId());
-            if (friendModel.getFacebookId().isEmpty()){
+            if (friendModel.getFacebookId() == null || friendModel.getFacebookId().isEmpty()){
                 friendModel.setHasFacebookId(false);
             }else {
                 friendModel.setHasFacebookId(true);

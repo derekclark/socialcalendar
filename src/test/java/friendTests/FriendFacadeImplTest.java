@@ -14,8 +14,8 @@ import static org.junit.Assert.assertTrue;
 
 public class FriendFacadeImplTest {
 	FriendFacadeImpl friendFacade = new FriendFacadeImpl();
-	public static final String FRIEND_NAME_REQUESTER="REQUESTER NAME";
-	public static final String FRIEND_NAME_REQUESTEE="REQUESTEE NAME";
+	public static final String FRIEND_NAME_REQUESTER="REQUESTER NAME1";
+	public static final String FRIEND_NAME_REQUESTEE="REQUESTEE NAME1";
 	public static final String FRIEND_NAME1="NAME1";
 	public static final String FRIEND_NAME2="NAME2";
 	public static final String FRIEND_NAME3="NAME3";

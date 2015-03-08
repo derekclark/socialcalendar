@@ -91,6 +91,13 @@ public class FriendModelFacadeTest {
         assertEquals(expectedFriendModelList, actualFriendModelList);
     }
 
+    @Test
+    public void canHandleNullFacebookId(){
+        create1FriendWithNullFacebookId();
+        List<FriendModel> actualFriendModelList = friendModelFacade.getFriendModelList(USER_EMAIL1);
+        assertEquals(false, actualFriendModelList.get(0).isHasFacebookId());
+    }
+
     private void create1FriendWithFacebookId() {
         friendList = createAListOf1Friend();
         when(mockFriendFacade.getMyAcceptedFriends(USER_EMAIL1)).thenReturn(friendList);
@@ -103,6 +110,14 @@ public class FriendModelFacadeTest {
         friendList = createAListOf1Friend();
         when(mockFriendFacade.getMyAcceptedFriends(USER_EMAIL1)).thenReturn(friendList);
         create1UserWithNoFacebookId();
+        when(mockUserFacade.getUser(BEFRIENDED_EMAIL1)).thenReturn(user1);
+        when(mockUserFacade.getUser(BEFRIENDED_EMAIL2)).thenReturn(user2);
+    }
+
+    private void create1FriendWithNullFacebookId() {
+        friendList = createAListOf1Friend();
+        when(mockFriendFacade.getMyAcceptedFriends(USER_EMAIL1)).thenReturn(friendList);
+        create1UserWithNullFacebookId();
         when(mockUserFacade.getUser(BEFRIENDED_EMAIL1)).thenReturn(user1);
         when(mockUserFacade.getUser(BEFRIENDED_EMAIL2)).thenReturn(user2);
     }
@@ -120,6 +135,10 @@ public class FriendModelFacadeTest {
 
     public void create1UserWithNoFacebookId(){
         user1 = new User(BEFRIENDED_EMAIL1, FRIEND_NAME1, "");
+    }
+
+    public void create1UserWithNullFacebookId(){
+        user1 = new User(BEFRIENDED_EMAIL1, FRIEND_NAME1, null);
     }
 
     private void create2Friends() {

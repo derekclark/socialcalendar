@@ -36,7 +36,7 @@ public class UserFacadeImplTest {
         expectedUser.setFacebookId(FACEBOOK_ID);
         expectedUser.setName(USER_NAME);
 
-        when(mockUserDAO.getUser(USER_EMAIL)).thenReturn(expectedUser);
+        when(mockUserDAO.read(USER_EMAIL)).thenReturn(expectedUser);
 
         User actualUser = facade.getUser(USER_EMAIL);
 

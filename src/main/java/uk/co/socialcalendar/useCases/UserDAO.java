@@ -4,6 +4,6 @@ import uk.co.socialcalendar.entities.User;
 
 public interface UserDAO {
 
-    public User getUser(String userEmail);
+    public User read(String userEmail);
     public boolean save(User user);
 }

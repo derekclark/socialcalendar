@@ -29,6 +29,6 @@ public class UserDAOTest {
     public void cadReadUser(){
         User user = new User(EMAIL, NAME, FACEBOOKID);
         userDAO.save(user);
-        assertEquals(user, userDAO.getUser(EMAIL));
+        assertEquals(user, userDAO.read(EMAIL));
     }
 }

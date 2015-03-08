@@ -12,6 +12,6 @@ public class UserFacadeImpl implements UserFacade {
     }
 
     public User getUser(String userEmail){
-        return userDAO.getUser(userEmail);
+        return userDAO.read(userEmail);
     }
 }

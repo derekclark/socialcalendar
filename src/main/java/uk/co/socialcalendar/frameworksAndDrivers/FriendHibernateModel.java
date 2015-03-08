@@ -22,11 +22,29 @@ public class FriendHibernateModel {
     @Enumerated(EnumType.STRING)
     private FriendStatus status;
 
+    public FriendHibernateModel(){}
+
     public FriendHibernateModel(Friend friend){
         this.beFriendedEmail = friend.getBeFriendedEmail();
         this.requesterEmail = friend.getRequesterEmail();
         this.status = friend.getStatus();
         this.friendId = friend.getFriendId();
+    }
+
+    public int getFriendId() {
+        return friendId;
+    }
+
+    public String getRequesterEmail() {
+        return requesterEmail;
+    }
+
+    public String getBeFriendedEmail() {
+        return beFriendedEmail;
+    }
+
+    public FriendStatus getStatus() {
+        return status;
     }
 
     public void setFriendId(int friendId) {

@@ -23,7 +23,7 @@ public class InMemoryUserDAO implements UserDAO {
     List<User> listOfUsers = new ArrayList<User>();
 
     @Override
-    public User getUser(String userEmail) {
+    public User read(String userEmail) {
         for (User u:listOfUsers){
             if (u.getEmail().equals(userEmail)){
                 return u;
@@ -34,7 +34,7 @@ public class InMemoryUserDAO implements UserDAO {
 
     @Override
     public boolean save(User user) {
-        if (getUser(user.getEmail()) == null) {
+        if (read(user.getEmail()) == null) {
             listOfUsers.add(user);
         }else {
             return false;
