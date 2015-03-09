@@ -22,10 +22,9 @@ public class FacebookOauth implements HttpRequestHandler {
     private Token accessToken;
     private String apiSecret;
     private OAuthService service;
-    FacebookResponse facebookResponse;
+
     OAuthRequest oauthRequest;
     Auth auth;
-    FacebookAuthCode facebookAuthCode;
     HttpSession httpSession;
 
     public void setAuth(Auth auth) {
@@ -36,13 +35,6 @@ public class FacebookOauth implements HttpRequestHandler {
         this.httpSession = httpSession;
     }
 
-    public void setFacebookAuthCode(FacebookAuthCode facebookAuthCode) {
-        this.facebookAuthCode = facebookAuthCode;
-    }
-
-    public void setFacebookResponse(FacebookResponse facebookResponse) {
-        this.facebookResponse = facebookResponse;
-    }
 
     public void setOauthRequest(OAuthRequest oauthRequest) {
         this.oauthRequest = oauthRequest;
@@ -80,7 +72,7 @@ public class FacebookOauth implements HttpRequestHandler {
     }
 
     public FacebookUserData getFacebookUserData(Token token, HttpServletResponse response) {
-        return facebookResponse.getResponse(accessToken,"facebookProtectedResourceUrl", response);
+        return auth.getResponse(accessToken,"facebookProtectedResourceUrl", response);
     }
 
     public boolean isSet(String string){
@@ -102,7 +94,7 @@ public class FacebookOauth implements HttpRequestHandler {
     }
 
     public String getAuthCode(){
-        return facebookAuthCode.getcode();
+        return auth.getcode();
     }
 
     public void setSessionAttributes(FacebookUserData fb){

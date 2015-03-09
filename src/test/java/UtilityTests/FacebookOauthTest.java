@@ -7,7 +7,7 @@ import org.scribe.oauth.OAuthService;
 import uk.co.socialcalendar.frameworksAndDrivers.FacebookOauth;
 import uk.co.socialcalendar.frameworksAndDrivers.FakeHttpSession;
 import uk.co.socialcalendar.frameworksAndDrivers.FakeAuthentication;
-import uk.co.socialcalendar.frameworksAndDrivers.StubFacebookAuthCode;
+
 
 
 import javax.servlet.ServletException;
@@ -38,9 +38,7 @@ public class FacebookOauthTest {
     OAuthService mockService;
     OAuthRequest mockOauthRequest;
     FakeAuthentication fakeAuthentication;
-    StubFacebookResponse stubFacebookResponse;
     //StubFacebookVerifier stubFacebookVerifier;
-    StubFacebookAuthCode stubFacebookAuthCode;
     FakeHttpSession fakeHttpSession;
 
     @Before
@@ -50,13 +48,9 @@ public class FacebookOauthTest {
         callback = "1";
         facebook = new FacebookOauth(apiKey, apiSecret, callback);
 
-        stubFacebookResponse = new StubFacebookResponse();
         fakeAuthentication = new FakeAuthentication();
-        stubFacebookAuthCode = new StubFacebookAuthCode();
         fakeHttpSession = new FakeHttpSession();
-        facebook.setFacebookResponse(stubFacebookResponse);
         facebook.setAuth(fakeAuthentication);
-        facebook.setFacebookAuthCode(stubFacebookAuthCode);
         facebook.setHttpSession(fakeHttpSession);
         setupHttpSessions();
         setupMocks();
@@ -117,8 +111,8 @@ public class FacebookOauthTest {
         when(mockHttpServletRequest.getParameter(OAUTH_CODE)).thenReturn(OAUTH_CODE);
         when(mockHttpServletRequest.getParameter(OAUTH_TOKEN)).thenReturn("");
         facebook.handleRequest(mockHttpServletRequest, mockHttpServletResponse);
-        assertEquals(USER_EMAIL, stubFacebookResponse.getEmail());
-        assertEquals(USER_NAME, stubFacebookResponse.getName());
+        assertEquals(USER_EMAIL, fakeAuthentication.getEmail());
+        assertEquals(USER_NAME, fakeAuthentication.getName());
     }
 
     @Test
@@ -139,7 +133,7 @@ public class FacebookOauthTest {
         when(mockHttpServletRequest.getParameter(OAUTH_CODE)).thenReturn(OAUTH_CODE);
         when(mockHttpServletRequest.getParameter(OAUTH_TOKEN)).thenReturn(OAUTH_TOKEN);
         facebook.handleRequest(mockHttpServletRequest, mockHttpServletResponse);
-        assertTrue(stubFacebookResponse.wasCalled());
+        assertTrue(fakeAuthentication.wasGetResponseCalled());
     }
 
 
@@ -149,7 +143,7 @@ public class FacebookOauthTest {
         when(mockHttpServletRequest.getParameter(OAUTH_CODE)).thenReturn("");
         when(mockHttpServletRequest.getParameter(OAUTH_TOKEN)).thenReturn("");
         facebook.handleRequest(mockHttpServletRequest, mockHttpServletResponse);
-        assertTrue(stubFacebookAuthCode.wasCalled());
+        assertTrue(fakeAuthentication.wasGetCodeCalled());
     }
 
 }
