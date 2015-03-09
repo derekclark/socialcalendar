@@ -6,8 +6,9 @@ import org.scribe.model.OAuthRequest;
 import org.scribe.oauth.OAuthService;
 import uk.co.socialcalendar.frameworksAndDrivers.FacebookOauth;
 import uk.co.socialcalendar.frameworksAndDrivers.FakeHttpSession;
+import uk.co.socialcalendar.frameworksAndDrivers.FakeAuthentication;
 import uk.co.socialcalendar.frameworksAndDrivers.StubFacebookAuthCode;
-import uk.co.socialcalendar.frameworksAndDrivers.StubFacebookVerifier;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -36,8 +37,9 @@ public class FacebookOauthTest {
 //    HttpSession mockSession;
     OAuthService mockService;
     OAuthRequest mockOauthRequest;
+    FakeAuthentication fakeAuthentication;
     StubFacebookResponse stubFacebookResponse;
-    StubFacebookVerifier stubFacebookVerifier;
+    //StubFacebookVerifier stubFacebookVerifier;
     StubFacebookAuthCode stubFacebookAuthCode;
     FakeHttpSession fakeHttpSession;
 
@@ -49,11 +51,11 @@ public class FacebookOauthTest {
         facebook = new FacebookOauth(apiKey, apiSecret, callback);
 
         stubFacebookResponse = new StubFacebookResponse();
-        stubFacebookVerifier = new StubFacebookVerifier();
+        fakeAuthentication = new FakeAuthentication();
         stubFacebookAuthCode = new StubFacebookAuthCode();
         fakeHttpSession = new FakeHttpSession();
         facebook.setFacebookResponse(stubFacebookResponse);
-        facebook.setFacebookVerifier(stubFacebookVerifier);
+        facebook.setAuth(fakeAuthentication);
         facebook.setFacebookAuthCode(stubFacebookAuthCode);
         facebook.setHttpSession(fakeHttpSession);
         setupHttpSessions();
@@ -107,7 +109,7 @@ public class FacebookOauthTest {
         when(mockHttpServletRequest.getParameter(OAUTH_CODE)).thenReturn(OAUTH_CODE);
         when(mockHttpServletRequest.getParameter(OAUTH_TOKEN)).thenReturn("");
         facebook.handleRequest(mockHttpServletRequest, mockHttpServletResponse);
-        assertTrue(stubFacebookVerifier.wasCalled());
+        assertTrue(fakeAuthentication.wasGetTokenCalled());
     }
 
     @Test

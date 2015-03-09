@@ -7,6 +7,7 @@ import org.scribe.model.Token;
 import org.scribe.oauth.OAuthService;
 import org.springframework.web.HttpRequestHandler;
 import uk.co.socialcalendar.interfaceAdapters.models.FacebookUserData;
+import uk.co.socialcalendar.interfaceAdapters.utilities.Auth;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -23,10 +24,13 @@ public class FacebookOauth implements HttpRequestHandler {
     private OAuthService service;
     FacebookResponse facebookResponse;
     OAuthRequest oauthRequest;
-    FacebookVerifier facebookVerifier;
-
+    Auth auth;
     FacebookAuthCode facebookAuthCode;
     HttpSession httpSession;
+
+    public void setAuth(Auth auth) {
+        this.auth = auth;
+    }
 
     public void setHttpSession(HttpSession httpSession) {
         this.httpSession = httpSession;
@@ -34,10 +38,6 @@ public class FacebookOauth implements HttpRequestHandler {
 
     public void setFacebookAuthCode(FacebookAuthCode facebookAuthCode) {
         this.facebookAuthCode = facebookAuthCode;
-    }
-
-    public void setFacebookVerifier(FacebookVerifier facebookVerifier) {
-        this.facebookVerifier = facebookVerifier;
     }
 
     public void setFacebookResponse(FacebookResponse facebookResponse) {
@@ -98,7 +98,7 @@ public class FacebookOauth implements HttpRequestHandler {
     }
 
     public Token getToken(String code){
-        return facebookVerifier.getToken(code);
+        return auth.getToken(code);
     }
 
     public String getAuthCode(){
