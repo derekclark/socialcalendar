@@ -90,6 +90,11 @@ public class FakeAuthentication implements Authentication {
         return oauthToken;
     }
 
+    @Override
+    public String getAuthorizationUrl(Token token) {
+        return "/authorizationUrl";
+    }
+
     public void setOauthToken(String oauthToken) {
         this.oauthToken = oauthToken;
     }
