@@ -7,7 +7,7 @@ import org.scribe.model.Token;
 import org.scribe.oauth.OAuthService;
 import org.springframework.web.HttpRequestHandler;
 import uk.co.socialcalendar.interfaceAdapters.models.FacebookUserData;
-import uk.co.socialcalendar.interfaceAdapters.utilities.Auth;
+import uk.co.socialcalendar.interfaceAdapters.utilities.Authentication;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -24,11 +24,11 @@ public class FacebookOauth implements HttpRequestHandler {
     private OAuthService service;
 
     OAuthRequest oauthRequest;
-    Auth auth;
+    Authentication authentication;
     HttpSession httpSession;
 
-    public void setAuth(Auth auth) {
-        this.auth = auth;
+    public void setAuthentication(Authentication authentication) {
+        this.authentication = authentication;
     }
 
     public void setHttpSession(HttpSession httpSession) {
@@ -72,7 +72,7 @@ public class FacebookOauth implements HttpRequestHandler {
     }
 
     public FacebookUserData getFacebookUserData(Token token, HttpServletResponse response) {
-        return auth.getResponse(accessToken,"facebookProtectedResourceUrl", response);
+        return authentication.getResponse(accessToken,"facebookProtectedResourceUrl", response);
     }
 
     public boolean isSet(String string){
@@ -90,11 +90,11 @@ public class FacebookOauth implements HttpRequestHandler {
     }
 
     public Token getToken(String code){
-        return auth.getToken(code);
+        return authentication.getToken(code);
     }
 
     public String getAuthCode(){
-        return auth.getcode();
+        return authentication.getcode();
     }
 
     public void setSessionAttributes(FacebookUserData fb){

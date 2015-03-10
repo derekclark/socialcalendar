@@ -2,16 +2,17 @@ package uk.co.socialcalendar.frameworksAndDrivers;
 
 import org.scribe.model.Token;
 import uk.co.socialcalendar.interfaceAdapters.models.FacebookUserData;
-import uk.co.socialcalendar.interfaceAdapters.utilities.Auth;
+import uk.co.socialcalendar.interfaceAdapters.utilities.Authentication;
 
 import javax.servlet.http.HttpServletResponse;
 
-public class FakeAuthentication implements Auth{
+public class FakeAuthentication implements Authentication {
 
+    boolean authenticated;
+    String userFacebookId;
+    String oauthToken;
     private boolean wasGetTokenCalled;
     private boolean wasGetCodeCalled;
-
-
     private boolean wasGetResponseCalled;
 
     public boolean wasGetTokenCalled() {
@@ -67,5 +68,31 @@ public class FakeAuthentication implements Auth{
     public String getFacebookId(){
         return fb.getId();
     }
+
+    @Override
+    public boolean isAuthenticated() {
+        return authenticated==true;
+    }
+
+    public void setAuthenticated(boolean authenticated) {
+        this.authenticated = authenticated;
+    }
+
+    public String getUserFacebookId() {
+        return userFacebookId;
+    }
+
+    public void setUserFacebookId(String userFacebookId) {
+        this.userFacebookId = userFacebookId;
+    }
+
+    public String getOauthToken() {
+        return oauthToken;
+    }
+
+    public void setOauthToken(String oauthToken) {
+        this.oauthToken = oauthToken;
+    }
+
 
 }

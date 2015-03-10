@@ -2,7 +2,7 @@ package UtilityTests;
 
 import org.junit.Before;
 import org.junit.Test;
-import uk.co.socialcalendar.interfaceAdapters.utilities.FakeAuthentication;
+import uk.co.socialcalendar.frameworksAndDrivers.FakeAuthentication;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertFalse;

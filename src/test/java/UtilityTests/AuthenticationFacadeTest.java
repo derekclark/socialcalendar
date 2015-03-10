@@ -2,8 +2,8 @@ package UtilityTests;
 
 import org.junit.Before;
 import org.junit.Test;
+import uk.co.socialcalendar.frameworksAndDrivers.FakeAuthentication;
 import uk.co.socialcalendar.interfaceAdapters.utilities.AuthenticationFacade;
-import uk.co.socialcalendar.interfaceAdapters.utilities.FakeAuthentication;
 
 import java.util.Map;
 
