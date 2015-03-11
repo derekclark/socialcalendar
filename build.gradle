@@ -22,6 +22,48 @@ jar {
     version =  '0.1.0'
 }
 
+configurations {
+  outputDirs
+
+  integrationtestCompile.extendsFrom compile
+  integrationtestRuntime.extendsFrom runtime, integrationtestCompile
+
+  // Expose configurations that include the test fixture classes for clients to use
+  integrationtestUsageCompile.extendsFrom integrationtestCompile, outputDirs
+  integrationtestUsageRuntime.extendsFrom integrationtestRuntime
+
+  bddtestCompile.extendsFrom compile
+  bddtestRuntime.extendsFrom runtime, bddtestCompile
+
+  bddtestUsageCompile.extendsFrom bddtestCompile, outputDirs
+  bddtestUsageRuntime.extendsFrom bddtestRuntime
+
+  // Assume that the project wants to use the fixtures for its tests
+  testCompile.extendsFrom bddtestUsageCompile
+  testRuntime.extendsFrom bddtestUsageRuntime
+}
+
+
+sourceSets {
+  main {
+    java { srcDir 'src/main/java' }
+  }
+  test {
+    java { srcDir 'src/test/java' }
+  }
+  integrationtest {
+    compileClasspath = sourceSets.main.output + configurations.integrationtestCompile
+    runtimeClasspath = output + compileClasspath + configurations.integrationtestRuntime
+    java { srcDirs = [] }
+  }
+  bddtest {
+    compileClasspath = sourceSets.main.output + configurations.bddtestCompile
+    runtimeClasspath = output + compileClasspath + configurations.bddtestRuntime
+    java { srcDir 'src/bddtest/java' }
+    resources { srcDir 'src/bddtest/resources' }
+  }
+}
+
 repositories {
     mavenCentral()
     maven { url "http://repo.spring.io/libs-milestone" }
@@ -30,6 +72,8 @@ repositories {
 
 dependencies {
     def tomcatVersion = '7.0.42'
+    
+
     tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
             "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}"
     tomcat("org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}") {
@@ -54,33 +98,34 @@ dependencies {
    compile 'org.apache.commons:commons-dbcp2:2.0'
 
 //remove
-   compile 'commons-fileupload:commons-fileupload:1.3.1'
-   compile 'joda-time:joda-time:2.3'
+//  compile 'commons-fileupload:commons-fileupload:1.3.1'
+//  compile 'joda-time:joda-time:2.3'
 
 // hibernate
-   compile("org.hibernate:hibernate-core:4.2.8.Final")
-   compile 'org.hibernate:hibernate-validator:5.0.1.Final'
-   compile 'org.hibernate:hibernate-entitymanager:4.3.5.Final'
-   compile 'org.hibernate:hibernate-c3p0:4.3.5.Final'
+  compile("org.hibernate:hibernate-core:4.2.8.Final")
+  compile 'org.hibernate:hibernate-validator:5.0.1.Final'
+  compile 'org.hibernate:hibernate-entitymanager:4.3.5.Final'
+  compile 'org.hibernate:hibernate-c3p0:4.3.5.Final'
 
-   compile 'org.springframework:spring-test:3.2.3.RELEASE'
-   compile 'org.springframework:spring-webmvc:3.2.8.RELEASE'
+  compile 'org.springframework:spring-test:3.2.3.RELEASE'
+  compile 'org.springframework:spring-webmvc:3.2.8.RELEASE'
 //   compile("org.springframework.boot:spring-boot-starter-security")
-   compile 'org.springframework:spring-orm:4.0.3.RELEASE'
-   compile 'org.springframework.security:spring-security-web:3.2.3.RELEASE'
-   compile 'org.springframework.security:spring-security-config:3.2.3.RELEASE'
-   compile 'org.springframework.security:spring-security-core:3.2.3.RELEASE'
+  compile 'org.springframework:spring-orm:4.0.3.RELEASE'
+  compile 'org.springframework.security:spring-security-web:3.2.3.RELEASE'
+  compile 'org.springframework.security:spring-security-config:3.2.3.RELEASE'
+  compile 'org.springframework.security:spring-security-core:3.2.3.RELEASE'
 
-   compile 'org.apache.tomcat:tomcat-jdbc:7.0.19'
-   compile 'org.apache.tomcat:juli:6.0.26'         
+  compile 'org.apache.tomcat:tomcat-jdbc:7.0.19'
+  compile 'org.apache.tomcat:juli:6.0.26'
 //   compile 'org.mockito:mockito-all:1.9.5'
   compile 'org.mockito:mockito-core:1.9.5'
 
-   testCompile 'junit:junit-dep:4.11'
+  testCompile 'junit:junit-dep:4.11'
+  bddtestCompile 'info.cukes:cucumber-java:1.2.0'
+  bddtestCompile 'info.cukes:cucumber-junit:1.2.0'
+  bddtestCompile 'junit:junit:4.11'
 
 }
-
-
 
 task wrapper(type: Wrapper) {
     gradleVersion = '1.12'
