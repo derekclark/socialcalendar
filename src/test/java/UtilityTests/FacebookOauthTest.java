@@ -17,7 +17,6 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 public class FacebookOauthTest {
-
     public final static String OAUTH_CODE = "OAUTH_CODE";
     public final static String OAUTH_TOKEN = "OAUTH_TOKEN";
     public static final String USER_EMAIL = "userEmail";

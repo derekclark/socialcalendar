@@ -4,23 +4,22 @@ import org.scribe.model.Token;
 import org.springframework.web.HttpRequestHandler;
 import uk.co.socialcalendar.interfaceAdapters.models.FacebookUserData;
 import uk.co.socialcalendar.interfaceAdapters.utilities.Authentication;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-
 public class FacebookOauth implements HttpRequestHandler {
     Authentication authentication;
     HttpSession httpSession;
     public final static String OAUTH_CODE = "OAUTH_CODE";
     public final static String OAUTH_TOKEN = "OAUTH_TOKEN";
+    private static final Token EMPTY_TOKEN = null;
     public static final String HOMEPAGE = "/";
     private Token accessToken;
     private String apiSecret;
-    private static final Token EMPTY_TOKEN = null;
+
 
     public void setAuthentication(Authentication authentication) {
         this.authentication = authentication;
