@@ -6,8 +6,8 @@ import org.hibernate.SessionFactory;
 import org.junit.Before;
 import org.junit.Test;
 import uk.co.socialcalendar.entities.User;
-import uk.co.socialcalendar.frameworksAndDrivers.UserDAOHibernateImpl;
-import uk.co.socialcalendar.frameworksAndDrivers.UserHibernateModel;
+import uk.co.socialcalendar.frameworksAndDrivers.persistence.UserDAOHibernateImpl;
+import uk.co.socialcalendar.frameworksAndDrivers.persistence.UserHibernateModel;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNull;

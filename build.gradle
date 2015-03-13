@@ -182,6 +182,13 @@ task createRHWar (type: GradleBuild){
   tasks=['copyRHPropertyFile','clean','war']  
 }
 
+task cucumber(type: JavaExec, dependsOn: []) {
+    main = "cucumber.api.cli.Main"
+    classpath = configurations.bddtestRuntime + sourceSets.main.output + sourceSets.bddtest.output
+    jvmArgs = [  ]
+    args = ['-f', 'pretty', '--glue', 'uk.co.socialcalendar', 'src/bddtest/resources' ]
+
+}
 
 /* Change context path (base url). otherwise defaults to name of project */
 tomcatRunWar.contextPath = ''

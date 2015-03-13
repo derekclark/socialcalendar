@@ -1,4 +1,4 @@
-package uk.co.socialcalendar.frameworksAndDrivers;
+package uk.co.socialcalendar.frameworksAndDrivers.persistence;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

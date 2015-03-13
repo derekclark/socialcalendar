@@ -2,7 +2,7 @@ package UserTests;
 
 import org.junit.Test;
 import uk.co.socialcalendar.entities.User;
-import uk.co.socialcalendar.frameworksAndDrivers.InMemoryUserDAO;
+import uk.co.socialcalendar.frameworksAndDrivers.persistence.InMemoryUserDAO;
 import uk.co.socialcalendar.useCases.UserDAO;
 
 import static junit.framework.TestCase.assertEquals;

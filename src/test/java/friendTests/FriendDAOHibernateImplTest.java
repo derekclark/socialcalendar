@@ -7,8 +7,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import uk.co.socialcalendar.entities.Friend;
-import uk.co.socialcalendar.frameworksAndDrivers.FriendDAOHibernateImpl;
-import uk.co.socialcalendar.frameworksAndDrivers.FriendHibernateModel;
+import uk.co.socialcalendar.frameworksAndDrivers.persistence.FriendDAOHibernateImpl;
+import uk.co.socialcalendar.frameworksAndDrivers.persistence.FriendHibernateModel;
 import uk.co.socialcalendar.interfaceAdapters.models.FriendValidator;
 
 import java.util.ArrayList;

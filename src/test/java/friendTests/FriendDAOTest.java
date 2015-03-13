@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import uk.co.socialcalendar.entities.Friend;
 import uk.co.socialcalendar.entities.FriendStatus;
-import uk.co.socialcalendar.frameworksAndDrivers.InMemoryFriendDAO;
+import uk.co.socialcalendar.frameworksAndDrivers.persistence.InMemoryFriendDAO;
 import uk.co.socialcalendar.useCases.FriendDAO;
 
 import java.util.ArrayList;

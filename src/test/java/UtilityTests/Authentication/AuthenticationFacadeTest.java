@@ -1,8 +1,9 @@
-package UtilityTests;
+package UtilityTests.Authentication;
 
 import org.junit.Before;
 import org.junit.Test;
-import uk.co.socialcalendar.frameworksAndDrivers.FakeAuthentication;
+import uk.co.socialcalendar.frameworksAndDrivers.authentication.FakeAuthentication;
+import uk.co.socialcalendar.frameworksAndDrivers.authentication.FakeScribeAdapter;
 import uk.co.socialcalendar.interfaceAdapters.utilities.AuthenticationFacade;
 
 import java.util.Map;
@@ -15,6 +16,7 @@ public class AuthenticationFacadeTest {
     AuthenticationFacade facade = new AuthenticationFacade();
 
     FakeAuthentication fakeAuthentication;
+    FakeScribeAdapter fakeScribeAdapter;
     public static final String USER_FACEBOOK_ID = "123";
     public static final String OAUTH_TOKEN = "456";
 
@@ -22,7 +24,9 @@ public class AuthenticationFacadeTest {
     @Before
     public void setup(){
         fakeAuthentication = new FakeAuthentication();
+        fakeScribeAdapter = new FakeScribeAdapter();
         facade.setAuthentication(fakeAuthentication);
+        facade.setOauth(fakeScribeAdapter);
 
     }
 
@@ -52,7 +56,7 @@ public class AuthenticationFacadeTest {
 
     @Test
     public void shouldSetOauthTokenModelAttribute(){
-        fakeAuthentication.setOauthToken(OAUTH_TOKEN);
+        fakeScribeAdapter.setOauthToken(OAUTH_TOKEN);
         Map<String,Object> map = facade.getAuthenticationAttrbutes();
         assertEquals(OAUTH_TOKEN, map.get("oauthToken"));
     }

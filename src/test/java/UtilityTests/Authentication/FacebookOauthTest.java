@@ -1,10 +1,11 @@
-package UtilityTests;
+package UtilityTests.Authentication;
 
 import org.junit.Before;
 import org.junit.Test;
-import uk.co.socialcalendar.frameworksAndDrivers.FacebookOauth;
-import uk.co.socialcalendar.frameworksAndDrivers.FakeAuthentication;
+import uk.co.socialcalendar.frameworksAndDrivers.authentication.FacebookOauth;
+import uk.co.socialcalendar.frameworksAndDrivers.authentication.FakeAuthentication;
 import uk.co.socialcalendar.frameworksAndDrivers.FakeHttpSession;
+import uk.co.socialcalendar.frameworksAndDrivers.authentication.FakeScribeAdapter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +31,7 @@ public class FacebookOauthTest {
     HttpServletResponse mockResponse;
     FakeAuthentication fakeAuthentication;
     FakeHttpSession fakeHttpSession;
+    FakeScribeAdapter fakeScribeAdapter;
 
     String apiKey, apiSecret, callback;
 
@@ -41,8 +43,10 @@ public class FacebookOauthTest {
         facebook = new FacebookOauth(apiKey, apiSecret, callback);
         fakeAuthentication = new FakeAuthentication();
         fakeHttpSession = new FakeHttpSession();
+        fakeScribeAdapter = new FakeScribeAdapter();
         facebook.setAuthentication(fakeAuthentication);
         facebook.setHttpSession(fakeHttpSession);
+        facebook.setOauth(fakeScribeAdapter);
         setupHttpSessions();
 
     }
@@ -78,15 +82,15 @@ public class FacebookOauthTest {
     public void willGetTokenIfNotSet() throws ServletException, IOException {
         setupGetTokenCall();
         facebook.handleRequest(mockRequest, mockResponse);
-        assertTrue(fakeAuthentication.wasGetTokenCalled());
+        assertTrue(fakeScribeAdapter.wasGetTokenCalled());
     }
 
     @Test
     public void getsFacebookDataAfterGettingToken() throws ServletException, IOException {
         setupGetTokenCall();
         facebook.handleRequest(mockRequest, mockResponse);
-        assertEquals(USER_EMAIL, fakeAuthentication.getEmail());
-        assertEquals(USER_NAME, fakeAuthentication.getName());
+        assertEquals(USER_EMAIL, fakeHttpSession.getAttribute("USER_EMAIL"));
+        assertEquals(USER_NAME, fakeHttpSession.getAttribute("USER_NAME"));
     }
 
     @Test
@@ -110,14 +114,14 @@ public class FacebookOauthTest {
         when(mockRequest.getParameter(OAUTH_CODE)).thenReturn(OAUTH_CODE);
         when(mockRequest.getParameter(OAUTH_TOKEN)).thenReturn(OAUTH_TOKEN);
         facebook.handleRequest(mockRequest, mockResponse);
-        assertTrue(fakeAuthentication.wasGetResponseCalled());
+        assertTrue(fakeScribeAdapter.wasGetResponseCalled());
     }
 
     @Test
-    public void willGetCodeIfNotSet() throws ServletException, IOException {
+    public void willGetAuthCodeIfNotSet() throws ServletException, IOException {
         setupGetCodeCall();
         facebook.handleRequest(mockRequest, mockResponse);
-        assertTrue(fakeAuthentication.wasGetCodeCalled());
+        assertTrue(fakeScribeAdapter.wasGetAuthorizationUrlCalled());
     }
 
     private void setupGetCodeCall() {

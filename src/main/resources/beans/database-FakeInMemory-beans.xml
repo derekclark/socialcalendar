@@ -9,6 +9,6 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 	<!--Test Doubles -->
-	<bean id="friendDAO" class="uk.co.socialcalendar.frameworksAndDrivers.InMemoryFriendDAO" />
-	<bean id="userDAO" class="uk.co.socialcalendar.frameworksAndDrivers.InMemoryUserDAO" />
+	<bean id="friendDAO" class="uk.co.socialcalendar.frameworksAndDrivers.persistence.InMemoryFriendDAO" />
+	<bean id="userDAO" class="uk.co.socialcalendar.frameworksAndDrivers.persistence.InMemoryUserDAO" />
 </beans>

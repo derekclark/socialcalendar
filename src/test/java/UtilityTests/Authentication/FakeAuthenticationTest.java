@@ -1,8 +1,8 @@
-package UtilityTests;
+package UtilityTests.Authentication;
 
 import org.junit.Before;
 import org.junit.Test;
-import uk.co.socialcalendar.frameworksAndDrivers.FakeAuthentication;
+import uk.co.socialcalendar.frameworksAndDrivers.authentication.FakeAuthentication;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertFalse;
@@ -35,9 +35,9 @@ public class FakeAuthenticationTest {
         assertEquals("123", authentication.getUserFacebookId());
     }
 
-    @Test
-    public void shouldGetOauthToken(){
-        authentication.setOauthToken("456");
-        assertEquals("456", authentication.getOauthToken());
-    }
+//    @Test
+//    public void shouldGetOauthToken(){
+//        authentication.setOauthToken("456");
+//        assertEquals("456", authentication.getOauthToken());
+//    }
 }

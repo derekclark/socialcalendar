@@ -1,9 +1,10 @@
-package uk.co.socialcalendar.frameworksAndDrivers;
+package uk.co.socialcalendar.frameworksAndDrivers.authentication;
 
 import org.scribe.model.Token;
 import org.springframework.web.HttpRequestHandler;
 import uk.co.socialcalendar.interfaceAdapters.models.FacebookUserData;
 import uk.co.socialcalendar.interfaceAdapters.utilities.Authentication;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,6 +13,12 @@ import java.io.IOException;
 
 public class FacebookOauth implements HttpRequestHandler {
     Authentication authentication;
+    Oauth oauth;
+
+    public void setOauth(Oauth oauth) {
+        this.oauth = oauth;
+    }
+
     HttpSession httpSession;
     public final static String OAUTH_CODE = "OAUTH_CODE";
     public final static String OAUTH_TOKEN = "OAUTH_TOKEN";
@@ -31,18 +38,8 @@ public class FacebookOauth implements HttpRequestHandler {
 
 
     public FacebookOauth(String apiKey, String apiSecret, String callback) {
-//        service = createService(apiKey, apiSecret, callback);
         this.apiSecret = apiSecret;
     }
-
-//    public OAuthService createService(String apiKey, String apiSecret, String callback) {
-//        return new ServiceBuilder()
-//                .provider(FacebookApi.class)
-//                .apiKey(apiKey)
-//                .apiSecret(apiSecret)
-//                .callback(callback)
-//                .build();
-//    }
 
     @Override
     public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -60,26 +57,26 @@ public class FacebookOauth implements HttpRequestHandler {
         }
     }
 
-    private void handleGetFacebookUserData(HttpServletResponse response, String token) {
+    private void handleGetFacebookUserData(HttpServletResponse response, String token) throws IOException {
         Token accessToken = new Token(token, apiSecret);
         getFacebookUserData(accessToken, response);
     }
 
-    private void handleGetToken(HttpServletResponse response, String code) {
+    private void handleGetToken(HttpServletResponse response, String code) throws IOException {
         accessToken = getToken(code);
         FacebookUserData fb = getFacebookUserData(accessToken, response);
         setSessionAttributes(fb);
     }
 
     private void handleGetAuthCode(HttpServletResponse response) throws IOException {
-        getAuthCode();
-        String authorizationUrl = authentication.getAuthorizationUrl(EMPTY_TOKEN);
+//        getAuthCode();
+        String authorizationUrl = oauth.getAuthorizationUrl(EMPTY_TOKEN);
         httpSession.setAttribute("IS_AUTHENTICATED", false);
         redirect(authorizationUrl, response);
     }
 
-    public FacebookUserData getFacebookUserData(Token token, HttpServletResponse response) {
-        return authentication.getResponse(accessToken,"facebookProtectedResourceUrl", response);
+    public FacebookUserData getFacebookUserData(Token token, HttpServletResponse response) throws IOException {
+        return oauth.getResponse(accessToken,"facebookProtectedResourceUrl", response);
     }
 
     public boolean isSet(String string){
@@ -97,12 +94,12 @@ public class FacebookOauth implements HttpRequestHandler {
     }
 
     public Token getToken(String code){
-        return authentication.getToken(code);
+        return oauth.getToken(code);
     }
 
-    public String getAuthCode(){
-        return authentication.getcode();
-    }
+//    public String getAuthCode(){
+//        return authentication.getcode();
+//    }
 
     public void setSessionAttributes(FacebookUserData fb){
         httpSession.setAttribute("OAUTH_TOKEN", accessToken.getToken());

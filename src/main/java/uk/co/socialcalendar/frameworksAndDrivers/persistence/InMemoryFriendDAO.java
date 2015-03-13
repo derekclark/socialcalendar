@@ -1,4 +1,4 @@
-package uk.co.socialcalendar.frameworksAndDrivers;
+package uk.co.socialcalendar.frameworksAndDrivers.persistence;
 
 import uk.co.socialcalendar.entities.Friend;
 import uk.co.socialcalendar.entities.FriendStatus;
