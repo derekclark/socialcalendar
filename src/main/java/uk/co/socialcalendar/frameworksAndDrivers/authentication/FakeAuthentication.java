@@ -1,6 +1,6 @@
 package uk.co.socialcalendar.frameworksAndDrivers.authentication;
 
-import uk.co.socialcalendar.interfaceAdapters.models.FacebookUserData;
+import uk.co.socialcalendar.interfaceAdapters.models.facebook.FacebookUserData;
 import uk.co.socialcalendar.interfaceAdapters.utilities.Authentication;
 
 public class FakeAuthentication implements Authentication {

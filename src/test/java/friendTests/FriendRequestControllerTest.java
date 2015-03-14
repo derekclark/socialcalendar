@@ -7,11 +7,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
 import uk.co.socialcalendar.entities.Friend;
 import uk.co.socialcalendar.entities.FriendStatus;
-import uk.co.socialcalendar.interfaceAdapters.controllers.FriendCommonModel;
-import uk.co.socialcalendar.interfaceAdapters.controllers.FriendRequestController;
+import uk.co.socialcalendar.interfaceAdapters.controllers.friend.FriendCommonModel;
+import uk.co.socialcalendar.interfaceAdapters.controllers.friend.FriendRequestController;
 import uk.co.socialcalendar.interfaceAdapters.utilities.SessionAttributes;
 import uk.co.socialcalendar.interfaceAdapters.utilities.StubMailNotification;
-import uk.co.socialcalendar.useCases.FriendFacadeImpl;
+import uk.co.socialcalendar.useCases.friend.FriendFacadeImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

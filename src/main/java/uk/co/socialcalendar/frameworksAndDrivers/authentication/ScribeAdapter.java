@@ -5,7 +5,7 @@ import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.FacebookApi;
 import org.scribe.model.*;
 import org.scribe.oauth.OAuthService;
-import uk.co.socialcalendar.interfaceAdapters.models.FacebookUserData;
+import uk.co.socialcalendar.interfaceAdapters.models.facebook.FacebookUserData;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;

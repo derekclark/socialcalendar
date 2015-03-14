@@ -9,17 +9,18 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<bean id="friendFacadeImpl" class="uk.co.socialcalendar.useCases.FriendFacadeImpl">
+	<bean id="friendFacadeImpl" class="uk.co.socialcalendar.useCases.friend.FriendFacadeImpl">
         <property name="friendDAO" ref="friendDAO"/>
 	</bean>    	
 
-	<bean id="userFacade" class="uk.co.socialcalendar.useCases.UserFacadeImpl">
+	<bean id="userFacade" class="uk.co.socialcalendar.useCases.user.UserFacadeImpl">
         <property name="userDAO" ref="userDAO"/>
 	</bean>    	
 
 
 	<bean id="authenticationFacade" class="uk.co.socialcalendar.interfaceAdapters.utilities.AuthenticationFacade">
         <property name="authentication" ref="authentication"/>
+        <property name="oauth" ref="oauth"/>
 	</bean>
 
 	<bean id="sessionAttributes" class="uk.co.socialcalendar.interfaceAdapters.utilities.SessionAttributes" />

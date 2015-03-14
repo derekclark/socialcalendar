@@ -43,21 +43,21 @@ public class AuthenticationFacadeTest {
     @Test
     public void shouldSetAuthenticatedModelAttribute(){
         fakeAuthentication.setAuthenticated(true);
-        Map<String,Object> map = facade.getAuthenticationAttrbutes();
+        Map<String,Object> map = facade.getAuthenticationAttributes();
         assertEquals(true, map.get("isAuthenticated"));
     }
 
     @Test
     public void shouldSetUserFacebookIdModelAttribute(){
         fakeAuthentication.setUserFacebookId(USER_FACEBOOK_ID);
-        Map<String,Object> map = facade.getAuthenticationAttrbutes();
+        Map<String,Object> map = facade.getAuthenticationAttributes();
         assertEquals(USER_FACEBOOK_ID, map.get("userFacebookId"));
     }
 
     @Test
     public void shouldSetOauthTokenModelAttribute(){
         fakeScribeAdapter.setOauthToken(OAUTH_TOKEN);
-        Map<String,Object> map = facade.getAuthenticationAttrbutes();
+        Map<String,Object> map = facade.getAuthenticationAttributes();
         assertEquals(OAUTH_TOKEN, map.get("oauthToken"));
     }
 

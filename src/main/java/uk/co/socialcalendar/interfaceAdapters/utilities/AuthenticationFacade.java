@@ -18,7 +18,7 @@ public class AuthenticationFacade {
         this.authentication = authentication;
     }
 
-    public Map<String,Object> getAuthenticationAttrbutes(){
+    public Map<String,Object> getAuthenticationAttributes(){
         Map<String,Object> modelMap = new HashMap<String,Object>();
         modelMap.put("isAuthenticated", authentication.isAuthenticated());
         modelMap.put("userFacebookId", authentication.getUserFacebookId());

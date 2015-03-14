@@ -2,7 +2,7 @@ package uk.co.socialcalendar.frameworksAndDrivers.persistence;
 
 import uk.co.socialcalendar.entities.Friend;
 import uk.co.socialcalendar.entities.FriendStatus;
-import uk.co.socialcalendar.useCases.FriendDAO;
+import uk.co.socialcalendar.useCases.friend.FriendDAO;
 
 import java.util.ArrayList;
 import java.util.List;

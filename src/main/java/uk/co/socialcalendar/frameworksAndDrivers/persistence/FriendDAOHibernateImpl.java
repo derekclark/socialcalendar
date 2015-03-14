@@ -5,8 +5,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import uk.co.socialcalendar.entities.Friend;
 import uk.co.socialcalendar.entities.FriendStatus;
-import uk.co.socialcalendar.interfaceAdapters.models.FriendValidator;
-import uk.co.socialcalendar.useCases.FriendDAO;
+import uk.co.socialcalendar.interfaceAdapters.models.friend.FriendValidator;
+import uk.co.socialcalendar.useCases.friend.FriendDAO;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;

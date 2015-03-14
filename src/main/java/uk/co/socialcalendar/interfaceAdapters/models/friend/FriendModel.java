@@ -1,4 +1,4 @@
-package uk.co.socialcalendar.interfaceAdapters.models;
+package uk.co.socialcalendar.interfaceAdapters.models.friend;
 
 public class FriendModel {
     private int friendId;

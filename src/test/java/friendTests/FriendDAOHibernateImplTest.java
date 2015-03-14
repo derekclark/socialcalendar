@@ -9,7 +9,7 @@ import org.mockito.ArgumentCaptor;
 import uk.co.socialcalendar.entities.Friend;
 import uk.co.socialcalendar.frameworksAndDrivers.persistence.FriendDAOHibernateImpl;
 import uk.co.socialcalendar.frameworksAndDrivers.persistence.FriendHibernateModel;
-import uk.co.socialcalendar.interfaceAdapters.models.FriendValidator;
+import uk.co.socialcalendar.interfaceAdapters.models.friend.FriendValidator;
 
 import java.util.ArrayList;
 import java.util.List;

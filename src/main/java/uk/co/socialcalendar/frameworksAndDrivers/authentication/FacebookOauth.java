@@ -2,7 +2,7 @@ package uk.co.socialcalendar.frameworksAndDrivers.authentication;
 
 import org.scribe.model.Token;
 import org.springframework.web.HttpRequestHandler;
-import uk.co.socialcalendar.interfaceAdapters.models.FacebookUserData;
+import uk.co.socialcalendar.interfaceAdapters.models.facebook.FacebookUserData;
 import uk.co.socialcalendar.interfaceAdapters.utilities.Authentication;
 
 import javax.servlet.ServletException;
@@ -14,11 +14,6 @@ import java.io.IOException;
 public class FacebookOauth implements HttpRequestHandler {
     Authentication authentication;
     Oauth oauth;
-
-    public void setOauth(Oauth oauth) {
-        this.oauth = oauth;
-    }
-
     HttpSession httpSession;
     public final static String OAUTH_CODE = "OAUTH_CODE";
     public final static String OAUTH_TOKEN = "OAUTH_TOKEN";
@@ -27,6 +22,9 @@ public class FacebookOauth implements HttpRequestHandler {
     private Token accessToken;
     private String apiSecret;
 
+    public void setOauth(Oauth oauth) {
+        this.oauth = oauth;
+    }
 
     public void setAuthentication(Authentication authentication) {
         this.authentication = authentication;
@@ -35,7 +33,6 @@ public class FacebookOauth implements HttpRequestHandler {
     public void setHttpSession(HttpSession httpSession) {
         this.httpSession = httpSession;
     }
-
 
     public FacebookOauth(String apiKey, String apiSecret, String callback) {
         this.apiSecret = apiSecret;

@@ -1,4 +1,4 @@
-package uk.co.socialcalendar.useCases;
+package uk.co.socialcalendar.useCases.user;
 
 import uk.co.socialcalendar.entities.User;
 

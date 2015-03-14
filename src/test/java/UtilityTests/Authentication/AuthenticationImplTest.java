@@ -35,9 +35,6 @@ public class AuthenticationImplTest {
         mockVerifier =  mock(Verifier.class);
         mockOauthRequest = mock(OAuthRequest.class);
         mockResponse = mock(HttpServletResponse.class);
-//        authenticationImpl.setService(mockService);
-//        authenticationImpl.setVerifier(mockVerifier);
-//        authenticationImpl.setOauthRequest(mockOauthRequest);
     }
 
     @Test
@@ -45,31 +42,5 @@ public class AuthenticationImplTest {
         assertTrue(authenticationImpl instanceof AuthenticationImpl);
     }
 
-//    @Test
-//    public void canGetAuthorizationUrl(){
-//        String expected = "authorizationUrl";
-//        Token token = new Token("token", "apiSecret");
-//        when(mockService.getAuthorizationUrl(EMPTY_TOKEN)).thenReturn("authorizationUrl");
-//        String actual = authenticationImpl.getAuthorizationUrl(null);
-//        assertEquals(expected, actual);
-//    }
-
-//    @Test
-//    public void canGetAccessToken(){
-//        Token expectedToken = new Token("token", "apiSecret");
-//        when(mockService.getAccessToken(EMPTY_TOKEN, mockVerifier)).thenReturn(expectedToken);
-//        Token actualToken = authenticationImpl.getToken("");
-//        assertEquals(expectedToken, actualToken);
-//    }
-
-//    @Test
-//    public void getFacebookUserData() throws IOException {
-//        Token accessToken = new Token("token", "apiSecret");
-//        FacebookUserData fb = new FacebookUserData();
-//
-//
-////        when(mockOauthRequest.send()).thenReturn(response);
-//        authenticationImpl.getResponse(accessToken, "", mockResponse);
-//    }
 
 }

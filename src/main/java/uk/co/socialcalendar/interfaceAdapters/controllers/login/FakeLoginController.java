@@ -1,4 +1,4 @@
-package uk.co.socialcalendar.interfaceAdapters.controllers;
+package uk.co.socialcalendar.interfaceAdapters.controllers.login;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,8 +8,8 @@ import org.springframework.web.servlet.ModelAndView;
 import uk.co.socialcalendar.entities.Friend;
 import uk.co.socialcalendar.entities.FriendStatus;
 import uk.co.socialcalendar.entities.User;
-import uk.co.socialcalendar.useCases.FriendDAO;
-import uk.co.socialcalendar.useCases.UserDAO;
+import uk.co.socialcalendar.useCases.friend.FriendDAO;
+import uk.co.socialcalendar.useCases.user.UserDAO;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

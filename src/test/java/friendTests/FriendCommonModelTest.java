@@ -6,13 +6,13 @@ import org.springframework.web.servlet.ModelAndView;
 import uk.co.socialcalendar.entities.Friend;
 import uk.co.socialcalendar.entities.FriendStatus;
 import uk.co.socialcalendar.entities.User;
-import uk.co.socialcalendar.interfaceAdapters.controllers.FriendCommonModel;
-import uk.co.socialcalendar.interfaceAdapters.models.FriendModel;
-import uk.co.socialcalendar.interfaceAdapters.models.FriendModelFacade;
+import uk.co.socialcalendar.interfaceAdapters.controllers.friend.FriendCommonModel;
+import uk.co.socialcalendar.interfaceAdapters.models.friend.FriendModel;
+import uk.co.socialcalendar.interfaceAdapters.models.friend.FriendModelFacade;
 import uk.co.socialcalendar.interfaceAdapters.utilities.AuthenticationFacade;
-import uk.co.socialcalendar.useCases.FriendFacade;
-import uk.co.socialcalendar.useCases.FriendFacadeImpl;
-import uk.co.socialcalendar.useCases.UserFacade;
+import uk.co.socialcalendar.useCases.friend.FriendFacade;
+import uk.co.socialcalendar.useCases.friend.FriendFacadeImpl;
+import uk.co.socialcalendar.useCases.user.UserFacade;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -93,21 +93,21 @@ public class FriendCommonModelTest {
     @Test
     public void populateAuthenticatedAttribute(){
         Map<String, Object> actualModelMap = createAuthenticationModel();
-        when(mockAuthenticationFacade.getAuthenticationAttrbutes()).thenReturn(actualModelMap);
+        when(mockAuthenticationFacade.getAuthenticationAttributes()).thenReturn(actualModelMap);
         assertEquals(true, actualModelMap.get("isAuthenticated"));
     }
 
     @Test
     public void populateFacebookIdModelAttribute(){
         Map<String, Object> actualModelMap = createAuthenticationModel();
-		when(mockAuthenticationFacade.getAuthenticationAttrbutes()).thenReturn(actualModelMap);
+		when(mockAuthenticationFacade.getAuthenticationAttributes()).thenReturn(actualModelMap);
         assertEquals(USER_FACEBOOK_ID,actualModelMap.get("userFacebookId"));
     }
 
     @Test
     public void populateOauthTokenAttribute(){
         Map<String, Object> actualModelMap = createAuthenticationModel();
-		when(mockAuthenticationFacade.getAuthenticationAttrbutes()).thenReturn(actualModelMap);
+		when(mockAuthenticationFacade.getAuthenticationAttributes()).thenReturn(actualModelMap);
         assertEquals(OAUTH_TOKEN,actualModelMap.get("oauthToken"));
     }
 
@@ -163,7 +163,7 @@ public class FriendCommonModelTest {
     @Test
     public void returnsAllAttributes(){
         Map<String, Object> actualModelMap = createAuthenticationModel();
-        when(mockAuthenticationFacade.getAuthenticationAttrbutes()).thenReturn(actualModelMap);
+        when(mockAuthenticationFacade.getAuthenticationAttributes()).thenReturn(actualModelMap);
 
         Map<String, Object> actualMap = friendCommonModel.getCommonModelAttributes(USER_ID);
         assertNotNull(actualMap.get("userName"));

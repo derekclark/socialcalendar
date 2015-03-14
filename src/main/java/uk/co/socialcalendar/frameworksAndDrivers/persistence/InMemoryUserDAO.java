@@ -1,7 +1,7 @@
 package uk.co.socialcalendar.frameworksAndDrivers.persistence;
 
 import uk.co.socialcalendar.entities.User;
-import uk.co.socialcalendar.useCases.UserDAO;
+import uk.co.socialcalendar.useCases.user.UserDAO;
 
 import java.util.ArrayList;
 import java.util.List;

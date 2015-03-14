@@ -1,10 +1,10 @@
-package uk.co.socialcalendar.interfaceAdapters.controllers;
+package uk.co.socialcalendar.interfaceAdapters.controllers.friend;
 
 import uk.co.socialcalendar.entities.Friend;
-import uk.co.socialcalendar.interfaceAdapters.models.FriendModelFacade;
+import uk.co.socialcalendar.interfaceAdapters.models.friend.FriendModelFacade;
 import uk.co.socialcalendar.interfaceAdapters.utilities.AuthenticationFacade;
-import uk.co.socialcalendar.useCases.FriendFacade;
-import uk.co.socialcalendar.useCases.UserFacade;
+import uk.co.socialcalendar.useCases.friend.FriendFacade;
+import uk.co.socialcalendar.useCases.user.UserFacade;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +37,7 @@ public class FriendCommonModel {
         mav.putAll(getFriendRequests(loggedInUser));
         mav.putAll(getSection());
         mav.putAll(getUserName(loggedInUser));
-        mav.putAll(authenticationFacade.getAuthenticationAttrbutes());
+        mav.putAll(authenticationFacade.getAuthenticationAttributes());
         mav.putAll(getNewFriend());
         return mav;
     }

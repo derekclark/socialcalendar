@@ -1,4 +1,4 @@
-package uk.co.socialcalendar.interfaceAdapters.models;
+package uk.co.socialcalendar.interfaceAdapters.models.friend;
 
 import uk.co.socialcalendar.entities.Friend;
 import static uk.co.socialcalendar.entities.FriendStatus.*;

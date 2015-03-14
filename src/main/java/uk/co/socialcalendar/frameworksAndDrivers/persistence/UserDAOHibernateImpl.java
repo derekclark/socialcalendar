@@ -3,7 +3,7 @@ package uk.co.socialcalendar.frameworksAndDrivers.persistence;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import uk.co.socialcalendar.entities.User;
-import uk.co.socialcalendar.useCases.UserDAO;
+import uk.co.socialcalendar.useCases.user.UserDAO;
 import javax.transaction.Transactional;
 
 public class UserDAOHibernateImpl implements UserDAO {

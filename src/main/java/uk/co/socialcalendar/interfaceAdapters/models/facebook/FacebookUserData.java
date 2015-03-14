@@ -1,4 +1,4 @@
-package uk.co.socialcalendar.interfaceAdapters.models;
+package uk.co.socialcalendar.interfaceAdapters.models.facebook;
 
 public class FacebookUserData {
     private String id;

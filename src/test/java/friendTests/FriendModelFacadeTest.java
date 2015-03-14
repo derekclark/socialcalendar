@@ -5,10 +5,10 @@ import org.junit.Test;
 import uk.co.socialcalendar.entities.Friend;
 import uk.co.socialcalendar.entities.FriendStatus;
 import uk.co.socialcalendar.entities.User;
-import uk.co.socialcalendar.interfaceAdapters.models.FriendModel;
-import uk.co.socialcalendar.interfaceAdapters.models.FriendModelFacade;
-import uk.co.socialcalendar.useCases.FriendFacade;
-import uk.co.socialcalendar.useCases.UserFacade;
+import uk.co.socialcalendar.interfaceAdapters.models.friend.FriendModel;
+import uk.co.socialcalendar.interfaceAdapters.models.friend.FriendModelFacade;
+import uk.co.socialcalendar.useCases.friend.FriendFacade;
+import uk.co.socialcalendar.useCases.user.UserFacade;
 
 import java.util.ArrayList;
 import java.util.List;

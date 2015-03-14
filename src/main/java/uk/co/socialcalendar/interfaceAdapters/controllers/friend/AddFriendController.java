@@ -1,4 +1,4 @@
-package uk.co.socialcalendar.interfaceAdapters.controllers;
+package uk.co.socialcalendar.interfaceAdapters.controllers.friend;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

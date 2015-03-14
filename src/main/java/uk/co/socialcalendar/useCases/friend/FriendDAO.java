@@ -1,4 +1,4 @@
-package uk.co.socialcalendar.useCases;
+package uk.co.socialcalendar.useCases.friend;
 
 import uk.co.socialcalendar.entities.Friend;
 import uk.co.socialcalendar.entities.FriendStatus;

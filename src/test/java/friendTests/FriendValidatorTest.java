@@ -3,7 +3,7 @@ package friendTests;
 import org.junit.Before;
 import org.junit.Test;
 import uk.co.socialcalendar.entities.Friend;
-import uk.co.socialcalendar.interfaceAdapters.models.FriendValidator;
+import uk.co.socialcalendar.interfaceAdapters.models.friend.FriendValidator;
 
 import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertTrue;

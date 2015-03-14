@@ -3,8 +3,8 @@ package UserTests;
 import org.junit.Before;
 import org.junit.Test;
 import uk.co.socialcalendar.entities.User;
-import uk.co.socialcalendar.useCases.UserDAO;
-import uk.co.socialcalendar.useCases.UserFacadeImpl;
+import uk.co.socialcalendar.useCases.user.UserDAO;
+import uk.co.socialcalendar.useCases.user.UserFacadeImpl;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;

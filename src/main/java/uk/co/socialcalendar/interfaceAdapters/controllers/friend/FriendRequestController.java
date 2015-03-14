@@ -1,4 +1,4 @@
-package uk.co.socialcalendar.interfaceAdapters.controllers;
+package uk.co.socialcalendar.interfaceAdapters.controllers.friend;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,7 +10,7 @@ import uk.co.socialcalendar.entities.Friend;
 import uk.co.socialcalendar.entities.FriendStatus;
 import uk.co.socialcalendar.interfaceAdapters.utilities.SessionAttributes;
 import uk.co.socialcalendar.interfaceAdapters.utilities.UserNotification;
-import uk.co.socialcalendar.useCases.FriendFacade;
+import uk.co.socialcalendar.useCases.friend.FriendFacade;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

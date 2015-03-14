@@ -1,9 +1,9 @@
-package uk.co.socialcalendar.interfaceAdapters.models;
+package uk.co.socialcalendar.interfaceAdapters.models.friend;
 
 import uk.co.socialcalendar.entities.Friend;
 import uk.co.socialcalendar.entities.User;
-import uk.co.socialcalendar.useCases.FriendFacade;
-import uk.co.socialcalendar.useCases.UserFacade;
+import uk.co.socialcalendar.useCases.friend.FriendFacade;
+import uk.co.socialcalendar.useCases.user.UserFacade;
 
 import java.util.ArrayList;
 import java.util.List;
