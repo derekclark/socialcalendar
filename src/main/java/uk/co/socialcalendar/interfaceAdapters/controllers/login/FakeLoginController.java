@@ -48,12 +48,17 @@ public class FakeLoginController {
     public ModelAndView loginPage(Model m,
                                    HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
-        String loggedInUser = (String) session.getAttribute("USER_NAME");
 
         session.setAttribute("USER_ID", EMAIL1);
         session.setAttribute("IS_AUTHENTICATED", true);
         session.setAttribute("OAUTH_TOKEN", "token");
-        session.setAttribute("USER_FACEBOOK_ID", FACEBOOK_ID1);
+        session.setAttribute("MY_FACEBOOK_ID", FACEBOOK_ID1);
+
+        String loggedInUser = (String) session.getAttribute("USER_ID");
+        System.out.println("fake login id = " + loggedInUser);
+
+
+        System.out.println("in fake login , get attribute="+session.getAttribute("USER_ID"));
 
         ModelAndView mav = new ModelAndView("login");
         mav.addObject("username", NAME1);

@@ -8,13 +8,6 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
-
-	<import resource="beans/general-config.xml"/>	
-	<import resource="beans/entities-beans.xml"/>	
-    <import resource="beans/models-beans.xml"/>
-    <import resource="beans/facades-beans.xml"/>
-    <import resource="beans/controllers-beans.xml"/>
-    <import resource="beans/database-FakeInMemory-beans.xml"/>
-    <import resource="beans/authentication-fake-beans.xml"/>
-    <import resource="beans/MailNotification-fake-beans.xml"/>
+	<!--Test Doubles -->
+	<bean id="userNotification" class="uk.co.socialcalendar.interfaceAdapters.utilities.StubMailNotification" />
 </beans>

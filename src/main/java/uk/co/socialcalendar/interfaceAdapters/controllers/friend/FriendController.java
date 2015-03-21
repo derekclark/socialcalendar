@@ -26,6 +26,7 @@ public class FriendController{
 	@RequestMapping(value = "friend", method = RequestMethod.GET)
 	public ModelAndView friendPage(Model m,
 								   HttpServletRequest request, HttpServletResponse response) {
+
 		String loggedInUser = sessionAttributes.getLoggedInUserId(request);
 		ModelAndView mav = new ModelAndView("friend");
 		mav.addAllObjects(friendCommonModel.getCommonModelAttributes(loggedInUser));
