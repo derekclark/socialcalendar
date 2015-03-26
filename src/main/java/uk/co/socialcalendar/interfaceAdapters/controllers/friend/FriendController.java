@@ -23,14 +23,31 @@ public class FriendController{
 		this.sessionAttributes = sessionAttributes;
 	}
 
-	@RequestMapping(value = "friend", method = RequestMethod.GET)
+	@RequestMapping(value = {"/","friend"}, method = RequestMethod.GET)
 	public ModelAndView friendPage(Model m,
 								   HttpServletRequest request, HttpServletResponse response) {
-
-		String loggedInUser = sessionAttributes.getLoggedInUserId(request);
+		System.out.println("in friendPage");
+		String myUserId = getMyUserId(request);
+		if (!iAmAuthenticated(myUserId)){
+			ModelAndView mav = new ModelAndView("login");
+			System.out.println("not authenticated, redirected!");
+			return mav;
+		}
 		ModelAndView mav = new ModelAndView("friend");
-		mav.addAllObjects(friendCommonModel.getCommonModelAttributes(loggedInUser));
+
+		mav.addAllObjects(friendCommonModel.getCommonModelAttributes(myUserId));
 		return mav;
+	}
+
+	private boolean iAmAuthenticated(String myUserId) {
+		if (myUserId == null || myUserId.isEmpty()){
+			return false;
+		};
+		return true;
+	}
+
+	public String getMyUserId(HttpServletRequest request){
+		return sessionAttributes.getLoggedInUserId(request);
 	}
 
 }

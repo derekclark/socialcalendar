@@ -34,11 +34,15 @@ public class ScribeAdapter implements Oauth {
         service = createService(apiKey, apiSecret, callback);
     }
 
+    public ScribeAdapter(){
+
+    }
+
     @Override
     public FacebookUserData getResponse(Token accessToken, String fbResource, HttpServletResponse response) throws IOException {
         OAuthRequest request = new OAuthRequest(Verb.GET, fbResource);
-        service.signRequest(accessToken, oauthRequest);
-        Response apiResponse = oauthRequest.send();
+        service.signRequest(accessToken, request);
+        Response apiResponse = request.send();
         response.setContentType("application/json");
         response.setStatus(apiResponse.getCode());
         response.getWriter().write(apiResponse.getBody());
@@ -62,12 +66,14 @@ public class ScribeAdapter implements Oauth {
     @Override
     public Token getToken(String code) {
 
-//        Verifier verifier = new Verifier(code);
+        Verifier verifier = new Verifier(code);
         return service.getAccessToken(EMPTY_TOKEN, verifier);
 
     }
 
     public OAuthService createService(String apiKey, String apiSecret, String callback) {
+        System.out.println("createService!!!!!!!!!!!! apikey=" + apiKey + " apisecret=" + apiSecret);
+
         return new ServiceBuilder()
                 .provider(FacebookApi.class)
                 .apiKey(apiKey)

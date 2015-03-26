@@ -179,11 +179,11 @@ task copyLocalSpringFile(type: Copy) {
 
 
 task runLocalMocked (type: GradleBuild){
-  tasks=['copyLocalPropertyFile','copyLocalMockedSpringFile','clean','tomcatrunwar']
+  tasks=['copyLocalPropertyFile','copyLocalMockedSpringFile','tomcatrunwar']
 }
 
 task runLocal (type: GradleBuild){
-  tasks=['copyLocalPropertyFile','copyLocalSpringFile','clean','tomcatrunwar']
+  tasks=['copyLocalPropertyFile','copyLocalSpringFile','tomcatrunwar']
 }
 
 task createRHWar (type: GradleBuild){

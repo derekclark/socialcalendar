@@ -27,8 +27,8 @@ public class FriendFacadeImpl implements FriendFacade {
 		return true;
 	}
 
-	public List<Friend> getMyAcceptedFriends(String user) {
-		return friendDAO.getMyAcceptedFriends(user);
+	public List<Friend> getMyAcceptedFriends(String me) {
+		return friendDAO.getMyAcceptedFriends(me);
 	}
 
 	public boolean saveFriend(Friend friend){
@@ -37,8 +37,8 @@ public class FriendFacadeImpl implements FriendFacade {
 	}
 
 	@Override
-	public List<Friend> getFriendRequests(String user) {
-		return friendDAO.getMyFriendInvites(user);
+	public List<Friend> getFriendRequests(String me) {
+		return friendDAO.getMyFriendInvites(me);
 	}
 
 	@Override

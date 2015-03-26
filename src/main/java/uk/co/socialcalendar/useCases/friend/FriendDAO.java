@@ -11,5 +11,5 @@ public interface FriendDAO {
 	public boolean updateStatus(int friendId, FriendStatus status);
 	public List<Friend> getMyAcceptedFriends(String email);
 	public List<Friend> getMyFriendInvites(String name);
-	public boolean doesFriendshipExist(String email1, String email2);
+	public boolean newFriendship(String email1, String email2);
 }

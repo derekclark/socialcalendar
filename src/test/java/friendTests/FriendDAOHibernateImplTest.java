@@ -286,7 +286,7 @@ public class FriendDAOHibernateImplTest {
 
         when(mockQuery.list()).thenReturn(notEmptyList).thenReturn(emptyList);
 
-        assertTrue(friendDAOImpl.doesFriendshipExist(email1, email2));
+        assertTrue(friendDAOImpl.newFriendship(email1, email2));
     }
 
     @Test
@@ -301,7 +301,7 @@ public class FriendDAOHibernateImplTest {
 
         when(mockQuery.list()).thenReturn(emptyList).thenReturn(notEmptyList);
 
-        assertTrue(friendDAOImpl.doesFriendshipExist(email1, email2));
+        assertTrue(friendDAOImpl.newFriendship(email1, email2));
     }
 
     @Test
@@ -315,7 +315,7 @@ public class FriendDAOHibernateImplTest {
         notEmptyList.add(new FriendHibernateModel(friend));
 
         when(mockQuery.list()).thenReturn(emptyList);
-        assertFalse(friendDAOImpl.doesFriendshipExist(email1, email2));
+        assertFalse(friendDAOImpl.newFriendship(email1, email2));
     }
 
 }

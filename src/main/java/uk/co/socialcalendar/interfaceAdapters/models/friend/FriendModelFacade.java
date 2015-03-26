@@ -21,18 +21,18 @@ public class FriendModelFacade {
         this.userFacade = userFacade;
     }
 
-    public List<FriendModel> getFriendModelList(String myEmail){
-        List<Friend> friendList = friendFacade.getMyAcceptedFriends(myEmail);
+    public List<FriendModel> getFriendModelList(String myId){
+        List<Friend> friendList = friendFacade.getMyAcceptedFriends(myId);
         List<FriendModel> friendModelList = new ArrayList<FriendModel>();
         for (Friend f : friendList){
-            System.out.println("requester="+f.getRequesterEmail() + " befriended=" + f.getBeFriendedEmail() + " me=" + myEmail);
-            friendModelList.add(populateModel(myEmail, f));
+            System.out.println("requester="+f.getRequesterEmail() + " befriended=" + f.getBeFriendedEmail() + " me=" + myId);
+            friendModelList.add(populateModel(myId, f));
         }
         return friendModelList;
     }
 
-    private FriendModel populateModel(String myEmail, Friend f) {
-        String u = returnFriendsEmailNotMine(f, myEmail);
+    private FriendModel populateModel(String myId, Friend f) {
+        String u = returnFriendsEmailNotMine(f, myId);
         System.out.println("your email not mine = " + u);
         User user = userFacade.getUser(u);
         System.out.println("user = " + user.getName());

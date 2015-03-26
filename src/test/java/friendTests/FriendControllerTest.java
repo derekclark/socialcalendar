@@ -13,7 +13,6 @@ import uk.co.socialcalendar.interfaceAdapters.utilities.SessionAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,6 +30,7 @@ public class FriendControllerTest {
 	SessionAttributes sessionAttributes;
 	FriendCommonModel mockFriendCommonModel;
 	Model model;
+	HttpServletRequest emptyHttpServletRequest;
 	HttpServletRequest mockHttpServletRequest;
 	HttpServletResponse mockHttpServletResponse;
 	HttpSession mockSession;
@@ -50,6 +50,7 @@ public class FriendControllerTest {
 		model = new ExtendedModelMap();
 		mockHttpServletRequest = mock(HttpServletRequest.class);
 		mockHttpServletResponse = mock(HttpServletResponse.class);
+
 		mockSession = mock(HttpSession.class);
 		when(mockHttpServletRequest.getSession()).thenReturn(mockSession);
 		when(mockSession.getAttribute("USER_ID")).thenReturn(USER_ID);
@@ -100,5 +101,31 @@ public class FriendControllerTest {
 		return expectedMap;
 	}
 
+
+	@Test
+	public void shouldRedirectToLoginPageWhenAuthenticatedUserIsNull(){
+		setupNullLoggedInUser();
+		mav = controller.friendPage(model, emptyHttpServletRequest, mockHttpServletResponse);
+		assertEquals("login", mav.getViewName());
+	}
+
+	@Test
+	public void shouldRedirectToLoginPageWhenAuthenticatedUserIsEmpty(){
+		setupEmptyLoggedInUser();
+		mav = controller.friendPage(model, emptyHttpServletRequest, mockHttpServletResponse);
+		assertEquals("login", mav.getViewName());
+	}
+
+	private void setupNullLoggedInUser() {
+		emptyHttpServletRequest = mock(HttpServletRequest.class);
+		when(emptyHttpServletRequest.getSession()).thenReturn(mockSession);
+		when(mockSession.getAttribute("USER_ID")).thenReturn(null);
+	}
+
+	private void setupEmptyLoggedInUser() {
+		emptyHttpServletRequest = mock(HttpServletRequest.class);
+		when(emptyHttpServletRequest.getSession()).thenReturn(mockSession);
+		when(mockSession.getAttribute("USER_ID")).thenReturn("");
+	}
 
 }

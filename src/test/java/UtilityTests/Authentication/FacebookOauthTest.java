@@ -2,9 +2,10 @@ package UtilityTests.Authentication;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.scribe.model.Token;
+import uk.co.socialcalendar.frameworksAndDrivers.FakeHttpSession;
 import uk.co.socialcalendar.frameworksAndDrivers.authentication.FacebookOauth;
 import uk.co.socialcalendar.frameworksAndDrivers.authentication.FakeAuthentication;
-import uk.co.socialcalendar.frameworksAndDrivers.FakeHttpSession;
 import uk.co.socialcalendar.frameworksAndDrivers.authentication.FakeScribeAdapter;
 
 import javax.servlet.ServletException;
@@ -18,8 +19,8 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 public class FacebookOauthTest {
-    public final static String OAUTH_CODE = "OAUTH_CODE";
-    public final static String OAUTH_TOKEN = "OAUTH_TOKEN";
+    public final static String OAUTH_CODE = "code";
+    public final static String OAUTH_TOKEN = "token";
     public static final String USER_EMAIL = "userEmail";
     public static final String USER_NAME = "userName";
     public static final String FACEBOOK_ID = "facebookId";
@@ -38,22 +39,21 @@ public class FacebookOauthTest {
     @Before
     public void setup() {
         apiKey="1";
-        apiSecret="1";
+        apiSecret="API_SECRET";
         callback = "1";
         facebook = new FacebookOauth(apiKey, apiSecret, callback);
         fakeAuthentication = new FakeAuthentication();
-        fakeHttpSession = new FakeHttpSession();
         fakeScribeAdapter = new FakeScribeAdapter();
         facebook.setAuthentication(fakeAuthentication);
-        facebook.setHttpSession(fakeHttpSession);
         facebook.setOauth(fakeScribeAdapter);
         setupHttpSessions();
-
     }
 
     public void setupHttpSessions(){
         mockRequest = mock(HttpServletRequest.class);
         mockResponse = mock(HttpServletResponse.class);
+        fakeHttpSession = new FakeHttpSession();
+        facebook.setHttpSession(fakeHttpSession);
         when(mockRequest.getSession()).thenReturn(fakeHttpSession);
     }
 
@@ -97,7 +97,8 @@ public class FacebookOauthTest {
     public void willSetSessionVariablesAfterGettingToken() throws ServletException, IOException {
         setupGetTokenCall();
         facebook.handleRequest(mockRequest, mockResponse);
-        assertEquals(OAUTH_TOKEN, fakeHttpSession.getAttribute(OAUTH_TOKEN));
+        Token expectedToken = new Token(OAUTH_TOKEN, apiSecret);
+        assertEquals(expectedToken.toString(), fakeHttpSession.getAttribute(OAUTH_TOKEN).toString());
         assertEquals("true", fakeHttpSession.getAttribute("IS_AUTHENTICATED").toString());
         assertEquals(USER_EMAIL,fakeHttpSession.getAttribute("USER_EMAIL"));
         assertEquals(USER_NAME,fakeHttpSession.getAttribute("USER_NAME"));
@@ -107,6 +108,7 @@ public class FacebookOauthTest {
     private void setupGetTokenCall() {
         when(mockRequest.getParameter(OAUTH_CODE)).thenReturn(OAUTH_CODE);
         when(mockRequest.getParameter(OAUTH_TOKEN)).thenReturn("");
+//        when(fakeScribeAdapter.getToken(OAUTH_CODE)).thenReturn(new Token(OAUTH_TOKEN, apiSecret));
     }
 
     @Test

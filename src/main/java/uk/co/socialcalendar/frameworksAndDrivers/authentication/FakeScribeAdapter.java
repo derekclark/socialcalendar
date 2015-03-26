@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletResponse;
 
 public class FakeScribeAdapter implements Oauth {
 
+    public static final String OAUTH_TOKEN = "token";
+    public static final String API_SECRET = "API_SECRET";
     private boolean wasGetTokenCalled;
     private boolean wasGetCodeCalled;
     private boolean wasGetResponseCalled;
@@ -66,7 +68,7 @@ public class FakeScribeAdapter implements Oauth {
     @Override
     public Token getToken(String code) {
         wasGetTokenCalled = true;
-        return new Token("OAUTH_TOKEN", "API_SECRET");
+        return new Token(OAUTH_TOKEN, API_SECRET);
     }
 
 }

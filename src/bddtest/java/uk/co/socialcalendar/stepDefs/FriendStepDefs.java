@@ -4,6 +4,7 @@ import cucumber.api.PendingException;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,20 +21,18 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import uk.co.socialcalendar.interfaceAdapters.controllers.friend.FriendController;
-import uk.co.socialcalendar.interfaceAdapters.models.friend.FriendModel;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
-import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
+import static uk.co.socialcalendar.stepDefs.HelperAsserts.assertPropertyIsTrue;
+
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -69,16 +68,39 @@ public class FriendStepDefs {
 
     }
 
+    @Before
+    public void setup(){
+        mockMvc = webAppContextSetup(this.wac).build();
+    }
+
     @Test
-    public void testFriendPage() throws Exception {
+    public void testFriendPageWhenIAmAuthenticated() throws Exception {
         givenIHaveLoggedIn();
         thenIShouldBeAuthenticated();
         whenISelectFriendPage();
+        thenSectionShouldBeFriends();
         thenFriendPageShouldBeShown();
         thenLoggedInUserShouldBeMe();
         thenMyFriendListShouldBeShown();
-        thenSectionShouldBeFriends();
+        thenMyFriendRequestsShouldBeShown();
     }
+
+    @Test
+    public void testFriendPageWhenIAmNotAuthenticated() throws Exception {
+        whenISelectFriendPageWithoutAuthentication();
+        thenIShouldBeSentToLoginPage();
+    }
+
+    public void whenISelectFriendPageWithoutAuthentication() throws Exception {
+        results = mockMvc.perform(get("/friend"))
+                .andDo(print());
+    }
+
+    public void thenIShouldBeSentToLoginPage() throws Exception {
+        results.andExpect(status().isOk())
+                .andExpect(view().name("login"));
+    }
+
 
     private void thenIShouldBeAuthenticated() {
         assertEquals(true, session.getAttribute("IS_AUTHENTICATED"));
@@ -92,34 +114,16 @@ public class FriendStepDefs {
     }
 
     private void thenMyFriendListShouldBeShown() throws Exception {
-        List<FriendModel> expectedFriendList = new ArrayList<FriendModel>();
-        FriendModel friendModel = new FriendModel();
-        friendModel.setName("name3");
-        friendModel.setFacebookId("100040345");
-        friendModel.setEmail("userEmail3");
-        expectedFriendList.add(friendModel);
-
-        FriendModel friendModel2 = new FriendModel();
-        friendModel2.setName("name4");
-        friendModel2.setFacebookId("1008173740345");
-        friendModel2.setEmail("userEmail4");
-        expectedFriendList.add(friendModel2);
-
-        assertPropertyIsTrue("friendList", "name", "name3");
-        assertPropertyIsTrue("friendList", "facebookId", "100040345");
-        assertPropertyIsTrue("friendList", "email", "userEmail3");
+        assertPropertyIsTrue(results, "friendList", "name", "name3");
+        assertPropertyIsTrue(results, "friendList", "facebookId", "100040345");
+        assertPropertyIsTrue(results, "friendList", "email", "userEmail3");
+        assertPropertyIsTrue(results, "friendList", "name", "name4");
+        assertPropertyIsTrue(results, "friendList", "facebookId", "1008173740345");
+        assertPropertyIsTrue(results, "friendList", "email", "userEmail4");
     }
 
-    private void assertPropertyIsTrue(String attribute, String propertyName, String expectedValue) throws Exception {
-        results.andExpect(model().attribute(attribute,
-                hasItem(
-                        allOf(
-                                hasProperty(propertyName,is(expectedValue)
-                                )
-                        )
-                )
-        )
-        );
+    private void thenMyFriendRequestsShouldBeShown() throws Exception {
+        assertPropertyIsTrue(results, "friendRequests", "requesterEmail", "userEmail5");
     }
 
     private void thenLoggedInUserShouldBeMe() throws Exception {
@@ -137,7 +141,7 @@ public class FriendStepDefs {
     }
 
     private void givenIHaveLoggedIn() throws Exception {
-        mockMvc = webAppContextSetup(this.wac).build();
+//        mockMvc = webAppContextSetup(this.wac).build();
 
         session = mockMvc.perform(get("/").param("USER_ID", "userEmail1").param("j_password", "user1"))
 //                .andExpect(status().is(HttpStatus.FOUND.value()))
@@ -149,14 +153,13 @@ public class FriendStepDefs {
 
         results = mockMvc.perform(get("/").session((MockHttpSession)session).locale(Locale.ENGLISH))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(view().name("login"));
+                .andExpect(status().isOk());
 
     }
 
     @Given("^The friend webpage is available$")
     public void the_friend_webpage_is_available() throws Throwable {
-        testFriendPage();
+        testFriendPageWhenIAmAuthenticated();
 
 //        setupMockMvc();
     }

@@ -30,6 +30,7 @@ public class InMemoryFriendDAO implements FriendDAO{
 			return false;
 		}
 		this.listOfSavedFriends.add(friend);
+		System.out.println("friend added");
 		return true;
 	}
 
@@ -69,20 +70,15 @@ public class InMemoryFriendDAO implements FriendDAO{
 	}
 
 	@Override
-	public List<Friend> getMyAcceptedFriends(String email) {
-		System.out.println("in inMemoryFriendDAO getMyAcceptedFriends for " + email);
+	public List<Friend> getMyAcceptedFriends(String me) {
+		System.out.println("in inMemoryFriendDAO getMyAcceptedFriends for " + me);
 		for (Friend f:listOfSavedFriends){
 			System.out.println("saved friend=" + f.getRequesterEmail());
 		}
 		List<Friend> friendList = new ArrayList<Friend>();
 		for (Friend friend: listOfSavedFriends){
-			if (friend.getRequesterEmail().equals(email) && friend.getStatus() == FriendStatus.ACCEPTED){
-				friendList.add(friend);
-			}
-		}
-
-		for (Friend friend: listOfSavedFriends){
-			if (friend.getBeFriendedEmail().equals(email) && friend.getStatus() == FriendStatus.ACCEPTED){
+			System.out.println("checking friend=" + friend.getRequesterEmail() + " " + friend.getBeFriendedEmail());
+			if (youAreMyAcceptedFriend(me, friend) || iAmYourAcceptedFriend(me, friend)){
 				friendList.add(friend);
 			}
 		}
@@ -90,11 +86,21 @@ public class InMemoryFriendDAO implements FriendDAO{
 		return friendList;
 	}
 
+	private boolean iAmYourAcceptedFriend(String me, Friend friend) {
+		return friend.getBeFriendedEmail().equals(me) && friend.getStatus() == FriendStatus.ACCEPTED;
+	}
+
+	private boolean youAreMyAcceptedFriend(String me, Friend friend) {
+		return friend.getRequesterEmail().equals(me) && friend.getStatus() == FriendStatus.ACCEPTED;
+	}
+
 	@Override
-	public List<Friend> getMyFriendInvites(String requesterEmail) {
+	public List<Friend> getMyFriendInvites(String me) {
 		List<Friend> friendList = new ArrayList<Friend>();
 		for (Friend friend: listOfSavedFriends){
-			if (friend.getBeFriendedEmail().equals(requesterEmail) && friend.getStatus() == FriendStatus.PENDING){
+			System.out.println("friendrequests looking at=" + friend.getRequesterEmail());
+			if (friend.getBeFriendedEmail().equals(me) && friend.getStatus() == FriendStatus.PENDING){
+				System.out.println("yes");
 				friendList.add(friend);
 			}
 		}
@@ -103,8 +109,8 @@ public class InMemoryFriendDAO implements FriendDAO{
 	}
 
 	@Override
-	public boolean doesFriendshipExist(String email1, String email2) {
-		return false;
+	public boolean newFriendship(String email1, String email2) {
+		return true;
 	}
 
 	;

@@ -14,6 +14,7 @@ import uk.co.socialcalendar.useCases.user.UserDAO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import static uk.co.socialcalendar.entities.FriendStatus.*;
 
 @Controller
 public class FakeLoginController {
@@ -44,7 +45,7 @@ public class FakeLoginController {
         this.friendDAO = friendDAO;
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = "/fakelogin", method = RequestMethod.GET)
     public ModelAndView loginPage(Model m,
                                    HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
@@ -60,7 +61,7 @@ public class FakeLoginController {
 
         System.out.println("in fake login , get attribute="+session.getAttribute("USER_ID"));
 
-        ModelAndView mav = new ModelAndView("login");
+        ModelAndView mav = new ModelAndView("fakeLogin");
         mav.addObject("username", NAME1);
         populateUsers();
         populateFriends();
@@ -84,16 +85,20 @@ public class FakeLoginController {
         }
     }
     public void populateFriends(){
-        writeFriends(new Friend(EMAIL1, EMAIL3, FriendStatus.ACCEPTED));
-        writeFriends(new Friend(EMAIL4, EMAIL2, FriendStatus.ACCEPTED));
-        writeFriends(new Friend(EMAIL4, EMAIL1, FriendStatus.ACCEPTED));
-        writeFriends(new Friend(EMAIL5, EMAIL1, FriendStatus.PENDING));
+        writeFriends(createFriend(EMAIL1, EMAIL3, ACCEPTED, 1));
+        writeFriends(createFriend(EMAIL4, EMAIL2, ACCEPTED, 2));
+        writeFriends(createFriend(EMAIL4, EMAIL1, ACCEPTED, 3));
+        writeFriends(createFriend(EMAIL5, EMAIL1, PENDING, 4));
         System.out.println("populated 4 friends");
     }
 
+    public Friend createFriend(String requester, String beFriended, FriendStatus status, int id){
+        Friend friend = new Friend(requester, beFriended, status);
+        friend.setFriendId(id);
+        return friend;
+    }
     public void writeFriends(Friend friend){
-        if (!friendDAO.doesFriendshipExist(friend.getRequesterEmail(), friend.getBeFriendedEmail())){
-            System.out.println("creating friend=" + friend.getRequesterEmail());
+        if (friendDAO.newFriendship(friend.getRequesterEmail(), friend.getBeFriendedEmail())){
             friendDAO.save(friend);
         }
     }

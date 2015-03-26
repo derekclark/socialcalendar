@@ -31,20 +31,20 @@ public class FriendCommonModel {
         this.userFacade = userFacade;
     }
 
-    public Map<String, Object> getCommonModelAttributes(String loggedInUser) {
+    public Map<String, Object> getCommonModelAttributes(String myId) {
         Map<String, Object> mav = new HashMap<String, Object>();
-        mav.putAll(getFriendList(loggedInUser));
-        mav.putAll(getFriendRequests(loggedInUser));
+        mav.putAll(getFriendList(myId));
+        mav.putAll(getFriendRequests(myId));
         mav.putAll(getSection());
-        mav.putAll(getUserName(loggedInUser));
+        mav.putAll(getUserName(myId));
         mav.putAll(authenticationFacade.getAuthenticationAttributes());
         mav.putAll(getNewFriend());
         return mav;
     }
 
-    public Map<String,Object> getFriendList(String loggedInUser) {
+    public Map<String,Object> getFriendList(String myId) {
         Map<String, Object> modelMap = new HashMap<String, Object>();
-        modelMap.put("friendList", friendModelFacade.getFriendModelList(loggedInUser));
+        modelMap.put("friendList", friendModelFacade.getFriendModelList(myId));
         return modelMap;
     }
 
@@ -61,16 +61,16 @@ public class FriendCommonModel {
         return modelMap;
     }
 
-    public Map<String,Object> getFriendRequests(String loggedInUser) {
+    public Map<String,Object> getFriendRequests(String myId) {
         Map<String, Object> modelMap = new HashMap<String, Object>();
-        modelMap.put("friendRequests", friendFacade.getFriendRequests(loggedInUser));
+        modelMap.put("friendRequests", friendFacade.getFriendRequests(myId));
         return modelMap;
     }
 
 
-    public Map<String,Object> getUserName(String loggedInUser) {
+    public Map<String,Object> getUserName(String myId) {
         Map<String, Object> modelMap = new HashMap<String, Object>();
-        modelMap.put("userName", userFacade.getUser(loggedInUser).getName());
+        modelMap.put("userName", userFacade.getUser(myId).getName());
         return modelMap;
     }
 

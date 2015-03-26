@@ -107,7 +107,7 @@ public class FriendDAOHibernateImpl implements FriendDAO {
 
     @Override
     @Transactional
-    public boolean doesFriendshipExist(String email1, String email2) {
+    public boolean newFriendship(String email1, String email2) {
         if (read(email1, email2)){
             return true;
         }
