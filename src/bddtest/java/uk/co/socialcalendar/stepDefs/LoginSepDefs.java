@@ -40,7 +40,7 @@ public class LoginSepDefs {
     private static final String JSP_VIEW = "/WEB-INF/jsp/view/";
     public static final String FRIEND_VIEW = "friend";
     public static final String USER_ID = "userId";
-    
+
     ModelAndView mav;
     ResultActions results;
 
