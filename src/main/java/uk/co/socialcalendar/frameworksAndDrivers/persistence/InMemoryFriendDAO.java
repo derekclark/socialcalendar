@@ -109,7 +109,7 @@ public class InMemoryFriendDAO implements FriendDAO{
 	}
 
 	@Override
-	public boolean newFriendship(String email1, String email2) {
+	public boolean friendshipExists(String email1, String email2) {
 		return true;
 	}
 

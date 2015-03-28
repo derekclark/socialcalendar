@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 public class LoginController {
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public ModelAndView loginPage(Model model, HttpServletRequest mockHttpServletRequest, HttpServletResponse mockHttpServletResponse) {
+        System.out.println("in login controller");
         ModelAndView mav = new ModelAndView("login");
         return mav;
     }

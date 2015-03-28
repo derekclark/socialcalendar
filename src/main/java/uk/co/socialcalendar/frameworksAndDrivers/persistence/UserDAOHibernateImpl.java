@@ -45,6 +45,7 @@ public class UserDAOHibernateImpl implements UserDAO {
     @Override
     @Transactional
     public boolean save(User user) {
+        System.out.println("userDAO hibernate save");
         Session session = sessionFactory.getCurrentSession();
         UserHibernateModel userHibernateModel = convertToUserHibernateModel(user);
         session.save(userHibernateModel);
