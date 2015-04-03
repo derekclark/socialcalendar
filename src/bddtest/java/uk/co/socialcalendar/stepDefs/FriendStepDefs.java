@@ -1,17 +1,9 @@
 package uk.co.socialcalendar.stepDefs;
 
-import cucumber.api.PendingException;
-import cucumber.api.java.en.Given;
+import cucumber.api.java.Before;
 import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -23,18 +15,12 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import uk.co.socialcalendar.interfaceAdapters.controllers.friend.FriendController;
 
 import javax.servlet.http.HttpSession;
-import java.util.Locale;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 import static uk.co.socialcalendar.stepDefs.HelperAsserts.assertPropertyIsTrue;
 
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(locations = {"file:src/test/resources/test-servlet-context.xml"})
 public class FriendStepDefs {
@@ -46,9 +32,15 @@ public class FriendStepDefs {
 
     @Autowired private WebApplicationContext wac;
 
+    @Autowired private SpringHolder springHolder;
+
     private static final String JSP_VIEW = "/WEB-INF/jsp/view/";
     public static final String FRIEND_VIEW = "friend";
     public static final String USER_ID = "userId";
+    public static final String VALID_USER_ID = "me";
+    public static final String VALID_USER_PASSWORD = "pass1";
+    public static final String MY_FACEBOOK_ID = "100008173740345";
+    public static final String TOKEN = "token";
 
 
     @Autowired FriendController friendController;
@@ -69,49 +61,42 @@ public class FriendStepDefs {
     }
 
     @Before
-    public void setup(){
+    public void setup() throws Exception {
+
         mockMvc = webAppContextSetup(this.wac).build();
+
+//        session = mockMvc.perform(get("/fakelogin"))
+////                .andExpect(status().is(HttpStatus.FOUND.value()))
+//                .andReturn()
+//                .getRequest()
+//                .getSession();
+//
+//        WebApplicationContext ctx= WebApplicationContextUtils.getWebApplicationContext(session.getServletContext());
+//        PopulateDatabase pop = (PopulateDatabase)ctx.getBean("populateDatabase");
+//        pop.populateUsers();
+//        pop.populateFriends();
+
     }
 
-    @Test
-    public void testFriendPageWhenIAmAuthenticated() throws Exception {
-        givenIHaveLoggedIn();
-        thenIShouldBeAuthenticated();
-        whenISelectFriendPage();
-        thenSectionShouldBeFriends();
-        thenFriendPageShouldBeShown();
-        thenLoggedInUserShouldBeMe();
-        thenMyFriendListShouldBeShown();
-        thenMyFriendRequestsShouldBeShown();
-    }
+//    @Test
+//    public void testFriendPageWhenIAmAuthenticated() throws Exception {
+//        givenIHaveLoggedInWithValidCredentials();
+//        thenIShouldBeAuthenticated();
+//        whenISelectFriendPage();
+////        thenSectionShouldBeFriends();
+////        thenFriendPageShouldBeShown();
+////        thenLoggedInUserShouldBeMe();
+////        thenMyFriendListShouldBeShown();
+////        thenMyFriendRequestsShouldBeShown();
+//    }
 
-    @Test
-    public void testFriendPageWhenIAmNotAuthenticated() throws Exception {
-        whenISelectFriendPageWithoutAuthentication();
-        thenIShouldBeSentToLoginPage();
-    }
+//    private void thenIShouldBeAuthenticated() {
+//        assertEquals(true, session.getAttribute("IS_AUTHENTICATED"));
+//        assertEquals(VALID_USER_ID,session.getAttribute("USER_ID"));
+//        assertEquals(TOKEN,session.getAttribute("OAUTH_TOKEN"));
+//        assertEquals(MY_FACEBOOK_ID,session.getAttribute("MY_FACEBOOK_ID"));
+//    }
 
-    public void whenISelectFriendPageWithoutAuthentication() throws Exception {
-        results = mockMvc.perform(get("/friend"))
-                .andDo(print());
-    }
-
-    public void thenIShouldBeSentToLoginPage() throws Exception {
-        results.andExpect(status().isOk())
-                .andExpect(view().name("login"));
-    }
-
-
-    private void thenIShouldBeAuthenticated() {
-        assertEquals(true, session.getAttribute("IS_AUTHENTICATED"));
-        assertEquals("userEmail1",session.getAttribute("USER_ID"));
-        assertEquals("token",session.getAttribute("OAUTH_TOKEN"));
-        assertEquals("100008173740345",session.getAttribute("MY_FACEBOOK_ID"));
-    }
-
-    private void thenSectionShouldBeFriends() throws Exception {
-        results.andExpect(model().attribute("section", "friends"));
-    }
 
     private void thenMyFriendListShouldBeShown() throws Exception {
         assertPropertyIsTrue(results, "friendList", "name", "name3");
@@ -130,67 +115,44 @@ public class FriendStepDefs {
         results.andExpect(model().attribute("userName", "derek clark"));
     }
 
-    private void thenFriendPageShouldBeShown() throws Exception {
-        results.andExpect(status().isOk())
-                .andExpect(view().name("friend"));
-    }
-
     private void whenISelectFriendPage() throws Exception {
-        results = mockMvc.perform(get("/friend").session((MockHttpSession)session).locale(Locale.ENGLISH))
-                .andDo(print());
     }
 
-    private void givenIHaveLoggedIn() throws Exception {
-//        mockMvc = webAppContextSetup(this.wac).build();
+//    private void givenIHaveLoggedInWithValidCredentials() throws Exception {
+//        session = mockMvc.perform(post("/fakelogin").param("userId", VALID_USER_ID).param("password", VALID_USER_PASSWORD))
+////                .andExpect(status().is(HttpStatus.FOUND.value()))
+//                .andReturn()
+//                .getRequest()
+//                .getSession();
+//
+//        assertNotNull(session);
+//    }
 
-        session = mockMvc.perform(get("/").param("USER_ID", "userEmail1").param("j_password", "user1"))
-//                .andExpect(status().is(HttpStatus.FOUND.value()))
-                .andReturn()
-                .getRequest()
-                .getSession();
 
-        assertNotNull(session);
 
-        results = mockMvc.perform(get("/").session((MockHttpSession)session).locale(Locale.ENGLISH))
-                .andDo(print())
-                .andExpect(status().isOk());
+//    @Given("^The friend webpage is available$")
+//    public void the_friend_webpage_is_available() throws Throwable {
+//
+//        session = mockMvc.perform(get("/fakelogin"))
+////                .andExpect(status().is(HttpStatus.FOUND.value()))
+//                .andReturn()
+//                .getRequest()
+//                .getSession();
+//    }
 
-    }
-
-    @Given("^The friend webpage is available$")
-    public void the_friend_webpage_is_available() throws Throwable {
-        testFriendPageWhenIAmAuthenticated();
-
-//        setupMockMvc();
-    }
-
-    @When("^a request is made$")
-    public void a_request_is_made() throws Throwable {
-        MockHttpServletRequestBuilder getRequest = get("/friend").accept(MediaType.ALL);
-        results = mockMvc.perform(getRequest).andDo(print());
-    }
-
-    @Then("^page is shown$")
+    @Then("^the friend page is shown$")
     public void friends_are_shown() throws Throwable {
+        results = springHolder.getResultActions();
         results.andExpect(status().isOk());
     }
 
-    @Then("^friend view is returned$")
-    public void friend_view_is_returned() throws Throwable {
-        results.andExpect(view().name(FRIEND_VIEW));
+
+    @Then("^the section should be friends$")
+    public void the_section_should_be_friends() throws Throwable {
+        results = springHolder.getResultActions();
+        results.andExpect(model().attribute("section", "friends"));
     }
 
-    @Given("^The I have friends Ron and Lisa$")
-    public void the_I_have_friends_Ron_and_Lisa() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
-
-    @Then("^ron and lisa are shown in my friend list$")
-    public void ron_and_lisa_are_shown_in_my_friend_list() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
 }
 
 

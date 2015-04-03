@@ -66,7 +66,7 @@ public class PopulateDatabase {
         return friend;
     }
     public void writeFriends(Friend friend){
-        if (!friendDAO.friendshipExists(friend.getRequesterEmail(), friend.getBeFriendedEmail())){
+        if (friendDAO.friendshipExists(friend.getRequesterEmail(), friend.getBeFriendedEmail())){
             friendDAO.save(friend);
             System.out.println("just saved friend");
         }else{

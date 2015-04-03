@@ -1,14 +1,13 @@
 //package uk.co.socialcalendar.stepDefs;
 //
 //import cucumber.api.PendingException;
+//import cucumber.api.java.Before;
 //import cucumber.api.java.en.Given;
 //import cucumber.api.java.en.Then;
 //import cucumber.api.java.en.When;
-//import org.junit.runner.RunWith;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.http.MediaType;
 //import org.springframework.test.context.ContextConfiguration;
-//import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 //import org.springframework.test.context.web.WebAppConfiguration;
 //import org.springframework.test.web.servlet.MockMvc;
 //import org.springframework.test.web.servlet.ResultActions;
@@ -24,9 +23,8 @@
 //import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 //import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 //
-//@RunWith(SpringJUnit4ClassRunner.class)
 //@WebAppConfiguration
-//@ContextConfiguration(locations = {"classpath:test-servlet-cont1ext.xml"})
+//@ContextConfiguration(locations = {"file:src/test/resources/test-servlet-context.xml"})
 //public class Friend {
 //
 //
@@ -53,7 +51,7 @@
 //
 //    ResultActions results;
 //
-//
+//    @Before
 //    public void setup(){
 ////        controller = new FriendController();
 ////        sessionAttributes = new SessionAttributes();

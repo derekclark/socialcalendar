@@ -26,7 +26,7 @@ public class FriendController{
 	@RequestMapping(value = {"/","friend"}, method = RequestMethod.GET)
 	public ModelAndView friendPage(Model m,
 								   HttpServletRequest request, HttpServletResponse response) {
-		System.out.println("in friendPage");
+		System.out.println("in friendPage; userid=" + request.getSession().getAttribute("USER_ID"));
 		String myUserId = getMyUserId(request);
 		if (!iAmAuthenticated(myUserId)){
 			ModelAndView mav = new ModelAndView("login");
