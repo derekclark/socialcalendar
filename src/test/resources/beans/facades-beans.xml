@@ -13,7 +13,7 @@
         <property name="friendDAO" ref="friendDAO"/>
 	</bean>    	
 
-	<bean id="userFacade" class="uk.co.socialcalendar.useCases.user.UserFacadeImpl">
+	<bean id="userFacadeImpl" class="uk.co.socialcalendar.useCases.user.UserFacadeImpl">
         <property name="userDAO" ref="userDAO"/>
 	</bean>    	
 

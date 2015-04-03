@@ -10,6 +10,5 @@ Feature: Login
     Then I should not be authenticated
 
   Scenario: access friend page when I am not authenticated
-    Given I have not authenticated
-    When I select the friend page
+    When I select the friend page without going authenticating
     Then I should be redirected to the login page

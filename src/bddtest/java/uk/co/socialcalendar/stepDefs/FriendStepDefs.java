@@ -2,12 +2,17 @@ package uk.co.socialcalendar.stepDefs;
 
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
@@ -16,9 +21,9 @@ import uk.co.socialcalendar.interfaceAdapters.controllers.friend.FriendControlle
 
 import javax.servlet.http.HttpSession;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
-import static uk.co.socialcalendar.stepDefs.HelperAsserts.assertPropertyIsTrue;
 
 
 @WebAppConfiguration
@@ -47,8 +52,6 @@ public class FriendStepDefs {
     ModelAndView mav;
     ResultActions results;
 
-
-
     private void setupMockMvc(){
         InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
         viewResolver.setPrefix(JSP_VIEW);
@@ -65,80 +68,20 @@ public class FriendStepDefs {
 
         mockMvc = webAppContextSetup(this.wac).build();
 
-//        session = mockMvc.perform(get("/fakelogin"))
-////                .andExpect(status().is(HttpStatus.FOUND.value()))
-//                .andReturn()
-//                .getRequest()
-//                .getSession();
-//
-//        WebApplicationContext ctx= WebApplicationContextUtils.getWebApplicationContext(session.getServletContext());
-//        PopulateDatabase pop = (PopulateDatabase)ctx.getBean("populateDatabase");
-//        pop.populateUsers();
-//        pop.populateFriends();
 
     }
 
-//    @Test
-//    public void testFriendPageWhenIAmAuthenticated() throws Exception {
-//        givenIHaveLoggedInWithValidCredentials();
-//        thenIShouldBeAuthenticated();
-//        whenISelectFriendPage();
-////        thenSectionShouldBeFriends();
-////        thenFriendPageShouldBeShown();
-////        thenLoggedInUserShouldBeMe();
-////        thenMyFriendListShouldBeShown();
-////        thenMyFriendRequestsShouldBeShown();
-//    }
+    @When("^I select the friend page$")
+    public void i_select_the_friend_page() throws Throwable {
 
-//    private void thenIShouldBeAuthenticated() {
-//        assertEquals(true, session.getAttribute("IS_AUTHENTICATED"));
-//        assertEquals(VALID_USER_ID,session.getAttribute("USER_ID"));
-//        assertEquals(TOKEN,session.getAttribute("OAUTH_TOKEN"));
-//        assertEquals(MY_FACEBOOK_ID,session.getAttribute("MY_FACEBOOK_ID"));
-//    }
+        RequestBuilder getFriend = MockMvcRequestBuilders.get("/friend")
+                .session((MockHttpSession)springHolder.getSession());
 
+        results = mockMvc.perform(getFriend)
+                .andDo(MockMvcResultHandlers.print());
 
-    private void thenMyFriendListShouldBeShown() throws Exception {
-        assertPropertyIsTrue(results, "friendList", "name", "name3");
-        assertPropertyIsTrue(results, "friendList", "facebookId", "100040345");
-        assertPropertyIsTrue(results, "friendList", "email", "userEmail3");
-        assertPropertyIsTrue(results, "friendList", "name", "name4");
-        assertPropertyIsTrue(results, "friendList", "facebookId", "1008173740345");
-        assertPropertyIsTrue(results, "friendList", "email", "userEmail4");
+        springHolder.setResultActions(results);
     }
-
-    private void thenMyFriendRequestsShouldBeShown() throws Exception {
-        assertPropertyIsTrue(results, "friendRequests", "requesterEmail", "userEmail5");
-    }
-
-    private void thenLoggedInUserShouldBeMe() throws Exception {
-        results.andExpect(model().attribute("userName", "derek clark"));
-    }
-
-    private void whenISelectFriendPage() throws Exception {
-    }
-
-//    private void givenIHaveLoggedInWithValidCredentials() throws Exception {
-//        session = mockMvc.perform(post("/fakelogin").param("userId", VALID_USER_ID).param("password", VALID_USER_PASSWORD))
-////                .andExpect(status().is(HttpStatus.FOUND.value()))
-//                .andReturn()
-//                .getRequest()
-//                .getSession();
-//
-//        assertNotNull(session);
-//    }
-
-
-
-//    @Given("^The friend webpage is available$")
-//    public void the_friend_webpage_is_available() throws Throwable {
-//
-//        session = mockMvc.perform(get("/fakelogin"))
-////                .andExpect(status().is(HttpStatus.FOUND.value()))
-//                .andReturn()
-//                .getRequest()
-//                .getSession();
-//    }
 
     @Then("^the friend page is shown$")
     public void friends_are_shown() throws Throwable {

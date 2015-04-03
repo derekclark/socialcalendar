@@ -12,14 +12,14 @@
 	<!-- MODELS -->
 	<bean id="friendModel" class="uk.co.socialcalendar.interfaceAdapters.models.friend.FriendModel" />
 	<bean id="friendModelFacade" class="uk.co.socialcalendar.interfaceAdapters.models.friend.FriendModelFacade">
-		<property name="userFacade" ref="userFacade" />
+		<property name="userFacade" ref="userFacadeImpl" />
 		<property name="friendFacade" ref="friendFacadeImpl" />
 	</bean>
 	
 	<bean id="friendValidator" class="uk.co.socialcalendar.interfaceAdapters.models.friend.FriendValidator" />
 
 	<bean id="friendCommonModel" class="uk.co.socialcalendar.interfaceAdapters.controllers.friend.FriendCommonModel">
-		<property name="userFacade" ref="userFacade" />
+		<property name="userFacade" ref="userFacadeImpl" />
 		<property name="friendFacade" ref="friendFacadeImpl" />
 		<property name="friendModelFacade" ref="friendModelFacade" />
 		<property name="authenticationFacade" ref="authenticationFacade" />
