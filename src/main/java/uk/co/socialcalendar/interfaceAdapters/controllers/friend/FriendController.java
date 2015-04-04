@@ -10,7 +10,6 @@ import uk.co.socialcalendar.interfaceAdapters.utilities.SessionAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@org.springframework.web.bind.annotation.SessionAttributes(value="USER_ID",types=String.class)
 @Controller
 public class FriendController{
 	SessionAttributes sessionAttributes;

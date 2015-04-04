@@ -5,7 +5,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import uk.co.socialcalendar.useCases.friend.FriendDAO;
 import uk.co.socialcalendar.useCases.user.UserDAO;
@@ -13,7 +12,7 @@ import uk.co.socialcalendar.useCases.user.UserDAO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-@SessionAttributes(value="USER_ID",types=String.class)
+
 @Controller
 public class FakeLoginController {
     public static final String FACEBOOK_ID1 = "100008173740345";
