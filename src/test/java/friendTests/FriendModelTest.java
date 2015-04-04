@@ -44,13 +44,6 @@ import static org.junit.Assert.assertTrue;
          assertEquals(EMAIL,model.getEmail());
      }
 
-
-//     @Test
-//     public void canGetAndSetBeFriendedEmail(){
-//         model.setBeFriendedEmail(EMAIL);
-//         assertEquals(EMAIL,model.getBeFriendedEmail());
-//     }
-
      @Test
      public void canGetAndSetName(){
          model.setName(EMAIL);
@@ -67,6 +60,4 @@ import static org.junit.Assert.assertTrue;
          assertEquals("userFacebook1", model.getFacebookId());
 
      }
-
-
  }

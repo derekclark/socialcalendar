@@ -76,6 +76,7 @@ public class LoginSepDefs {
         MvcResult result = auth.andReturn();
         MockHttpSession mockHttpSession = (MockHttpSession)result.getRequest().getSession();
         springHolder.setSession(mockHttpSession);
+        springHolder.setMockMVC(mockMvc);
     }
 
     @Then("^I should be authenticated$")

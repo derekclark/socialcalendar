@@ -20,6 +20,7 @@ public class FriendModel {
         this.email = user.getEmail();
         this.name = user.getName();
         this.facebookId = user.getFacebookId();
+        this.hasFacebookId=false;
     }
 
     public String getName() {
@@ -86,4 +87,8 @@ public class FriendModel {
         return hash;
     }
 
+    @Override
+    public String toString(){
+        return "name=" + name + " email=" + email + " facebookId=" + facebookId + " friendId=" + friendId;
+    }
 }
