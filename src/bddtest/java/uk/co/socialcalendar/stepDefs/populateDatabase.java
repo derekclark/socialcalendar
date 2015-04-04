@@ -78,4 +78,11 @@ public class PopulateDatabase {
         }
     }
 
+    public void populateUser(User user){
+        writeUser(user);
+    }
+
+    public void populateFriend(Friend friend){
+        writeFriends(friend);
+    }
 }

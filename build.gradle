@@ -86,7 +86,6 @@ dependencies {
       exclude group: 'org.eclipse.jdt.core.compiler', module: 'ecj'
     }
 
-   compile 'org.hamcrest:hamcrest-library:1.3'
    compile 'org.scribe:scribe:1.3.1'
    runtime 'mysql:mysql-connector-java:5.1.30'
    compile 'com.google.code.gson:gson:2.2.4'
@@ -130,9 +129,10 @@ dependencies {
   bddtestCompile 'junit:junit:4.11'
 //  bddtestCompile "org.springframework:spring-core:${springVersion}"
   bddtestCompile "org.springframework:spring-context:${springVersion}"
-  bddtestCompile "org.mockito:mockito-all:${mockitoVersion}"
+  bddtestCompile "org.mockito:mockito-core:${mockitoVersion}"
   bddtestCompile 'org.springframework:spring-test:4.1.2.RELEASE'
 //  bddtestCompile 'org.springframework:spring-test-mvc:1.0.0.M2'
+  bddtestCompile 'org.hamcrest:hamcrest-library:1.3'
 
 }
 

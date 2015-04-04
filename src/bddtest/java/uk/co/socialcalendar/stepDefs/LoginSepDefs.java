@@ -107,8 +107,6 @@ public class LoginSepDefs {
     public void i_have_not_authenticated() throws Throwable {
     }
 
-
-
     @Then("^I should be redirected to the login page$")
     public void i_should_be_redirected_to_the_login_page() throws Throwable {
         results.andExpect(status().isOk())

@@ -1,8 +1,10 @@
 package uk.co.socialcalendar.stepDefs;
 
 import cucumber.api.java.Before;
+import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.hamcrest.Matchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.ContextConfiguration;
@@ -15,17 +17,22 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import uk.co.socialcalendar.entities.Friend;
+import uk.co.socialcalendar.entities.FriendStatus;
+import uk.co.socialcalendar.entities.User;
 import uk.co.socialcalendar.interfaceAdapters.controllers.friend.FriendController;
+import uk.co.socialcalendar.interfaceAdapters.models.friend.FriendModel;
 
 import javax.servlet.http.HttpSession;
 
+import static org.hamcrest.Matchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
-
-
 @WebAppConfiguration
 @ContextConfiguration(locations = {"file:src/test/resources/test-servlet-context.xml"})
 public class FriendStepDefs {
@@ -96,6 +103,63 @@ public class FriendStepDefs {
         results.andExpect(model().attribute("section", "friends"));
     }
 
+    @Given("^I have friends Ron and Lisa$")
+    public void i_have_friends_Ron_and_Lisa() throws Throwable {
+        session = mockMvc.perform(get("/fakelogin"))
+                .andReturn()
+                .getRequest()
+                .getSession();
+
+        WebApplicationContext ctx= WebApplicationContextUtils.getWebApplicationContext(session.getServletContext());
+        PopulateDatabase pop = (PopulateDatabase)ctx.getBean("populateDatabase");
+        pop.populateUser(new User("ron_email", "ron", "1234"));
+        pop.populateUser(new User("lisa_email", "lisa", "567"));
+        Friend ronFriend = new Friend("me", "ron_email", FriendStatus.ACCEPTED);
+        ronFriend.setFriendId(1);
+        Friend lisaFriend = new Friend("me", "lisa_email", FriendStatus.ACCEPTED);
+        lisaFriend.setFriendId(2);
+
+
+        pop.populateFriend(ronFriend);
+        pop.populateFriend(lisaFriend);
+    }
+
+    @Then("^Ron and Lisa are shown in my friend list$")
+    public void ron_and_Lisa_are_shown_in_my_friend_list() throws Throwable {
+        FriendModel ron_friend = new FriendModel();
+        ron_friend.setEmail("ron_email");
+        FriendModel lisa_friend = new FriendModel();
+        lisa_friend.setEmail("lisa_email");
+
+
+
+
+        results = springHolder.getResultActions();
+
+
+        results.andExpect(model().attribute("friendList",
+                        hasItem(Matchers.<FriendModel>
+                                anyOf(
+                                        hasProperty("email", is(ron_friend.getEmail())
+                                        )
+                                )
+                        )
+                )
+        );
+
+        results.andExpect(model().attribute("friendList",
+                        hasItem(Matchers.<FriendModel>
+                                        anyOf(
+                                        hasProperty("email", is(lisa_friend.getEmail())
+                                        )
+                                )
+                        )
+                )
+        );
+
+
+
+    }
 }
 
 
