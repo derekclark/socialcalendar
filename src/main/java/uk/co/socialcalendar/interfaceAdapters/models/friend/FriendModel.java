@@ -1,5 +1,7 @@
 package uk.co.socialcalendar.interfaceAdapters.models.friend;
 
+import uk.co.socialcalendar.entities.User;
+
 public class FriendModel {
     private int friendId;
     private String facebookId;
@@ -12,6 +14,12 @@ public class FriendModel {
         this.friendId=0;
         this.email="";
         this.name="";
+    }
+
+    public FriendModel(User user){
+        this.email = user.getEmail();
+        this.name = user.getName();
+        this.facebookId = user.getFacebookId();
     }
 
     public String getName() {
