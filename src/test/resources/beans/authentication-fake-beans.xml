@@ -21,6 +21,7 @@
 	<bean id="populateDatabase" class="uk.co.socialcalendar.stepDefs.PopulateDatabase">
                 <property name="userDAO" ref="userDAO"/>
                 <property name="friendDAO" ref="friendDAO"/>                
-	</bean>    	
+	</bean>
+
 
 </beans>

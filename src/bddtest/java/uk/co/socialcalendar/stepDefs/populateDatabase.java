@@ -41,7 +41,7 @@ public class PopulateDatabase {
     }
 
     public void populateUsers(){
-        writeUser(new User(MY_EMAIL, MY_NAME, MY_FACEBOOK_ID));
+
         writeUser(new User(EMAIL1, NAME1, FACEBOOK_ID1));
         writeUser(new User(EMAIL2, NAME2, FACEBOOK_ID2));
         writeUser(new User(EMAIL3, NAME3, FACEBOOK_ID3));
@@ -78,6 +78,9 @@ public class PopulateDatabase {
         }
     }
 
+    public void populateMyUser(){
+        writeUser(new User(MY_EMAIL, MY_NAME, MY_FACEBOOK_ID));
+    }
     public void populateUser(User user){
         writeUser(user);
     }

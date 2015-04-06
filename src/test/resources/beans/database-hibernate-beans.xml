@@ -37,4 +37,13 @@
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
 
+    <bean id="databaseActions" class="uk.co.socialcalendar.frameworksAndDrivers.persistence.TestDatabaseActions">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+
+    <bean id="databaseUrl" class="uk.co.socialcalendar.stepDefs.DatabaseUrl">
+        <property name="databaseActions" ref="databaseActions" />
+    </bean>
+
+
 </beans>

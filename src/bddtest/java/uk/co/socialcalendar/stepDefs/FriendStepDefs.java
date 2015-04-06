@@ -1,5 +1,6 @@
 package uk.co.socialcalendar.stepDefs;
 
+import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -28,9 +29,13 @@ import static org.hamcrest.Matchers.isIn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
+
 @WebAppConfiguration
 @ContextConfiguration(locations = {"file:src/test/resources/test-servlet-context.xml"})
 public class FriendStepDefs {
+    public static final int RON_FRIEND_ID = 5;
+    public static final int LISA_FRIEND_ID = 6;
     User ronUser, lisaUser;
     FriendModel ronFriendModel, lisaFriendModel;
     public static final String RON_EMAIL = "ron_email";
@@ -45,6 +50,14 @@ public class FriendStepDefs {
     public static final String USER_ID = "userId";
     @Autowired FriendController friendController;
     ResultActions results;
+    private MockMvc mockMvc;
+    @Autowired private WebApplicationContext wac;
+
+    @Before
+    public void setup() throws Throwable {
+        mockMvc = webAppContextSetup(this.wac).build();
+        clearDatabase();
+    }
 
     @When("^I select the friend page$")
     public void i_select_the_friend_page() throws Throwable {
@@ -89,9 +102,9 @@ public class FriendStepDefs {
 
     private void populateMyFriends(PopulateDatabase pop) {
         Friend ronFriend = new Friend("me", RON_EMAIL, FriendStatus.ACCEPTED);
-        ronFriend.setFriendId(5);
+        ronFriend.setFriendId(RON_FRIEND_ID);
         Friend lisaFriend = new Friend("me", LISA_EMAIL, FriendStatus.ACCEPTED);
-        lisaFriend.setFriendId(6);
+        lisaFriend.setFriendId(LISA_FRIEND_ID);
         pop.populateFriend(ronFriend);
         pop.populateFriend(lisaFriend);
     }
@@ -118,8 +131,23 @@ public class FriendStepDefs {
     private void setExpectedFriendModels() {
         ronFriendModel = new FriendModel(ronUser);
         lisaFriendModel = new FriendModel(lisaUser);
-        ronFriendModel.setFriendId(5);
-        lisaFriendModel.setFriendId(6);
+        ronFriendModel.setFriendId(RON_FRIEND_ID);
+        lisaFriendModel.setFriendId(LISA_FRIEND_ID);
+    }
+
+    public void clearDatabase() throws Throwable {
+
+        System.out.println("clearing database... getting bean");
+        session = mockMvc.perform(get("/clearDatabase"))
+                .andReturn()
+                .getRequest()
+                .getSession();
+
+//        System.out.println("clearing database... getting bean");
+//        WebApplicationContext ctx= WebApplicationContextUtils.getWebApplicationContext(session.getServletContext());
+////        PopulateDatabase pop = (PopulateDatabase)ctx.getBean("populateDatabase");
+//        DatabaseUrl pop = (DatabaseUrl)ctx.getBean("databaseActions");
+//        pop.clearDatabase();
     }
 
 }

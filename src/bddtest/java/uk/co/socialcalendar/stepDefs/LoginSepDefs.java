@@ -55,10 +55,21 @@ public class LoginSepDefs {
         mockMvc = webAppContextSetup(this.wac).build();
     }
 
+    @Given("^I am a registered user$")
+    public void i_am_a_registered_user() throws Throwable {
+        session = mockMvc.perform(get("/fakelogin"))
+                .andReturn()
+                .getRequest()
+                .getSession();
+
+        WebApplicationContext ctx= WebApplicationContextUtils.getWebApplicationContext(session.getServletContext());
+        PopulateDatabase pop = (PopulateDatabase)ctx.getBean("populateDatabase");
+        pop.populateMyUser();
+    }
+
     @Given("^I have friends setup$")
     public void i_have_friends_setup() throws Throwable {
         session = mockMvc.perform(get("/fakelogin"))
-//                .andExpect(status().is(HttpStatus.FOUND.value()))
                 .andReturn()
                 .getRequest()
                 .getSession();
