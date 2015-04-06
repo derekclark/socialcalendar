@@ -14,11 +14,10 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 import uk.co.socialcalendar.entities.Friend;
 import uk.co.socialcalendar.entities.FriendStatus;
 import uk.co.socialcalendar.entities.User;
-import uk.co.socialcalendar.interfaceAdapters.controllers.friend.FriendController;
+import uk.co.socialcalendar.frameworksAndDrivers.persistence.TestDatabaseActions;
 import uk.co.socialcalendar.interfaceAdapters.models.friend.FriendModel;
 
 import javax.servlet.http.HttpSession;
@@ -26,7 +25,6 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.isIn;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
@@ -34,41 +32,39 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @WebAppConfiguration
 @ContextConfiguration(locations = {"file:src/test/resources/test-servlet-context.xml"})
 public class FriendStepDefs {
-    public static final int RON_FRIEND_ID = 5;
-    public static final int LISA_FRIEND_ID = 6;
+    @Autowired private SpringHolder springHolder;
+    @Autowired private WebApplicationContext wac;
+    @Autowired TestDatabaseActions databaseActions;
+    @Autowired PopulateDatabase populateDatabase;
+
+    HttpSession session;
+    ResultActions results;
+    private MockMvc mockMvc;
     User ronUser, lisaUser;
     FriendModel ronFriendModel, lisaFriendModel;
+
     public static final String RON_EMAIL = "ron_email";
     public static final String RON_NAME = "ron";
     public static final String RON_FACEBOOK_ID = "1234";
     public static final String LISA_FACEBOOK_ID = "567";
     public static final String LISA_NAME = "lisa";
     public static final String LISA_EMAIL = "lisa_email";
-    HttpSession session;
-    @Autowired private SpringHolder springHolder;
-    private static final String JSP_VIEW = "/WEB-INF/jsp/view/";
-    public static final String USER_ID = "userId";
-    @Autowired FriendController friendController;
-    ResultActions results;
-    private MockMvc mockMvc;
-    @Autowired private WebApplicationContext wac;
+    public static final int RON_FRIEND_ID = 5;
+    public static final int LISA_FRIEND_ID = 6;
 
     @Before
     public void setup() throws Throwable {
-        mockMvc = webAppContextSetup(this.wac).build();
+        mockMvc = webAppContextSetup(wac).build();
         clearDatabase();
     }
 
     @When("^I select the friend page$")
     public void i_select_the_friend_page() throws Throwable {
-
         MockMvc mockMvc = springHolder.getMockMVC();
         RequestBuilder getFriend = MockMvcRequestBuilders.get("/friend")
                 .session((MockHttpSession)springHolder.getSession());
-
         results = mockMvc.perform(getFriend)
                 .andDo(MockMvcResultHandlers.print());
-
         springHolder.setResultActions(results);
     }
 
@@ -87,33 +83,24 @@ public class FriendStepDefs {
 
     @Given("^I have friends Ron and Lisa$")
     public void i_have_friends_Ron_and_Lisa() throws Throwable {
-        MockMvc mockMvc = springHolder.getMockMVC();
-
-        session = mockMvc.perform(get("/fakelogin"))
-                .andReturn()
-                .getRequest()
-                .getSession();
-
-        WebApplicationContext ctx= WebApplicationContextUtils.getWebApplicationContext(session.getServletContext());
-        PopulateDatabase pop = (PopulateDatabase)ctx.getBean("populateDatabase");
-        populateUsers(pop);
-        populateMyFriends(pop);
+        populateUsers();
+        populateMyFriends();
     }
 
-    private void populateMyFriends(PopulateDatabase pop) {
+    private void populateMyFriends() {
         Friend ronFriend = new Friend("me", RON_EMAIL, FriendStatus.ACCEPTED);
         ronFriend.setFriendId(RON_FRIEND_ID);
         Friend lisaFriend = new Friend("me", LISA_EMAIL, FriendStatus.ACCEPTED);
         lisaFriend.setFriendId(LISA_FRIEND_ID);
-        pop.populateFriend(ronFriend);
-        pop.populateFriend(lisaFriend);
+        populateDatabase.populateFriend(ronFriend);
+        populateDatabase.populateFriend(lisaFriend);
     }
 
-    private void populateUsers(PopulateDatabase pop) {
+    private void populateUsers() {
         ronUser = new User(RON_EMAIL, RON_NAME, RON_FACEBOOK_ID);
         lisaUser = new User(LISA_EMAIL, LISA_NAME, LISA_FACEBOOK_ID);
-        pop.populateUser(ronUser);
-        pop.populateUser(lisaUser);
+        populateDatabase.populateUser(ronUser);
+        populateDatabase.populateUser(lisaUser);
     }
 
     @Then("^Ron and Lisa are shown in my friend list$")
@@ -136,20 +123,8 @@ public class FriendStepDefs {
     }
 
     public void clearDatabase() throws Throwable {
-
-        System.out.println("clearing database... getting bean");
-        session = mockMvc.perform(get("/clearDatabase"))
-                .andReturn()
-                .getRequest()
-                .getSession();
-
-//        System.out.println("clearing database... getting bean");
-//        WebApplicationContext ctx= WebApplicationContextUtils.getWebApplicationContext(session.getServletContext());
-////        PopulateDatabase pop = (PopulateDatabase)ctx.getBean("populateDatabase");
-//        DatabaseUrl pop = (DatabaseUrl)ctx.getBean("databaseActions");
-//        pop.clearDatabase();
+        databaseActions.clear();
     }
-
 }
 
 

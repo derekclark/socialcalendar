@@ -12,18 +12,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -32,52 +28,35 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @WebAppConfiguration
 @ContextConfiguration(locations = {"file:src/test/resources/test-servlet-context.xml"})
 public class LoginSepDefs {
+    @Autowired SpringHolder springHolder;
+    @Autowired PopulateDatabase populateDatabase;
+    @Autowired private WebApplicationContext wac;
+
+    private MockMvc mockMvc;
+    HttpSession session;
+    ResultActions results;
+
+    public static final String FRIEND_VIEW = "friend";
+    public static final String USER_ID = "userId";
     public static final String VALID_USER_ID = "me";
     public static final String VALID_USER_PASSWORD = "pass1";
     public static final String MY_FACEBOOK_ID = "100008173740345";
     public static final String TOKEN = "token";
-    private MockMvc mockMvc;
-    MockHttpServletRequestBuilder getRequest;
-    HttpSession session;
-
-    @Autowired SpringHolder springHolder;
-
-    @Autowired private WebApplicationContext wac;
-    private static final String JSP_VIEW = "/WEB-INF/jsp/view/";
-    public static final String FRIEND_VIEW = "friend";
-    public static final String USER_ID = "userId";
-
-    ModelAndView mav;
-    ResultActions results;
 
     @Before
     public void setup() throws Exception {
-        mockMvc = webAppContextSetup(this.wac).build();
+        mockMvc = webAppContextSetup(wac).build();
     }
 
     @Given("^I am a registered user$")
     public void i_am_a_registered_user() throws Throwable {
-        session = mockMvc.perform(get("/fakelogin"))
-                .andReturn()
-                .getRequest()
-                .getSession();
-
-        WebApplicationContext ctx= WebApplicationContextUtils.getWebApplicationContext(session.getServletContext());
-        PopulateDatabase pop = (PopulateDatabase)ctx.getBean("populateDatabase");
-        pop.populateMyUser();
+        populateDatabase.populateMyUser();
     }
 
     @Given("^I have friends setup$")
     public void i_have_friends_setup() throws Throwable {
-        session = mockMvc.perform(get("/fakelogin"))
-                .andReturn()
-                .getRequest()
-                .getSession();
-
-        WebApplicationContext ctx= WebApplicationContextUtils.getWebApplicationContext(session.getServletContext());
-        PopulateDatabase pop = (PopulateDatabase)ctx.getBean("populateDatabase");
-        pop.populateUsers();
-        pop.populateFriends();
+        populateDatabase.populateUsers();
+        populateDatabase.populateFriends();
     }
 
     @Given("^I have logged in with valid credentials$")
@@ -105,13 +84,11 @@ public class LoginSepDefs {
                 .andReturn()
                 .getRequest()
                 .getSession();
-
         assertNotNull(session);
     }
 
     @Then("^I should not be authenticated$")
     public void i_should_not_be_authenticated() throws Throwable {
-
         assertEquals(null, session.getAttribute("IS_AUTHENTICATED"));
     }
 
@@ -134,10 +111,8 @@ public class LoginSepDefs {
     @When("^I select the friend page without going authenticating$")
     public void i_select_the_friend_page_without_going_authenticating() throws Throwable {
         RequestBuilder getFriend = MockMvcRequestBuilders.get("/friend");
-
         results = mockMvc.perform(getFriend)
                 .andDo(MockMvcResultHandlers.print());
-
         springHolder.setResultActions(results);
 
     }
