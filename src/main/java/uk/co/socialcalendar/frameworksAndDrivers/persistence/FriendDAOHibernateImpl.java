@@ -73,19 +73,12 @@ public class FriendDAOHibernateImpl implements FriendDAO {
     @Transactional
     public List<Friend> getMyAcceptedFriends(String email) {
         @SuppressWarnings("unchecked")
-
         Query query = queryMyAcceptedFriendsWhereIAmOwner(email);
-
         List<FriendHibernateModel> returnSQLList = query.list();
         query = queryMyAcceptedFriendsWhereIAmNotOwner(email);
         returnSQLList.addAll(query.list());
 
         List<Friend> friendList = convertModelListToFriendList(returnSQLList);
-
-        System.out.println("in get my accepted friends..." + email);
-        for (FriendHibernateModel friend:returnSQLList){
-            System.out.println(friend.getFriendId());
-        }
         return friendList;
     }
 
@@ -101,8 +94,8 @@ public class FriendDAOHibernateImpl implements FriendDAO {
     @Transactional
     public List<Friend> getMyFriendInvites(String email) {
         Query query = queryStringForMyFriendInvites(email);
-        List<Friend> returnSQLList = query.list();
-        return returnSQLList;
+        List<FriendHibernateModel> returnSQLList = query.list();
+        return convertModelListToFriendList(returnSQLList);
     }
 
     @Override

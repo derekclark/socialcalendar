@@ -240,7 +240,8 @@ public class FriendDAOHibernateImplTest {
     public void shouldGetListOfMyFriendInvitations(){
         when(mockSessionFactory.getCurrentSession().createQuery(anyString())).thenReturn(mockQuery);
         List<Friend> myFriendInvites = getListOfMyFriendInvites();
-        when(mockQuery.list()).thenReturn(myFriendInvites);
+        List<FriendHibernateModel> myFriendInvitesModel = convertFriendListToModelList(myFriendInvites);
+        when(mockQuery.list()).thenReturn(myFriendInvitesModel);
 
         assertEquals(myFriendInvites, friendDAOImpl.getMyFriendInvites(REQUESTER_EMAIL));
     }
