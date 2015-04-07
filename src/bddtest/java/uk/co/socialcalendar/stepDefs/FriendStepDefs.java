@@ -23,8 +23,6 @@ import uk.co.socialcalendar.interfaceAdapters.models.friend.FriendModel;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.isIn;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
@@ -32,17 +30,26 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @WebAppConfiguration
 @ContextConfiguration(locations = {"file:src/test/resources/test-servlet-context.xml"})
 public class FriendStepDefs {
-    @Autowired private SpringHolder springHolder;
-    @Autowired private WebApplicationContext wac;
-    @Autowired TestDatabaseActions databaseActions;
-    @Autowired PopulateDatabase populateDatabase;
+    public static final int JEREMY_FRIEND_ID = 3;
+    public static final String MY_EMAIL = "me";
+    @Autowired
+    private SpringHolder springHolder;
+    @Autowired
+    private WebApplicationContext wac;
+    @Autowired
+    TestDatabaseActions databaseActions;
+    @Autowired
+    PopulateDatabase populateDatabase;
 
     HttpSession session;
     ResultActions results;
     private MockMvc mockMvc;
-    User ronUser, lisaUser;
+    User ronUser, lisaUser, jeremyUser;
     FriendModel ronFriendModel, lisaFriendModel;
 
+    public static final String JEREMY_EMAIL = "jeremy_email";
+    public static final String JEREMY_NAME = "jeremy";
+    public static final String JERMEY_FACEBOOK_ID = "1234";
     public static final String RON_EMAIL = "ron_email";
     public static final String RON_NAME = "ron";
     public static final String RON_FACEBOOK_ID = "1234";
@@ -62,7 +69,7 @@ public class FriendStepDefs {
     public void i_select_the_friend_page() throws Throwable {
         MockMvc mockMvc = springHolder.getMockMVC();
         RequestBuilder getFriend = MockMvcRequestBuilders.get("/friend")
-                .session((MockHttpSession)springHolder.getSession());
+                .session((MockHttpSession) springHolder.getSession());
         results = mockMvc.perform(getFriend)
                 .andDo(MockMvcResultHandlers.print());
         springHolder.setResultActions(results);
@@ -73,7 +80,6 @@ public class FriendStepDefs {
         results = springHolder.getResultActions();
         results.andExpect(status().isOk());
     }
-
 
     @Then("^the section should be friends$")
     public void the_section_should_be_friends() throws Throwable {
@@ -88,19 +94,24 @@ public class FriendStepDefs {
     }
 
     private void populateMyFriends() {
-        Friend ronFriend = new Friend("me", RON_EMAIL, FriendStatus.ACCEPTED);
+        Friend ronFriend = new Friend(MY_EMAIL, RON_EMAIL, FriendStatus.ACCEPTED);
         ronFriend.setFriendId(RON_FRIEND_ID);
-        Friend lisaFriend = new Friend("me", LISA_EMAIL, FriendStatus.ACCEPTED);
+        Friend lisaFriend = new Friend(MY_EMAIL, LISA_EMAIL, FriendStatus.ACCEPTED);
         lisaFriend.setFriendId(LISA_FRIEND_ID);
+        Friend jeremyFriend = new Friend(JEREMY_EMAIL, MY_EMAIL, FriendStatus.PENDING);
+        jeremyFriend.setFriendId(JEREMY_FRIEND_ID);
         populateDatabase.populateFriend(ronFriend);
         populateDatabase.populateFriend(lisaFriend);
+        populateDatabase.populateFriend(jeremyFriend);
     }
 
     private void populateUsers() {
         ronUser = new User(RON_EMAIL, RON_NAME, RON_FACEBOOK_ID);
         lisaUser = new User(LISA_EMAIL, LISA_NAME, LISA_FACEBOOK_ID);
+        jeremyUser = new User(JEREMY_EMAIL, JEREMY_NAME, JERMEY_FACEBOOK_ID);
         populateDatabase.populateUser(ronUser);
         populateDatabase.populateUser(lisaUser);
+        populateDatabase.populateUser(jeremyUser);
     }
 
     @Then("^Ron and Lisa are shown in my friend list$")
@@ -111,8 +122,8 @@ public class FriendStepDefs {
         List<FriendModel> actualFriendList =
                 (List<FriendModel>) results.andReturn().getRequest().getAttribute("friendList");
 
-        assertThat(ronFriendModel,isIn(actualFriendList));
-        assertThat(lisaFriendModel,isIn(actualFriendList));
+        assertFriendModelIsInList(ronFriendModel, actualFriendList);
+        assertFriendModelIsInList(lisaFriendModel, actualFriendList);
     }
 
     private void setExpectedFriendModels() {
@@ -125,6 +136,49 @@ public class FriendStepDefs {
     public void clearDatabase() throws Throwable {
         databaseActions.clear();
     }
+
+    @Given("^I have a friend request from Jeremy$")
+    public void i_have_a_friend_request_from_Jeremy() throws Throwable {
+        populateUsers();
+        populateMyFriends();
+    }
+
+    @Then("^Jeremy is shown as a friend request$")
+    public void jeremy_is_shown_as_a_friend_request() throws Throwable {
+        results = springHolder.getResultActions();
+        List<Friend> actualFriendList =
+                (List<Friend>) results.andReturn().getRequest().getAttribute("friendRequests");
+
+        Friend jeremyFriend = new Friend(JEREMY_EMAIL, MY_EMAIL, FriendStatus.PENDING);
+        jeremyFriend.setFriendId(JEREMY_FRIEND_ID);
+
+        //This isn't great! Cannot do a - assertThat(jeremyFriend isIn actualFriendList) - because I cannot
+        //predict the friendId which hibernate will assign to the friend object
+        assertFriendIsInList(jeremyFriend, actualFriendList);
+    }
+
+    public boolean assertFriendIsInList(Friend friendToFind, List<Friend> friendListToSearch) {
+        for (Friend f : friendListToSearch) {
+            if (f.getRequesterEmail().equals(friendToFind.getRequesterEmail()) &&
+                    f.getBeFriendedEmail().equals(friendToFind.getBeFriendedEmail()) &&
+                    f.getStatus() == friendToFind.getStatus()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean assertFriendModelIsInList(FriendModel friendToFind, List<FriendModel> friendListToSearch) {
+        for (FriendModel f : friendListToSearch) {
+            if (f.getEmail().equals(friendToFind.getEmail()) &&
+                    f.getFacebookId().equals((friendToFind.getFacebookId())) &&
+                    f.getName().equals(friendToFind.getName())){
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
 
 
