@@ -54,7 +54,7 @@ public class FakeLoginController {
     @RequestMapping(value = "/fakelogin", method = RequestMethod.POST)
     public ModelAndView login(@ModelAttribute FakeUserCredentials fakeUserCredentials,
                               HttpServletRequest request, HttpServletResponse response){
-        System.out.println("test user name" + fakeUserCredentials.getUserId());
+        System.out.println("test user name=" + fakeUserCredentials.getUserId());
 
         if (validUserCredentials(fakeUserCredentials)){
             HttpSession session = request.getSession();
@@ -66,9 +66,12 @@ public class FakeLoginController {
             String loggedInUser = (String) session.getAttribute("USER_ID");
             System.out.println("fake login id = " + loggedInUser);
             System.out.println("in fake login , get attribute="+session.getAttribute("USER_ID"));
+        }else {
+            ModelAndView mav = new ModelAndView("login");
+            return mav;
         };
 
-        ModelAndView mav = new ModelAndView("/");
+        ModelAndView mav = new ModelAndView("homePage");
         mav.addObject("username", NAME1);
 //        mav.addObject("USER_ID", fakeUserCredentials.getUserId());
         return mav;

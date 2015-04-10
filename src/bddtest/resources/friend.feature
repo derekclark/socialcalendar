@@ -4,9 +4,9 @@ Feature: Friend Page
     Given I am a registered user
     Given I have logged in with valid credentials
     When I select the friend page
-    Then the friend page is shown
-    Then friend view is returned
-    Then the section should be friends
+    Then the page is shown OK
+    And the "friend" view is rendered
+    Then the section should be "friends"
 
   Scenario: The friend page shows my friends
     Given I am a registered user

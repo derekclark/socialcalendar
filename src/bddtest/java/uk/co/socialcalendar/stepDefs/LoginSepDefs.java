@@ -20,8 +20,6 @@ import uk.co.socialcalendar.entities.User;
 import javax.servlet.http.HttpSession;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
@@ -66,6 +64,7 @@ public class LoginSepDefs {
         MockHttpSession mockHttpSession = (MockHttpSession)result.getRequest().getSession();
         springHolder.setSession(mockHttpSession);
         springHolder.setMockMVC(mockMvc);
+        springHolder.setResultActions(auth);
     }
 
     @Then("^I should be authenticated$")
@@ -79,15 +78,19 @@ public class LoginSepDefs {
 
     @Given("^I have logged in with invalid credentials$")
     public void i_have_logged_in_with_invalid_credentials() throws Throwable {
-        session = mockMvc.perform(post("/fakelogin").param("userId", MY_USER_ID).param("password", "wrongpassword"))
-                .andReturn()
-                .getRequest()
-                .getSession();
-        assertNotNull(session);
+        ResultActions auth = mockMvc.perform(
+                MockMvcRequestBuilders.post("/fakelogin").param("userId", MY_USER_ID).param("password", "wrong password"))
+                .andDo(MockMvcResultHandlers.print());
+        MvcResult result = auth.andReturn();
+        MockHttpSession mockHttpSession = (MockHttpSession)result.getRequest().getSession();
+        springHolder.setSession(mockHttpSession);
+        springHolder.setMockMVC(mockMvc);
+        springHolder.setResultActions(auth);
     }
 
     @Then("^I should not be authenticated$")
     public void i_should_not_be_authenticated() throws Throwable {
+        MockHttpSession session = (MockHttpSession)springHolder.getSession();
         assertEquals(null, session.getAttribute("IS_AUTHENTICATED"));
     }
 
@@ -101,13 +104,13 @@ public class LoginSepDefs {
                 .andExpect(view().name("login"));
     }
 
-    @Then("^friend view is returned$")
-    public void friend_view_is_returned() throws Throwable {
+    @Then("^the \"(.*?)\" view is rendered$")
+    public void the_view_is_returned(String expectedView) throws Throwable {
         results = springHolder.getResultActions();
-        results.andExpect(view().name(FRIEND_VIEW));
+        results.andExpect(view().name(expectedView));
     }
 
-    @When("^I select the friend page without going authenticating$")
+    @When("^I select the friend page without authenticating$")
     public void i_select_the_friend_page_without_going_authenticating() throws Throwable {
         RequestBuilder getFriend = MockMvcRequestBuilders.get("/friend");
         results = mockMvc.perform(getFriend)

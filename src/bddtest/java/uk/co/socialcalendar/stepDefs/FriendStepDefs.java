@@ -75,16 +75,16 @@ public class FriendStepDefs {
         springHolder.setResultActions(results);
     }
 
-    @Then("^the friend page is shown$")
+    @Then("^the page is shown OK$")
     public void friends_are_shown() throws Throwable {
         results = springHolder.getResultActions();
         results.andExpect(status().isOk());
     }
 
-    @Then("^the section should be friends$")
-    public void the_section_should_be_friends() throws Throwable {
+    @Then("^the section should be \"(.*?)\"$")
+    public void the_section_should_be(String section) throws Throwable {
         results = springHolder.getResultActions();
-        results.andExpect(model().attribute("section", "friends"));
+        results.andExpect(model().attribute("section", section));
     }
 
     @Given("^I have friends Ron and Lisa$")
