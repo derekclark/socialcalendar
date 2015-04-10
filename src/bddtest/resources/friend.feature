@@ -2,7 +2,6 @@ Feature: Friend Page
 
   Scenario: When the friend page is requested it is shown
     Given I am a registered user
-    Given I have friends setup
     Given I have logged in with valid credentials
     When I select the friend page
     Then the friend page is shown

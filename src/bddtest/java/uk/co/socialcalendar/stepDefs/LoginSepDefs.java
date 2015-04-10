@@ -53,12 +53,6 @@ public class LoginSepDefs {
         populateDatabase.populateMyUser();
     }
 
-    @Given("^I have friends setup$")
-    public void i_have_friends_setup() throws Throwable {
-        populateDatabase.populateUsers();
-        populateDatabase.populateFriends();
-    }
-
     @Given("^I have logged in with valid credentials$")
     public void i_have_logged_in_with_valid_credentials() throws Throwable {
         ResultActions auth =this.mockMvc.perform(
