@@ -23,5 +23,11 @@ Feature: Friend Page
     When I select the friend page
     Then Jeremy is shown as a friend request
 
-
-
+  Scenario: I can accept a friend request
+    Given I am a registered user
+    Given I have logged in with valid credentials
+    Given I have a friend request from Jeremy
+    When I accept a friend request from Jeremy
+    Then a message is shown that you have accepted jeremy as a friend
+    When I select the friend page
+    Then Ron and Lisa and Jeremy are shown in my friend list

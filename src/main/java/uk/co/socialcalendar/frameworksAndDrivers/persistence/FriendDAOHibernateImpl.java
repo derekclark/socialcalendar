@@ -36,6 +36,7 @@ public class FriendDAOHibernateImpl implements FriendDAO {
         }
         Session session = sessionFactory.getCurrentSession();
         session.save(convertToFriendHibernateModel(friend));
+        System.out.println("just saved friend id=" + friend.getFriendId());
         return true;
     }
 

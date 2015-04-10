@@ -72,6 +72,7 @@ public class PopulateDatabase {
     public void writeFriends(Friend friend){
         if (!friendDAO.friendshipExists(friend.getRequesterEmail(), friend.getBeFriendedEmail())){
             friendDAO.save(friend);
+            System.out.println("friend id=" + friend.getFriendId());
             System.out.println("just saved friend");
         }else{
             System.out.println("existing friend relationship - don't write");
