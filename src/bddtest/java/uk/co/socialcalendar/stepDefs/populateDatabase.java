@@ -1,19 +1,17 @@
 package uk.co.socialcalendar.stepDefs;
 
 import uk.co.socialcalendar.entities.Friend;
-import uk.co.socialcalendar.entities.FriendStatus;
 import uk.co.socialcalendar.entities.User;
 import uk.co.socialcalendar.useCases.friend.FriendDAO;
 import uk.co.socialcalendar.useCases.user.UserDAO;
 
 public class PopulateDatabase {
+    UserDAO userDAO;
+    FriendDAO friendDAO;
     public static final String MY_FACEBOOK_ID = "100008173740345";
     public static final String MY_EMAIL = "me";
     public static final String MY_NAME = "my name";
     public static final int NOT_SAVED = -1;
-
-    UserDAO userDAO;
-    FriendDAO friendDAO;
 
     public void setUserDAO(UserDAO userDAO) {
         this.userDAO = userDAO;
@@ -30,11 +28,6 @@ public class PopulateDatabase {
         }
     }
 
-    public Friend createFriend(String requester, String beFriended, FriendStatus status, int id){
-        Friend friend = new Friend(requester, beFriended, status);
-        friend.setFriendId(id);
-        return friend;
-    }
     public int writeFriends(Friend friend){
         if (!friendDAO.friendshipExists(friend.getRequesterEmail(), friend.getBeFriendedEmail())){
             int id = friendDAO.save(friend);
@@ -46,9 +39,6 @@ public class PopulateDatabase {
         return NOT_SAVED;
     }
 
-    public void populateMyUser(){
-        writeUser(new User(MY_EMAIL, MY_NAME, MY_FACEBOOK_ID));
-    }
     public void populateUser(User user){
         writeUser(user);
     }

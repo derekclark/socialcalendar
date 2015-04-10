@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.web.context.WebApplicationContext;
+import uk.co.socialcalendar.entities.User;
 
 import javax.servlet.http.HttpSession;
 
@@ -38,10 +39,13 @@ public class LoginSepDefs {
 
     public static final String FRIEND_VIEW = "friend";
     public static final String USER_ID = "userId";
-    public static final String VALID_USER_ID = "me";
-    public static final String VALID_USER_PASSWORD = "pass1";
+    public static final String MY_USER_ID = "me";
+    public static final String MY_USER_PASSWORD = "pass1";
     public static final String MY_FACEBOOK_ID = "100008173740345";
     public static final String TOKEN = "token";
+    public static final String MY_NAME = "my name";
+
+    User myUser;
 
     @Before
     public void setup() throws Exception {
@@ -50,13 +54,14 @@ public class LoginSepDefs {
 
     @Given("^I am a registered user$")
     public void i_am_a_registered_user() throws Throwable {
-        populateDatabase.populateMyUser();
+        myUser = new User(MY_USER_ID, MY_NAME, MY_FACEBOOK_ID);
+        populateDatabase.populateUser(myUser);
     }
 
     @Given("^I have logged in with valid credentials$")
     public void i_have_logged_in_with_valid_credentials() throws Throwable {
         ResultActions auth =this.mockMvc.perform(
-                MockMvcRequestBuilders.post("/fakelogin").param("userId", VALID_USER_ID).param("password", VALID_USER_PASSWORD));
+                MockMvcRequestBuilders.post("/fakelogin").param("userId", MY_USER_ID).param("password", MY_USER_PASSWORD));
         MvcResult result = auth.andReturn();
         MockHttpSession mockHttpSession = (MockHttpSession)result.getRequest().getSession();
         springHolder.setSession(mockHttpSession);
@@ -67,14 +72,14 @@ public class LoginSepDefs {
     public void i_should_be_authenticated() throws Throwable {
         MockHttpSession session = (MockHttpSession)springHolder.getSession();
         assertEquals(true, session.getAttribute("IS_AUTHENTICATED"));
-        assertEquals(VALID_USER_ID,session.getAttribute("USER_ID"));
+        assertEquals(MY_USER_ID,session.getAttribute("USER_ID"));
         assertEquals(TOKEN,session.getAttribute("OAUTH_TOKEN"));
         assertEquals(MY_FACEBOOK_ID,session.getAttribute("MY_FACEBOOK_ID"));
     }
 
     @Given("^I have logged in with invalid credentials$")
     public void i_have_logged_in_with_invalid_credentials() throws Throwable {
-        session = mockMvc.perform(post("/fakelogin").param("userId", VALID_USER_ID).param("password", "wrongpassword"))
+        session = mockMvc.perform(post("/fakelogin").param("userId", MY_USER_ID).param("password", "wrongpassword"))
                 .andReturn()
                 .getRequest()
                 .getSession();
