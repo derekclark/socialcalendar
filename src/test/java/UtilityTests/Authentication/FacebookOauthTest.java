@@ -3,7 +3,7 @@ package UtilityTests.Authentication;
 import org.junit.Before;
 import org.junit.Test;
 import org.scribe.model.Token;
-import uk.co.socialcalendar.frameworksAndDrivers.FakeHttpSession;
+import org.springframework.mock.web.MockHttpSession;
 import uk.co.socialcalendar.frameworksAndDrivers.authentication.FacebookOauth;
 import uk.co.socialcalendar.frameworksAndDrivers.authentication.FakeAuthentication;
 import uk.co.socialcalendar.frameworksAndDrivers.authentication.FakeScribeAdapter;
@@ -31,7 +31,7 @@ public class FacebookOauthTest {
     HttpServletRequest mockRequest;
     HttpServletResponse mockResponse;
     FakeAuthentication fakeAuthentication;
-    FakeHttpSession fakeHttpSession;
+    MockHttpSession fakeHttpSession;
     FakeScribeAdapter fakeScribeAdapter;
 
     String apiKey, apiSecret, callback;
@@ -52,7 +52,7 @@ public class FacebookOauthTest {
     public void setupHttpSessions(){
         mockRequest = mock(HttpServletRequest.class);
         mockResponse = mock(HttpServletResponse.class);
-        fakeHttpSession = new FakeHttpSession();
+        fakeHttpSession = new MockHttpSession();
         facebook.setHttpSession(fakeHttpSession);
         when(mockRequest.getSession()).thenReturn(fakeHttpSession);
     }
