@@ -10,6 +10,7 @@ import uk.co.socialcalendar.useCases.friend.FriendDAO;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.*;
 public class FriendDAOTest {
 	Friend friend;
@@ -27,6 +28,7 @@ public class FriendDAOTest {
 	private final static String FRIEND_NAME7 = "NAME7";
 	private final static String FRIEND_NAME8 = "NAME8";
 	private final static String FRIEND_REQUESTER_NOT_PRESENT = "FRIEND_REQUESTER_EMAIL_NOT_EXIST";
+	private static final int NOT_SAVED = -1;
 
 	@Before
 	public void setup(){
@@ -73,37 +75,37 @@ public class FriendDAOTest {
 
 	@Test
 	public void canSaveFriend(){
-		assertTrue(friendDAO.save(friend));
+		assertThat(friendDAO.save(friend), greaterThan(0));
 	}
 	
 	@Test
 	public void shouldNotSaveFriendIfRequesteeNameIsNull(){
 		friend.setBeFriendedEmail(null);
-		assertFalse(friendDAO.save(friend));
+		assertEquals(NOT_SAVED, friendDAO.save(friend));
 	}
 	
 	@Test
 	public void shouldNotSaveFriendIfRequesteeNameIsEmpty(){
 		friend.setBeFriendedEmail("");
-		assertFalse(friendDAO.save(friend));
+		assertEquals(NOT_SAVED, friendDAO.save(friend));
 	}
 
 	@Test
 	public void shouldNotSaveFriendIfRequesterNameIsNull(){
 		friend.setRequesterEmail("");
-		assertFalse(friendDAO.save(friend));
+		assertEquals(NOT_SAVED, friendDAO.save(friend));
 	}
 
 	@Test
 	public void shouldNotSaveFriendIfRequesterNameIsEmpty(){
 		friend.setRequesterEmail("");
-		assertFalse(friendDAO.save(friend));
+		assertEquals(NOT_SAVED, friendDAO.save(friend));
 	}
 
 	@Test
 	public void shouldNotSaveFriendIfStatusIsUNKNOWN(){
 		friend.setStatus(FriendStatus.UNKNOWN);
-		assertFalse(friendDAO.save(friend));
+		assertEquals(NOT_SAVED, friendDAO.save(friend));
 	}
 	
 	@Test

@@ -16,6 +16,7 @@ import static uk.co.socialcalendar.entities.FriendStatus.*;
 public class FriendDAOHibernateImpl implements FriendDAO {
     SessionFactory sessionFactory;
     FriendValidator friendValidator;
+    private static final int NOT_SAVED = -1;
 
     public FriendDAOHibernateImpl(){
     }
@@ -30,14 +31,13 @@ public class FriendDAOHibernateImpl implements FriendDAO {
 
     @Override
     @Transactional
-    public boolean save(Friend friend) {
+    public int save(Friend friend) {
         if (!canUpdate(friend)){
-            return false;
+            return NOT_SAVED;
         }
         Session session = sessionFactory.getCurrentSession();
-        session.save(convertToFriendHibernateModel(friend));
-        System.out.println("just saved friend id=" + friend.getFriendId());
-        return true;
+        int id = (int) session.save(convertToFriendHibernateModel(friend));
+        return id;
     }
 
     public boolean canUpdate(Friend friend) {

@@ -6,7 +6,7 @@ import uk.co.socialcalendar.entities.FriendStatus;
 import java.util.List;
 
 public interface FriendDAO {
-	public boolean save(Friend friend);
+	public int save(Friend friend);
 	public Friend read(int friendId);
 	public boolean updateStatus(int friendId, FriendStatus status);
 	public List<Friend> getMyAcceptedFriends(String email);

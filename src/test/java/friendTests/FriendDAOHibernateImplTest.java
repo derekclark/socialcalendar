@@ -15,7 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 import static uk.co.socialcalendar.entities.FriendStatus.*;
@@ -31,6 +33,7 @@ public class FriendDAOHibernateImplTest {
     FriendValidator friendValidator;
 	private final static String REQUESTER_EMAIL = "requesterEmail";
     private final static String BEFRIENDED_EMAIL = "befriendedEmail";
+    private static final int NOT_SAVED = -1;
 
     SessionFactory mockSessionFactory;
     Session mockSession;
@@ -43,7 +46,6 @@ public class FriendDAOHibernateImplTest {
         friend.setFriendId(FRIEND_ID);
         emptyFriend = new Friend();
         friendValidator = new FriendValidator();
-
         setupMocks();
 	}
 
@@ -54,6 +56,7 @@ public class FriendDAOHibernateImplTest {
         mockSession = mock(Session.class);
         mockQuery = mock(Query.class);
         when(mockSessionFactory.getCurrentSession()).thenReturn(mockSession);
+
     }
 
 	@Test
@@ -63,7 +66,8 @@ public class FriendDAOHibernateImplTest {
 
     @Test
     public void canSaveFriend(){
-        assertTrue(friendDAOImpl.save(friend));
+        when(mockSession.save(anyObject())).thenReturn(1);
+        assertThat(friendDAOImpl.save(friend), greaterThan(0));
     }
 
     @Test
@@ -74,6 +78,7 @@ public class FriendDAOHibernateImplTest {
 
     @Test
     public void saveCallsSessionFactory(){
+        when(mockSession.save(anyObject())).thenReturn(1);
         friendDAOImpl.save(friend);
         verify(mockSession).save(anyObject());
     }
@@ -82,35 +87,35 @@ public class FriendDAOHibernateImplTest {
     public void willNotSaveFriendWithNullRequesterEmail(){
         emptyFriend = new Friend(null, BEFRIENDED_EMAIL, ACCEPTED);
         emptyFriend.setFriendId(FRIEND_ID);
-        assertFalse(friendDAOImpl.save(emptyFriend));
+        assertEquals(NOT_SAVED, friendDAOImpl.save(emptyFriend));
     }
 
     @Test
     public void willNotSaveFriendWithEmptyRequesterEmail(){
         emptyFriend = new Friend("", BEFRIENDED_EMAIL,ACCEPTED);
         emptyFriend.setFriendId(FRIEND_ID);
-        assertFalse(friendDAOImpl.save(emptyFriend));
+        assertEquals(NOT_SAVED, friendDAOImpl.save(emptyFriend));
     }
 
     @Test
     public void willNotSaveFriendWithNullBeFriendedEmail(){
         emptyFriend = new Friend(REQUESTER_EMAIL, null, ACCEPTED);
         emptyFriend.setFriendId(FRIEND_ID);
-        assertFalse(friendDAOImpl.save(emptyFriend));
+        assertEquals(NOT_SAVED, friendDAOImpl.save(emptyFriend));
     }
 
     @Test
     public void willNotSaveFriendWithEmptyBeFriendedEmail(){
         emptyFriend = new Friend(REQUESTER_EMAIL, "", ACCEPTED);
         emptyFriend.setFriendId(FRIEND_ID);
-        assertFalse(friendDAOImpl.save(emptyFriend));
+        assertEquals(NOT_SAVED, friendDAOImpl.save(emptyFriend));
     }
 
     @Test
     public void willNotSaveFriendWithInvalidStatus(){
         emptyFriend = new Friend(REQUESTER_EMAIL, BEFRIENDED_EMAIL, UNKNOWN);
         emptyFriend.setFriendId(FRIEND_ID);
-        assertFalse(friendDAOImpl.save(emptyFriend));
+        assertEquals(NOT_SAVED, friendDAOImpl.save(emptyFriend));
     }
 
     @Test
