@@ -32,7 +32,6 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @WebAppConfiguration
 @ContextConfiguration(locations = {"file:src/test/resources/test-servlet-context.xml"})
 public class FriendStepDefs {
-    public static final int JEREMY_FRIEND_ID = 3;
     public static final String MY_EMAIL = "me";
     @Autowired
     private SpringHolder springHolder;
@@ -48,6 +47,7 @@ public class FriendStepDefs {
     private MockMvc mockMvc;
     User ronUser, lisaUser, jeremyUser;
     FriendModel ronFriendModel, lisaFriendModel, jeremyFriendModel;
+    Friend ronFriend, lisaFriend, jeremyFriend;
 
     public static final String JEREMY_EMAIL = "jeremy_email";
     public static final String JEREMY_NAME = "jeremy";
@@ -96,15 +96,12 @@ public class FriendStepDefs {
     }
 
     private void populateMyFriends() {
-        Friend ronFriend = new Friend(MY_EMAIL, RON_EMAIL, FriendStatus.ACCEPTED);
-//        ronFriend.setFriendId(RON_FRIEND_ID);
-        Friend lisaFriend = new Friend(MY_EMAIL, LISA_EMAIL, FriendStatus.ACCEPTED);
-        lisaFriend.setFriendId(LISA_FRIEND_ID);
-        Friend jeremyFriend = new Friend(JEREMY_EMAIL, MY_EMAIL, FriendStatus.PENDING);
-        jeremyFriend.setFriendId(JEREMY_FRIEND_ID);
-        populateDatabase.populateFriend(ronFriend);
-        populateDatabase.populateFriend(lisaFriend);
-        populateDatabase.populateFriend(jeremyFriend);
+        ronFriend = new Friend(MY_EMAIL, RON_EMAIL, FriendStatus.ACCEPTED);
+        lisaFriend = new Friend(MY_EMAIL, LISA_EMAIL, FriendStatus.ACCEPTED);
+        jeremyFriend = new Friend(JEREMY_EMAIL, MY_EMAIL, FriendStatus.PENDING);
+        ronFriend.setFriendId(populateDatabase.populateFriend(ronFriend));
+        lisaFriend.setFriendId(populateDatabase.populateFriend(lisaFriend));
+        jeremyFriend.setFriendId(populateDatabase.populateFriend(jeremyFriend));
     }
 
     private void populateUsers() {
@@ -132,9 +129,9 @@ public class FriendStepDefs {
         ronFriendModel = new FriendModel(ronUser);
         lisaFriendModel = new FriendModel(lisaUser);
         jeremyFriendModel = new FriendModel(jeremyUser);
-        ronFriendModel.setFriendId(RON_FRIEND_ID);
-        lisaFriendModel.setFriendId(LISA_FRIEND_ID);
-        jeremyFriendModel.setFriendId(JEREMY_FRIEND_ID);
+        ronFriendModel.setFriendId(ronFriend.getFriendId());
+        lisaFriendModel.setFriendId(lisaFriend.getFriendId());
+        jeremyFriendModel.setFriendId(jeremyFriend.getFriendId());
     }
 
     public void clearDatabase() throws Throwable {
@@ -153,8 +150,8 @@ public class FriendStepDefs {
         List<Friend> actualFriendList =
                 (List<Friend>) results.andReturn().getRequest().getAttribute("friendRequests");
 
-        Friend jeremyFriend = new Friend(JEREMY_EMAIL, MY_EMAIL, FriendStatus.PENDING);
-        jeremyFriend.setFriendId(JEREMY_FRIEND_ID);
+//        jeremyFriend = new Friend(JEREMY_EMAIL, MY_EMAIL, FriendStatus.PENDING);
+//        jeremyFriend.setFriendId(JEREMY_FRIEND_ID);
 
         //This isn't great! Cannot do a - assertThat(jeremyFriend isIn actualFriendList) - because I cannot
         //predict the friendId which hibernate will assign to the friend object
@@ -186,7 +183,7 @@ public class FriendStepDefs {
     @When("^I accept a friend request from Jeremy$")
     public void i_accept_a_friend_request_from_Jeremy() throws Throwable {
         MockMvc mockMvc = springHolder.getMockMVC();
-        RequestBuilder acceptFriendRequest = MockMvcRequestBuilders.get("/acceptFriendRequest?id=3")
+        RequestBuilder acceptFriendRequest = MockMvcRequestBuilders.get("/acceptFriendRequest?id=" + jeremyFriend.getFriendId())
                 .session((MockHttpSession) springHolder.getSession());
         results = mockMvc.perform(acceptFriendRequest)
                 .andDo(MockMvcResultHandlers.print());

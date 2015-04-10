@@ -28,6 +28,7 @@ public class PopulateDatabase {
     public static final String NAME3 = "name3";
     public static final String NAME4 = "name4";
     public static final String NAME5 = "name5";
+    public static final int NOT_SAVED = -1;
 
     UserDAO userDAO;
     FriendDAO friendDAO;
@@ -69,14 +70,15 @@ public class PopulateDatabase {
         friend.setFriendId(id);
         return friend;
     }
-    public void writeFriends(Friend friend){
+    public int writeFriends(Friend friend){
         if (!friendDAO.friendshipExists(friend.getRequesterEmail(), friend.getBeFriendedEmail())){
-            friendDAO.save(friend);
-            System.out.println("friend id=" + friend.getFriendId());
-            System.out.println("just saved friend");
+            int id = friendDAO.save(friend);
+            System.out.println("just saved friend id=" + id);
+            return id;
         }else{
             System.out.println("existing friend relationship - don't write");
         }
+        return NOT_SAVED;
     }
 
     public void populateMyUser(){
@@ -86,7 +88,7 @@ public class PopulateDatabase {
         writeUser(user);
     }
 
-    public void populateFriend(Friend friend){
-        writeFriends(friend);
+    public int populateFriend(Friend friend){
+        return writeFriends(friend);
     }
 }
