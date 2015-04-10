@@ -24,8 +24,7 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 import static org.hamcrest.collection.IsIn.isIn;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
@@ -148,7 +147,7 @@ public class FriendStepDefs {
         List<Friend> actualFriendList =
                 (List<Friend>) results.andReturn().getRequest().getAttribute("friendRequests");
 
-        assertThat(jeremyFriend, isIn(actualFriendList) );
+        assertThat(jeremyFriend, isIn(actualFriendList));
     }
 
     @When("^I accept a friend request from Jeremy$")
@@ -179,6 +178,34 @@ public class FriendStepDefs {
         assertThat(ronFriendModel, isIn(actualFriendList));
         assertThat(lisaFriendModel, isIn(actualFriendList));
         assertThat(jeremyFriendModel, isIn(actualFriendList));
+    }
+
+    @When("^I decline a friend request from Jeremy$")
+    public void i_decline_a_friend_request_from_Jeremy() throws Throwable {
+        MockMvc mockMvc = springHolder.getMockMVC();
+        RequestBuilder acceptFriendRequest = MockMvcRequestBuilders.get("/declineFriendRequest?id=" + jeremyFriend.getFriendId())
+                .session((MockHttpSession) springHolder.getSession());
+        results = mockMvc.perform(acceptFriendRequest)
+                .andDo(MockMvcResultHandlers.print());
+        springHolder.setResultActions(results);
+    }
+
+    @Then("^a message is shown that you have declined jeremy as a friend$")
+    public void a_message_is_shown_that_you_have_declined_jeremy_as_a_friend() throws Throwable {
+        results = springHolder.getResultActions();
+        String actualMessage =
+                (String) results.andReturn().getRequest().getAttribute("message");
+        assertEquals("You have just declined a friend request from jeremy_email",actualMessage);
+    }
+
+    @Then("^Jeremy is not shown as a pending friend request$")
+    public void jeremy_is_not_shown_as_a_pending_friend_request() throws Throwable {
+        results = springHolder.getResultActions();
+        List<FriendModel> actualFriendRequest =
+                (List<FriendModel>) results.andReturn().getRequest().getAttribute("friendRequest");
+
+        assertNull(actualFriendRequest);
+
     }
 }
 

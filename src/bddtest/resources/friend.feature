@@ -31,3 +31,13 @@ Feature: Friend Page
     Then a message is shown that you have accepted jeremy as a friend
     When I select the friend page
     Then Ron and Lisa and Jeremy are shown in my friend list
+
+  Scenario: I can decline a friend request
+    Given I am a registered user
+    Given I have logged in with valid credentials
+    Given I have a friend request from Jeremy
+    When I decline a friend request from Jeremy
+    Then a message is shown that you have declined jeremy as a friend
+    When I select the friend page
+    Then Ron and Lisa are shown in my friend list
+    And Jeremy is not shown as a pending friend request
