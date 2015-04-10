@@ -24,7 +24,9 @@ import uk.co.socialcalendar.interfaceAdapters.models.friend.FriendModel;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+import static org.hamcrest.collection.IsIn.isIn;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
@@ -121,8 +123,8 @@ public class FriendStepDefs {
         List<FriendModel> actualFriendList =
                 (List<FriendModel>) results.andReturn().getRequest().getAttribute("friendList");
 
-        assertFriendModelIsInList(ronFriendModel, actualFriendList);
-        assertFriendModelIsInList(lisaFriendModel, actualFriendList);
+        assertThat(ronFriendModel, isIn(actualFriendList));
+        assertThat(lisaFriendModel, isIn(actualFriendList));
     }
 
     private void setExpectedFriendModels() {
@@ -150,34 +152,7 @@ public class FriendStepDefs {
         List<Friend> actualFriendList =
                 (List<Friend>) results.andReturn().getRequest().getAttribute("friendRequests");
 
-//        jeremyFriend = new Friend(JEREMY_EMAIL, MY_EMAIL, FriendStatus.PENDING);
-//        jeremyFriend.setFriendId(JEREMY_FRIEND_ID);
-
-        //This isn't great! Cannot do a - assertThat(jeremyFriend isIn actualFriendList) - because I cannot
-        //predict the friendId which hibernate will assign to the friend object
-        assertFriendIsInList(jeremyFriend, actualFriendList);
-    }
-
-    public boolean assertFriendIsInList(Friend friendToFind, List<Friend> friendListToSearch) {
-        for (Friend f : friendListToSearch) {
-            if (f.getRequesterEmail().equals(friendToFind.getRequesterEmail()) &&
-                    f.getBeFriendedEmail().equals(friendToFind.getBeFriendedEmail()) &&
-                    f.getStatus() == friendToFind.getStatus()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean assertFriendModelIsInList(FriendModel friendToFind, List<FriendModel> friendListToSearch) {
-        for (FriendModel f : friendListToSearch) {
-            if (f.getEmail().equals(friendToFind.getEmail()) &&
-                    f.getFacebookId().equals((friendToFind.getFacebookId())) &&
-                    f.getName().equals(friendToFind.getName())){
-                return true;
-            }
-        }
-        return false;
+        assertThat(jeremyFriend, isIn(actualFriendList) );
     }
 
     @When("^I accept a friend request from Jeremy$")
@@ -221,9 +196,9 @@ public class FriendStepDefs {
         List<FriendModel> actualFriendList =
                 (List<FriendModel>) results.andReturn().getRequest().getAttribute("friendList");
 
-        assertFriendModelIsInList(ronFriendModel, actualFriendList);
-        assertFriendModelIsInList(lisaFriendModel, actualFriendList);
-        assertFriendModelIsInList(jeremyFriendModel, actualFriendList);
+        assertThat(ronFriendModel, isIn(actualFriendList));
+        assertThat(lisaFriendModel, isIn(actualFriendList));
+        assertThat(jeremyFriendModel, isIn(actualFriendList));
     }
 }
 
