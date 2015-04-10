@@ -1,6 +1,5 @@
 package uk.co.socialcalendar.stepDefs;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -60,8 +59,6 @@ public class FriendStepDefs {
     public static final String LISA_FACEBOOK_ID = "567";
     public static final String LISA_NAME = "lisa";
     public static final String LISA_EMAIL = "lisa_email";
-    public static final int RON_FRIEND_ID = 1;
-    public static final int LISA_FRIEND_ID = 2;
 
     @Before
     public void setup() throws Throwable {
@@ -118,7 +115,6 @@ public class FriendStepDefs {
     @Then("^Ron and Lisa are shown in my friend list$")
     public void ron_and_Lisa_are_shown_in_my_friend_list() throws Throwable {
         setExpectedFriendModels();
-
         results = springHolder.getResultActions();
         List<FriendModel> actualFriendList =
                 (List<FriendModel>) results.andReturn().getRequest().getAttribute("friendList");
@@ -163,21 +159,6 @@ public class FriendStepDefs {
         results = mockMvc.perform(acceptFriendRequest)
                 .andDo(MockMvcResultHandlers.print());
         springHolder.setResultActions(results);
-
-
-    }
-
-    @Then("^Jeremy will have a status of accepted$")
-    public void jeremy_will_have_a_status_of_accepted() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
-
-    @Then("^Jeremy will be notified of this change$")
-    public void jeremy_will_be_notified_of_this_change() throws Throwable {
-        results = springHolder.getResultActions();
-        List<FriendModel> actualFriendList =
-                (List<FriendModel>) results.andReturn().getRequest().getAttribute("message");
     }
 
     @Then("^a message is shown that you have accepted jeremy as a friend$")
@@ -191,7 +172,6 @@ public class FriendStepDefs {
     @Then("^Ron and Lisa and Jeremy are shown in my friend list$")
     public void ron_and_Lisa_and_Jeremy_are_shown_in_my_friend_list() throws Throwable {
         setExpectedFriendModels();
-
         results = springHolder.getResultActions();
         List<FriendModel> actualFriendList =
                 (List<FriendModel>) results.andReturn().getRequest().getAttribute("friendList");
