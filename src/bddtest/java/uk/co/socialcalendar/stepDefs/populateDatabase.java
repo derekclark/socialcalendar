@@ -8,9 +8,6 @@ import uk.co.socialcalendar.useCases.user.UserDAO;
 public class PopulateDatabase {
     UserDAO userDAO;
     FriendDAO friendDAO;
-    public static final String MY_FACEBOOK_ID = "100008173740345";
-    public static final String MY_EMAIL = "me";
-    public static final String MY_NAME = "my name";
     public static final int NOT_SAVED = -1;
 
     public void setUserDAO(UserDAO userDAO) {
