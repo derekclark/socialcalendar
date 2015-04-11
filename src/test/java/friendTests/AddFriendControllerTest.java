@@ -10,6 +10,7 @@ import uk.co.socialcalendar.entities.User;
 import uk.co.socialcalendar.interfaceAdapters.controllers.friend.AddFriendController;
 import uk.co.socialcalendar.interfaceAdapters.controllers.friend.FriendCommonModel;
 import uk.co.socialcalendar.interfaceAdapters.utilities.SessionAttributes;
+import uk.co.socialcalendar.useCases.friend.FriendFacadeImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,7 +27,7 @@ import static org.mockito.Mockito.*;
 @Controller
 public class AddFriendControllerTest {
     public static final String FRIEND_VIEW = "friend";
-    public static final String USER_ID = "userId";
+    public static final String USER_ID = "me";
     public static final String REQUESTEE_NAME = "myProspectiveFriend";
     AddFriendController controller;
     ModelAndView mav;
@@ -37,14 +38,17 @@ public class AddFriendControllerTest {
     HttpServletResponse mockHttpServletResponse;
     HttpSession mockSession;
     User user;
+    FriendFacadeImpl mockFriendFacade;
 
     @Before
     public void setup(){
         controller = new AddFriendController();
         sessionAttributes = new SessionAttributes();
         mockFriendCommonModel = mock(FriendCommonModel.class);
+        mockFriendFacade = mock(FriendFacadeImpl.class);
         controller.setSessionAttributes(sessionAttributes);
         controller.setFriendCommonModel(mockFriendCommonModel);
+        controller.setFriendFacade(mockFriendFacade);
         setupHttpSessions();
     }
 
@@ -103,8 +107,14 @@ public class AddFriendControllerTest {
     }
 
     @Test
-    public void addRequestShowsAConfirmationMessage(){
+    public void addFriendShowsAConfirmationMessageAfterwards(){
         mav = controller.addFriend(REQUESTEE_NAME, model, mockHttpServletRequest, mockHttpServletResponse);
         assertEquals("You have sent a friend request to " + REQUESTEE_NAME, mav.getModelMap().get("message"));
+    }
+
+    @Test
+    public void addFriendShouldCallCreateFriendRequest(){
+        mav = controller.addFriend(REQUESTEE_NAME, model, mockHttpServletRequest, mockHttpServletResponse);
+        verify(mockFriendFacade).createFriendRequest(USER_ID, REQUESTEE_NAME);
     }
 }

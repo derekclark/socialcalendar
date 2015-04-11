@@ -1,6 +1,5 @@
 package uk.co.socialcalendar.stepDefs;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -242,8 +241,13 @@ public class FriendStepDefs {
 
     @Then("^Jeremy is shown as a pending friend request$")
     public void jeremy_is_shown_as_a_pending_friend_request() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        jeremyFriend = createFriend(JEREMY_EMAIL, JEREMY_NAME, FriendStatus.PENDING);
+        jeremyFriendModel = createFriendModel(jeremyUser, jeremyFriend);
+        results = springHolder.getResultActions();
+        List<FriendModel> actualFriendRequest =
+                (List<FriendModel>) results.andReturn().getRequest().getAttribute("friendRequest");
+
+        assertThat(jeremyFriendModel, isIn(actualFriendRequest));
     }
 }
 
