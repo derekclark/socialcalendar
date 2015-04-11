@@ -12,9 +12,11 @@ public class FriendFacadeImpl implements FriendFacade {
 		this.friendDAO = friendDAO;
 	}
 
-	public Friend createFriendRequest(String requesterName,
+	public int createFriendRequest(String requesterName,
 			String requesteeName) {
-		return new Friend(requesterName, requesteeName, PENDING);
+		System.out.println("creating friend request for " + requesterName + " " + requesteeName);
+		int id = friendDAO.save(new Friend(requesterName, requesteeName, PENDING));
+		return id;
 	}
 
 	public boolean acceptFriendRequest(int friendId) {

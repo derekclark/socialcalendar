@@ -22,7 +22,8 @@ public class InMemoryFriendDAO implements FriendDAO{
 	@Override
 	public int save(Friend friend) {
 
-		if (isAlreadyPresent(friend)) return NOT_SAVED;
+		friend.setFriendId(getNextFriendId());
+//		if (isAlreadyPresent(friend)) return NOT_SAVED;
 		if (isNotSet(friend.getBeFriendedEmail()) || isNotSet(friend.getRequesterEmail()) ){
 			return NOT_SAVED;
 		}
@@ -30,9 +31,17 @@ public class InMemoryFriendDAO implements FriendDAO{
 		if (friend.getStatus() == FriendStatus.UNKNOWN){
 			return NOT_SAVED;
 		}
-		this.listOfSavedFriends.add(friend);
+		listOfSavedFriends.add(friend);
 		System.out.println("friend added");
 		return friend.getFriendId();
+	}
+
+	private int getNextFriendId(){
+		if (listOfSavedFriends.size() == 0){
+			return 1;
+		}
+		Friend friend = listOfSavedFriends.get(listOfSavedFriends.size()-1);
+		return friend.getFriendId() + 1;
 	}
 
 	private boolean isAlreadyPresent(Friend friend) {

@@ -72,5 +72,4 @@ public class FriendCommonModel {
         modelMap.put("userName", userFacade.getUser(myId).getName());
         return modelMap;
     }
-
 }

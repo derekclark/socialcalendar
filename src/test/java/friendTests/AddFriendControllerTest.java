@@ -29,6 +29,7 @@ public class AddFriendControllerTest {
     public static final String FRIEND_VIEW = "friend";
     public static final String USER_ID = "me";
     public static final String REQUESTEE_NAME = "myProspectiveFriend";
+    public static final String REQUESTEE_EMAIL = "requesteeEmail";
     AddFriendController controller;
     ModelAndView mav;
     SessionAttributes sessionAttributes;
@@ -62,12 +63,11 @@ public class AddFriendControllerTest {
 
     }
 
-
     @Test
     public void addFriendRendersFriendView(){
         createExpectedModelAndView();
 
-        mav = controller.addFriend(REQUESTEE_NAME, model, mockHttpServletRequest, mockHttpServletResponse);
+        mav = controller.addFriend(REQUESTEE_EMAIL, REQUESTEE_NAME, model, mockHttpServletRequest, mockHttpServletResponse);
         assertEquals(FRIEND_VIEW,mav.getViewName());
     }
 
@@ -75,14 +75,14 @@ public class AddFriendControllerTest {
     public void populateSectionAttribute(){
         createExpectedModelAndView();
 
-        mav = controller.addFriend(REQUESTEE_NAME, model, mockHttpServletRequest, mockHttpServletResponse);
+        mav = controller.addFriend(REQUESTEE_EMAIL, REQUESTEE_NAME, model, mockHttpServletRequest, mockHttpServletResponse);
         assertNotNull(mav.getModelMap().get("section"));
     }
 
     @Test
     public void allModelAttributesArePopulated(){
         createExpectedModelAndView();
-        mav = controller.addFriend(REQUESTEE_NAME, model, mockHttpServletRequest, mockHttpServletResponse);
+        mav = controller.addFriend(REQUESTEE_EMAIL, REQUESTEE_NAME, model, mockHttpServletRequest, mockHttpServletResponse);
         assertNotNull(mav.getModelMap().get("newFriend"));
         assertNotNull(mav.getModelMap().get("friendList"));
         assertNotNull(mav.getModelMap().get("userName"));
@@ -108,13 +108,15 @@ public class AddFriendControllerTest {
 
     @Test
     public void addFriendShowsAConfirmationMessageAfterwards(){
-        mav = controller.addFriend(REQUESTEE_NAME, model, mockHttpServletRequest, mockHttpServletResponse);
+        mav = controller.addFriend(REQUESTEE_EMAIL, REQUESTEE_NAME, model,
+                mockHttpServletRequest, mockHttpServletResponse);
         assertEquals("You have sent a friend request to " + REQUESTEE_NAME, mav.getModelMap().get("message"));
     }
 
     @Test
     public void addFriendShouldCallCreateFriendRequest(){
-        mav = controller.addFriend(REQUESTEE_NAME, model, mockHttpServletRequest, mockHttpServletResponse);
-        verify(mockFriendFacade).createFriendRequest(USER_ID, REQUESTEE_NAME);
+        mav = controller.addFriend(REQUESTEE_EMAIL, REQUESTEE_NAME, model,
+                mockHttpServletRequest, mockHttpServletResponse);
+        verify(mockFriendFacade).createFriendRequest(USER_ID, REQUESTEE_EMAIL);
     }
 }

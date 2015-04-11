@@ -9,7 +9,9 @@ import uk.co.socialcalendar.useCases.friend.FriendFacadeImpl;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class FriendFacadeImplTest {
@@ -76,14 +78,20 @@ public class FriendFacadeImplTest {
 	}
 	
 	@Test
-	public void createFriendRequest(){
-		Friend friendRequest = friendFacade.createFriendRequest
+	public void friendRequestCreatesAnewFriendObject(){
+		int friendId=friendFacade.createFriendRequest
 				(FRIEND_NAME_REQUESTER,FRIEND_NAME_REQUESTEE);
-		assertEquals(FRIEND_NAME_REQUESTER,friendRequest.getRequesterEmail());
-		assertEquals(FRIEND_NAME_REQUESTEE,friendRequest.getBeFriendedEmail());
-		assertEquals(FRIEND_STATUS_PENDING,friendRequest.getStatus().toString());
+		assertThat(friendId, greaterThan(0));
 	}
-	
+
+	@Test
+	public void friendRequestCreatesFriendObjectWithPendingStatus(){
+		int friendId=friendFacade.createFriendRequest
+				(FRIEND_NAME_REQUESTER,FRIEND_NAME_REQUESTEE);
+		Friend friend = friendDAO.read(friendId);
+		assertEquals(FriendStatus.PENDING,friend.getStatus());
+	}
+
 	@Test
 	public void declineFriendRequestSavesFriendUpdate(){
 		assertTrue(friendFacade.declineFriendRequest(userFriendPending1.getFriendId()));

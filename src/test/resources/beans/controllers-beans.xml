@@ -16,7 +16,8 @@
 
 	<bean id="addFriendController" class="uk.co.socialcalendar.interfaceAdapters.controllers.friend.AddFriendController">
                 <property name="friendCommonModel" ref="friendCommonModel"/>
-                <property name="sessionAttributes" ref="sessionAttributes"/>	        
+                <property name="sessionAttributes" ref="sessionAttributes"/>
+                <property name="friendFacade" ref="friendFacadeImpl"/>
 	</bean>    	
 
 

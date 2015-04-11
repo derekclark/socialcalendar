@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface FriendFacade {
 
-    public Friend createFriendRequest(String requesterName, String requesteeName);
+    public int createFriendRequest(String requesterName, String requesteeName);
     public boolean acceptFriendRequest(int friendId);
     public boolean declineFriendRequest(int friendId);
     public List<Friend> getMyAcceptedFriends(String me);
