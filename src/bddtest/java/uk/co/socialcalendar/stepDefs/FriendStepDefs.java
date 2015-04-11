@@ -236,16 +236,14 @@ public class FriendStepDefs {
         springHolder.setResultActions(results);
     }
 
-
     @Then("^Jeremy is shown as a pending friend request$")
     public void jeremy_is_shown_as_a_pending_friend_request() throws Throwable {
-//        jeremyFriend = createFriend(JEREMY_EMAIL, JEREMY_NAME, FriendStatus.PENDING);
-//        jeremyFriendModel = createFriendModel(jeremyUser, jeremyFriend);
-//        results = springHolder.getResultActions();
-//        List<FriendModel> actualFriendRequest =
-//                (List<FriendModel>) results.andReturn().getRequest().getAttribute("myFriendRequest");
-//
-//        assertThat(jeremyFriendModel, isIn(actualFriendRequest));
+        results = springHolder.getResultActions();
+        List<Friend> actualFriendRequest =
+                (List<Friend>) results.andReturn().getRequest().getAttribute("friendRequestsMadeByMe");
+
+        assertEquals(1,actualFriendRequest.size());
+        assertEquals(JEREMY_EMAIL, actualFriendRequest.get(0).getBeFriendedEmail());
     }
 }
 

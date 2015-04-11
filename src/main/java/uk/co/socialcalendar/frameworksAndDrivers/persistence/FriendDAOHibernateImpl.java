@@ -102,7 +102,7 @@ public class FriendDAOHibernateImpl implements FriendDAO {
     @Override
     @Transactional
     public List<Friend> getFriendRequestsMadeByMe(String me) {
-        Query query = queryStringForMyFriendInvites(me);
+        Query query = queryStringForFriendRequestsMadeByMe(me);
         List<FriendHibernateModel> returnSQLList = query.list();
         return convertModelListToFriendList(returnSQLList);
     }
