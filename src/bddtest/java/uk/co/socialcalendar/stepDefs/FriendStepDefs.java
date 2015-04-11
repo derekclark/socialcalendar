@@ -162,7 +162,7 @@ public class FriendStepDefs {
     public void jeremy_is_shown_as_a_friend_request() throws Throwable {
         results = springHolder.getResultActions();
         List<Friend> actualFriendList =
-                (List<Friend>) results.andReturn().getRequest().getAttribute("friendRequests");
+                (List<Friend>) results.andReturn().getRequest().getAttribute("friendRequestsMadeOnMe");
 
         assertThat(jeremyFriend, isIn(actualFriendList));
     }
