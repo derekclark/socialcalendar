@@ -123,13 +123,22 @@ public class FriendCommonModelTest {
     }
 
     @Test
-    public void populateFriendRequestsMadeOnmMeAttribute(){
+    public void populateFriendRequestsMadeOnMeAttribute(){
         List<Friend> expectedFriendRequests = setExpectedRequestList();
 
 		when(mockFriendFacade.getFriendRequests(anyString())).thenReturn(expectedFriendRequests);
         Map<String, Object> actualModelMap = friendCommonModel.getFriendRequestsMadeOnMe(USER_ID);
         assertEquals(expectedFriendRequests, actualModelMap.get("friendRequestsMadeOnMe"));
 
+    }
+
+    @Test
+    public void populateFriendRequestsMadeByMeAttribute(){
+        List<Friend> expectedFriendRequests = setExpectedRequestList();
+
+        when(mockFriendFacade.getFriendRequestsMadeByMe(anyString())).thenReturn(expectedFriendRequests);
+        Map<String, Object> actualModelMap = friendCommonModel.getFriendRequestsMadeByMe(USER_ID);
+        assertEquals(expectedFriendRequests, actualModelMap.get("friendRequestsMadeByMe"));
     }
 
     private List<Friend> setExpectedRequestList() {

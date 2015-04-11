@@ -80,7 +80,7 @@ public class FriendFacadeImplTest {
 	@Test
 	public void friendRequestCreatesAnewFriendObject(){
 		int friendId=friendFacade.createFriendRequest
-				(FRIEND_NAME_REQUESTER,FRIEND_NAME_REQUESTEE);
+				(FRIEND_NAME_REQUESTER, FRIEND_NAME_REQUESTEE);
 		assertThat(friendId, greaterThan(0));
 	}
 
@@ -125,13 +125,19 @@ public class FriendFacadeImplTest {
 
 	@Test
 	public void getFriendRequests(){
-
-
 		List<Friend> actualFriendRequests = friendFacade.getFriendRequests(FRIEND_NAME1);
 
 		assertEquals(2, actualFriendRequests.size());
 		assertEquals(actualFriendRequests.get(0), userFriendPending2);
 		assertEquals(actualFriendRequests.get(1), userFriendPending3);
+	}
+
+	@Test
+	public void getFriendRequestsMadeByMe(){
+		List<Friend> actualFriendRequests = friendFacade.getFriendRequestsMadeByMe(FRIEND_NAME1);
+
+		assertEquals(1, actualFriendRequests.size());
+		assertEquals(actualFriendRequests.get(0), userFriendPending1);
 	}
 
 	private List<Friend> expectedFriendList() {

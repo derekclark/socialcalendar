@@ -101,6 +101,14 @@ public class FriendDAOHibernateImpl implements FriendDAO {
 
     @Override
     @Transactional
+    public List<Friend> getFriendRequestsMadeByMe(String me) {
+        Query query = queryStringForMyFriendInvites(me);
+        List<FriendHibernateModel> returnSQLList = query.list();
+        return convertModelListToFriendList(returnSQLList);
+    }
+
+    @Override
+    @Transactional
     public boolean friendshipExists(String email1, String email2) {
         System.out.println("checking friendship");
         if (read(email1, email2)){
@@ -146,6 +154,14 @@ public class FriendDAOHibernateImpl implements FriendDAO {
     public Query queryStringForMyFriendInvites(String email){
         Query query = sessionFactory.getCurrentSession().createQuery
                 ("from FriendHibernateModel where BEFRIENDED_EMAIL = :email and STATUS = :status");
+        query.setParameter("email", email);
+        query.setParameter("status", PENDING.toString());
+        return query;
+    }
+
+    public Query queryStringForFriendRequestsMadeByMe(String email){
+        Query query = sessionFactory.getCurrentSession().createQuery
+                ("from FriendHibernateModel where REQUESTER_EMAIL = :email and STATUS = :status");
         query.setParameter("email", email);
         query.setParameter("status", PENDING.toString());
         return query;

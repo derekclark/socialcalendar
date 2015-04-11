@@ -67,6 +67,12 @@ public class FriendCommonModel {
         return modelMap;
     }
 
+    public Map<String,Object> getFriendRequestsMadeByMe(String myId) {
+        Map<String, Object> modelMap = new HashMap<String, Object>();
+        modelMap.put("friendRequestsMadeByMe", friendFacade.getFriendRequestsMadeByMe(myId));
+        return modelMap;
+    }
+
     public Map<String,Object> getUserName(String myId) {
         Map<String, Object> modelMap = new HashMap<String, Object>();
         modelMap.put("userName", userFacade.getUser(myId).getName());

@@ -226,6 +226,18 @@ public class FriendDAOHibernateImplTest {
         assertEquals(expectedString, argument.getValue());
     }
 
+    @Test
+    public void queryForMyRequestsMadeByMe(){
+        String expectedString = queryStringGetMyRequestsMadeByMe();
+
+        when(mockSessionFactory.getCurrentSession().createQuery(anyString())).thenReturn(mockQuery);
+
+        Query query = friendDAOImpl.queryStringForFriendRequestsMadeByMe(REQUESTER_EMAIL);
+        ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class);
+        verify(mockSessionFactory.getCurrentSession()).createQuery(argument.capture());
+        assertEquals(expectedString, argument.getValue());
+    }
+
     private String queryStringGetMyFriendsWhereIAmOwner() {
         return "from FriendHibernateModel "
                 + "where REQUESTER_EMAIL = :email and STATUS = :status";
@@ -239,6 +251,21 @@ public class FriendDAOHibernateImplTest {
     private String queryStringGetMyFriendInvites() {
         return "from FriendHibernateModel "
                     + "where BEFRIENDED_EMAIL = :email and STATUS = :status";
+    }
+
+    private String queryStringGetMyRequestsMadeByMe() {
+        return "from FriendHibernateModel "
+                + "where REQUESTER_EMAIL = :email and STATUS = :status";
+    }
+
+    @Test
+    public void shouldGetListOfMyFriendRequestsMadeByMe(){
+        when(mockSessionFactory.getCurrentSession().createQuery(anyString())).thenReturn(mockQuery);
+        List<Friend> myFriendRequests = getListOfMyFriendRequestsMadeByMe();
+        List<FriendHibernateModel> myFriendRequestsModel = convertFriendListToModelList(myFriendRequests);
+        when(mockQuery.list()).thenReturn(myFriendRequestsModel);
+
+        assertEquals(myFriendRequests, friendDAOImpl.getFriendRequestsMadeByMe(REQUESTER_EMAIL));
     }
 
     @Test
@@ -256,6 +283,13 @@ public class FriendDAOHibernateImplTest {
         myFriendInvites.add(new Friend(REQUESTER_EMAIL, "user1", PENDING));
         myFriendInvites.add(new Friend(REQUESTER_EMAIL, "user2", PENDING));
         return myFriendInvites;
+    }
+
+    private List<Friend> getListOfMyFriendRequestsMadeByMe() {
+        List<Friend> myFriendRequests = new ArrayList<Friend>();
+        myFriendRequests.add(new Friend(REQUESTER_EMAIL, "user1", PENDING));
+        myFriendRequests.add(new Friend(REQUESTER_EMAIL, "user2", PENDING));
+        return myFriendRequests;
     }
 
     @Test

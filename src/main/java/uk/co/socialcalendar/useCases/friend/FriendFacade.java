@@ -12,5 +12,6 @@ public interface FriendFacade {
     public List<Friend> getMyAcceptedFriends(String me);
     public boolean saveFriend(Friend friend);
     List<Friend> getFriendRequests(String me);
+    List<Friend> getFriendRequestsMadeByMe(String me);
     Friend getFriend(int friendId);
 }

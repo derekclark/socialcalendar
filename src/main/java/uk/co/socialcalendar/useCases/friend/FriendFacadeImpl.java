@@ -44,6 +44,11 @@ public class FriendFacadeImpl implements FriendFacade {
 	}
 
 	@Override
+	public List<Friend> getFriendRequestsMadeByMe(String me) {
+		return friendDAO.getFriendRequestsMadeByMe(me);
+	}
+
+	@Override
 	public Friend getFriend(int friendId) {
 		return friendDAO.read(friendId);
 	}
