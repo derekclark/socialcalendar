@@ -35,6 +35,7 @@ public class FriendCommonModel {
         Map<String, Object> mav = new HashMap<String, Object>();
         mav.putAll(getFriendList(myId));
         mav.putAll(getFriendRequestsMadeOnMe(myId));
+        mav.putAll(getFriendRequestsMadeByMe(myId));
         mav.putAll(getSection());
         mav.putAll(getUserName(myId));
         mav.putAll(authenticationFacade.getAuthenticationAttributes());
