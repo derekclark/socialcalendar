@@ -34,7 +34,7 @@ public class FriendCommonModel {
     public Map<String, Object> getCommonModelAttributes(String myId) {
         Map<String, Object> mav = new HashMap<String, Object>();
         mav.putAll(getFriendList(myId));
-        mav.putAll(getFriendRequests(myId));
+        mav.putAll(getFriendRequestsMadeOnMe(myId));
         mav.putAll(getSection());
         mav.putAll(getUserName(myId));
         mav.putAll(authenticationFacade.getAuthenticationAttributes());
@@ -61,9 +61,9 @@ public class FriendCommonModel {
         return modelMap;
     }
 
-    public Map<String,Object> getFriendRequests(String myId) {
+    public Map<String,Object> getFriendRequestsMadeOnMe(String myId) {
         Map<String, Object> modelMap = new HashMap<String, Object>();
-        modelMap.put("friendRequests", friendFacade.getFriendRequests(myId));
+        modelMap.put("friendRequestsMadeOnMe", friendFacade.getFriendRequests(myId));
         return modelMap;
     }
 

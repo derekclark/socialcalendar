@@ -123,12 +123,12 @@ public class FriendCommonModelTest {
     }
 
     @Test
-    public void populateFriendRequestsAttribute(){
+    public void populateFriendRequestsMadeOnmMeAttribute(){
         List<Friend> expectedFriendRequests = setExpectedRequestList();
 
 		when(mockFriendFacade.getFriendRequests(anyString())).thenReturn(expectedFriendRequests);
-        Map<String, Object> actualModelMap = friendCommonModel.getFriendRequests(USER_ID);
-        assertEquals(expectedFriendRequests, actualModelMap.get("friendRequests"));
+        Map<String, Object> actualModelMap = friendCommonModel.getFriendRequestsMadeOnMe(USER_ID);
+        assertEquals(expectedFriendRequests, actualModelMap.get("friendRequestsMadeOnMe"));
 
     }
 
@@ -168,7 +168,7 @@ public class FriendCommonModelTest {
         Map<String, Object> actualMap = friendCommonModel.getCommonModelAttributes(USER_ID);
         assertNotNull(actualMap.get("userName"));
         assertNotNull(actualMap.get("friendList"));
-        assertNotNull(actualMap.get("friendRequests"));
+        assertNotNull(actualMap.get("friendRequestsMadeOnMe"));
         assertNotNull(actualMap.get("isAuthenticated"));
         assertNotNull(actualMap.get("oauthToken"));
         assertNotNull(actualMap.get("userFacebookId"));
