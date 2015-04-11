@@ -27,6 +27,7 @@ import static org.mockito.Mockito.*;
 public class AddFriendControllerTest {
     public static final String FRIEND_VIEW = "friend";
     public static final String USER_ID = "userId";
+    public static final String REQUESTEE_NAME = "myProspectiveFriend";
     AddFriendController controller;
     ModelAndView mav;
     SessionAttributes sessionAttributes;
@@ -62,7 +63,7 @@ public class AddFriendControllerTest {
     public void addFriendRendersFriendView(){
         createExpectedModelAndView();
 
-        mav = controller.addFriend(model, mockHttpServletRequest, mockHttpServletResponse);
+        mav = controller.addFriend(REQUESTEE_NAME, model, mockHttpServletRequest, mockHttpServletResponse);
         assertEquals(FRIEND_VIEW,mav.getViewName());
     }
 
@@ -70,14 +71,14 @@ public class AddFriendControllerTest {
     public void populateSectionAttribute(){
         createExpectedModelAndView();
 
-        mav = controller.addFriend(model, mockHttpServletRequest, mockHttpServletResponse);
+        mav = controller.addFriend(REQUESTEE_NAME, model, mockHttpServletRequest, mockHttpServletResponse);
         assertNotNull(mav.getModelMap().get("section"));
     }
 
     @Test
     public void allModelAttributesArePopulated(){
         createExpectedModelAndView();
-        mav = controller.addFriend(model, mockHttpServletRequest, mockHttpServletResponse);
+        mav = controller.addFriend(REQUESTEE_NAME, model, mockHttpServletRequest, mockHttpServletResponse);
         assertNotNull(mav.getModelMap().get("newFriend"));
         assertNotNull(mav.getModelMap().get("friendList"));
         assertNotNull(mav.getModelMap().get("userName"));
@@ -101,4 +102,9 @@ public class AddFriendControllerTest {
         return expectedMap;
     }
 
+    @Test
+    public void addRequestShowsAConfirmationMessage(){
+        mav = controller.addFriend(REQUESTEE_NAME, model, mockHttpServletRequest, mockHttpServletResponse);
+        assertEquals("You have sent a friend request to " + REQUESTEE_NAME, mav.getModelMap().get("message"));
+    }
 }

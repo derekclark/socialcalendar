@@ -42,7 +42,7 @@ Feature: Friend Page
 
   Scenario: I can decline a friend request
     Given I am a registered user
-    Given I have logged in with valid credentials
+    And I have logged in with valid credentials
     And Lisa is a user
     And Ron is a user
     And Jeremy is a user
@@ -54,3 +54,17 @@ Feature: Friend Page
     When I select the friend page
     Then Ron and Lisa are shown in my friend list
     And Jeremy is not shown as a pending friend request
+
+  Scenario: I can make a friend request 
+    Given I am a registered user 
+    And I have logged in with valid credentials
+    And Lisa is a user
+    And Ron is a user
+    And Jeremy is a user
+    And I have Ron as a "ACCEPTED" friend
+    And I have Lisa as a "ACCEPTED" friend
+    When I make a friend request on Jeremy 
+    Then a message is shown "You have sent a friend request to Jeremy" 
+    When I select the friend page 
+    Then Ron and Lisa are shown in my friend list 
+    And Jeremy is shown as a pending friend request

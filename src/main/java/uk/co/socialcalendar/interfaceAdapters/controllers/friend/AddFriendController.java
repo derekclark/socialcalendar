@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import uk.co.socialcalendar.interfaceAdapters.utilities.SessionAttributes;
 
@@ -24,11 +25,13 @@ public class AddFriendController {
     }
 
     @RequestMapping(value = "addFriend", method = RequestMethod.POST)
-    public ModelAndView addFriend(Model m,
-                                   HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView addFriend(
+            @RequestParam(value="name", required=true,defaultValue="") String userName,
+            Model m, HttpServletRequest request, HttpServletResponse response) {
         String loggedInUser = sessionAttributes.getLoggedInUserId(request);
         ModelAndView mav = new ModelAndView("friend");
         mav.addAllObjects(friendCommonModel.getCommonModelAttributes(loggedInUser));
+        mav.addObject("message", "You have sent a friend request to " + userName);
         return mav;
     }
 }

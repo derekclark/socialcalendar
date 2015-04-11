@@ -1,5 +1,6 @@
 package uk.co.socialcalendar.stepDefs;
 
+import cucumber.api.PendingException;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -225,6 +226,24 @@ public class FriendStepDefs {
 
         assertNull(actualFriendRequest);
 
+    }
+
+    @When("^I make a friend request on Jeremy $")
+    public void i_make_a_friend_request_on_Jeremy() throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @Then("^a message is shown \"(.*?)\" $")
+    public void a_message_is_shown(String arg1) throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @Then("^Jeremy is shown as a pending friend request$")
+    public void jeremy_is_shown_as_a_pending_friend_request() throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
     }
 }
 
