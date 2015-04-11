@@ -51,13 +51,13 @@ public class FriendStepDefs {
     Friend ronFriend, lisaFriend, jeremyFriend;
 
     public static final String JEREMY_EMAIL = "jeremy_email";
-    public static final String JEREMY_NAME = "jeremy";
+    public static final String JEREMY_NAME = "Jeremy";
     public static final String JERMEY_FACEBOOK_ID = "1234";
     public static final String RON_EMAIL = "ron_email";
-    public static final String RON_NAME = "ron";
+    public static final String RON_NAME = "Ron";
     public static final String RON_FACEBOOK_ID = "1234";
     public static final String LISA_FACEBOOK_ID = "567";
-    public static final String LISA_NAME = "lisa";
+    public static final String LISA_NAME = "Lisa";
     public static final String LISA_EMAIL = "lisa_email";
 
     @Before
@@ -225,19 +225,25 @@ public class FriendStepDefs {
                 (List<FriendModel>) results.andReturn().getRequest().getAttribute("friendRequest");
 
         assertNull(actualFriendRequest);
-
     }
 
     @When("^I make a friend request on Jeremy $")
     public void i_make_a_friend_request_on_Jeremy() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        MockMvc mockMvc = springHolder.getMockMVC();
+        RequestBuilder acceptFriendRequest = MockMvcRequestBuilders.post("/addFriend?name="
+                + jeremyUser.getName())
+                .session((MockHttpSession) springHolder.getSession());
+        results = mockMvc.perform(acceptFriendRequest)
+                .andDo(MockMvcResultHandlers.print());
+        springHolder.setResultActions(results);
     }
 
     @Then("^a message is shown \"(.*?)\" $")
-    public void a_message_is_shown(String arg1) throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+    public void a_message_is_shown(String expectedMessage) throws Throwable {
+        results = springHolder.getResultActions();
+        String actualMessage =
+                (String) results.andReturn().getRequest().getAttribute("message");
+        assertEquals(expectedMessage,actualMessage);
     }
 
     @Then("^Jeremy is shown as a pending friend request$")
