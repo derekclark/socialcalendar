@@ -178,13 +178,14 @@ public class FriendStepDefs {
         springHolder.setResultActions(results);
     }
 
-    @Then("^a message is shown that you have accepted jeremy as a friend$")
-    public void a_message_is_shown_that_you_have_accepted_jeremy_as_a_friend() throws Throwable {
+    @Then("^a message is shown \"(.*?)\"$")
+    public void a_message_is_shown(String expectedMessage) throws Throwable {
         results = springHolder.getResultActions();
         String actualMessage =
                 (String) results.andReturn().getRequest().getAttribute("message");
-        assertEquals("You have just accepted a friend request from jeremy_email",actualMessage);
+        assertEquals(expectedMessage,actualMessage);
     }
+
 
     @Then("^Ron and Lisa and Jeremy are shown in my friend list$")
     public void ron_and_Lisa_and_Jeremy_are_shown_in_my_friend_list() throws Throwable {
@@ -238,13 +239,6 @@ public class FriendStepDefs {
         springHolder.setResultActions(results);
     }
 
-    @Then("^a message is shown \"(.*?)\" $")
-    public void a_message_is_shown(String expectedMessage) throws Throwable {
-        results = springHolder.getResultActions();
-        String actualMessage =
-                (String) results.andReturn().getRequest().getAttribute("message");
-        assertEquals(expectedMessage,actualMessage);
-    }
 
     @Then("^Jeremy is shown as a pending friend request$")
     public void jeremy_is_shown_as_a_pending_friend_request() throws Throwable {

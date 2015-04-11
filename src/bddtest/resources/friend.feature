@@ -36,7 +36,7 @@ Feature: Friend Page
     And I have Ron as a "ACCEPTED" friend
     And I have Lisa as a "ACCEPTED" friend
     When I accept a friend request from Jeremy
-    Then a message is shown that you have accepted jeremy as a friend
+    Then a message is shown "You have just accepted a friend request from jeremy_email"
     When I select the friend page
     Then Ron and Lisa and Jeremy are shown in my friend list
 
@@ -50,7 +50,7 @@ Feature: Friend Page
     And I have Lisa as a "ACCEPTED" friend
     And Jeremy has made a friend request on me
     When I decline a friend request from Jeremy
-    Then a message is shown that you have declined jeremy as a friend
+    Then a message is shown "You have just declined a friend request from jeremy_email"
     When I select the friend page
     Then Ron and Lisa are shown in my friend list
     And Jeremy is not shown as a pending friend request
