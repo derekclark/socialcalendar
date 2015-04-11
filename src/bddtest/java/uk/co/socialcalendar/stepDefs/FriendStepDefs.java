@@ -87,33 +87,53 @@ public class FriendStepDefs {
         results.andExpect(model().attribute("section", section));
     }
 
-    @Given("^I have friends Ron and Lisa$")
-    public void i_have_friends_Ron_and_Lisa() throws Throwable {
-        populateUsers();
-        populateMyFriends();
+    @Given("^I have Ron as a \"(.*?)\" friend$")
+    public void i_have_Ron_as_a_friend(FriendStatus status) throws Throwable {
+        ronFriend = createFriend(MY_EMAIL, RON_EMAIL, status);
     }
 
-    private void populateMyFriends() {
-        ronFriend = new Friend(MY_EMAIL, RON_EMAIL, FriendStatus.ACCEPTED);
-        lisaFriend = new Friend(MY_EMAIL, LISA_EMAIL, FriendStatus.ACCEPTED);
-        jeremyFriend = new Friend(JEREMY_EMAIL, MY_EMAIL, FriendStatus.PENDING);
-        ronFriend.setFriendId(populateDatabase.populateFriend(ronFriend));
-        lisaFriend.setFriendId(populateDatabase.populateFriend(lisaFriend));
-        jeremyFriend.setFriendId(populateDatabase.populateFriend(jeremyFriend));
+    @Given("^I have Lisa as a \"(.*?)\" friend$")
+    public void i_have_Lisa_as_a_friend(FriendStatus status) throws Throwable {
+        lisaFriend = createFriend(MY_EMAIL, LISA_EMAIL, status);
     }
 
-    private void populateUsers() {
-        ronUser = new User(RON_EMAIL, RON_NAME, RON_FACEBOOK_ID);
-        lisaUser = new User(LISA_EMAIL, LISA_NAME, LISA_FACEBOOK_ID);
-        jeremyUser = new User(JEREMY_EMAIL, JEREMY_NAME, JERMEY_FACEBOOK_ID);
-        populateDatabase.populateUser(ronUser);
-        populateDatabase.populateUser(lisaUser);
-        populateDatabase.populateUser(jeremyUser);
+    @Given("^Jeremy has made a friend request on me$")
+    public void jeremy_has_made_a_friend_request_on_me() throws Throwable {
+        jeremyFriend = createFriend(JEREMY_EMAIL, MY_EMAIL, FriendStatus.PENDING);
+    }
+
+    @Given("^Lisa is a user$")
+    public void lisa_is_a_user() throws Throwable {
+        lisaUser = createUser(LISA_EMAIL, LISA_NAME, LISA_FACEBOOK_ID);
+    }
+
+    @Given("^Ron is a user$")
+    public void ron_is_a_user() throws Throwable {
+        ronUser = createUser(RON_EMAIL, RON_NAME, RON_FACEBOOK_ID);
+    }
+
+    @Given("^Jeremy is a user$")
+    public void jeremy_is_a_user() throws Throwable {
+        jeremyUser = createUser(JEREMY_EMAIL, JEREMY_NAME, JERMEY_FACEBOOK_ID);
+    }
+
+    private User createUser(String email, String name, String facebookId) {
+        User user = new User(email, name, facebookId);
+        populateDatabase.populateUser(user);
+        return user;
+    }
+
+    private Friend createFriend(String requester, String beFriended, FriendStatus status) {
+        Friend friend = new Friend(requester, beFriended, status);
+        friend.setFriendId(populateDatabase.populateFriend(friend));
+        return friend;
     }
 
     @Then("^Ron and Lisa are shown in my friend list$")
     public void ron_and_Lisa_are_shown_in_my_friend_list() throws Throwable {
-        setExpectedFriendModels();
+        ronFriendModel = createFriendModel(ronUser, ronFriend);
+        lisaFriendModel = createFriendModel(lisaUser, lisaFriend);
+
         results = springHolder.getResultActions();
         List<FriendModel> actualFriendList =
                 (List<FriendModel>) results.andReturn().getRequest().getAttribute("friendList");
@@ -122,13 +142,11 @@ public class FriendStepDefs {
         assertThat(lisaFriendModel, isIn(actualFriendList));
     }
 
-    private void setExpectedFriendModels() {
-        ronFriendModel = new FriendModel(ronUser);
-        lisaFriendModel = new FriendModel(lisaUser);
-        jeremyFriendModel = new FriendModel(jeremyUser);
-        ronFriendModel.setFriendId(ronFriend.getFriendId());
-        lisaFriendModel.setFriendId(lisaFriend.getFriendId());
-        jeremyFriendModel.setFriendId(jeremyFriend.getFriendId());
+
+    private FriendModel createFriendModel(User user, Friend friend){
+        FriendModel friendModel = new FriendModel(user);
+        friendModel.setFriendId(friend.getFriendId());
+        return friendModel;
     }
 
     public void clearDatabase() throws Throwable {
@@ -137,8 +155,7 @@ public class FriendStepDefs {
 
     @Given("^I have a friend request from Jeremy$")
     public void i_have_a_friend_request_from_Jeremy() throws Throwable {
-        populateUsers();
-        populateMyFriends();
+        jeremyFriend = createFriend(JEREMY_EMAIL, MY_EMAIL, FriendStatus.PENDING);
     }
 
     @Then("^Jeremy is shown as a friend request$")
@@ -170,7 +187,9 @@ public class FriendStepDefs {
 
     @Then("^Ron and Lisa and Jeremy are shown in my friend list$")
     public void ron_and_Lisa_and_Jeremy_are_shown_in_my_friend_list() throws Throwable {
-        setExpectedFriendModels();
+        ronFriendModel = createFriendModel(ronUser, ronFriend);
+        lisaFriendModel = createFriendModel(lisaUser, lisaFriend);
+        jeremyFriendModel = createFriendModel(jeremyUser, jeremyFriend);
         results = springHolder.getResultActions();
         List<FriendModel> actualFriendList =
                 (List<FriendModel>) results.andReturn().getRequest().getAttribute("friendList");
