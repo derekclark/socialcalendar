@@ -20,7 +20,7 @@ public class FakeLoginController {
     public static final String FACEBOOK_ID3 = "100040345";
     public static final String FACEBOOK_ID4 = "1008173740345";
     public static final String FACEBOOK_ID5 = "10000740345";
-    public static final String EMAIL1 = "userEmail1";
+    public static final String EMAIL1 = "derekclark14@googlemail.com";
     public static final String EMAIL2 = "userEmail2";
     public static final String EMAIL3 = "userEmail3";
     public static final String EMAIL4 = "userEmail4";

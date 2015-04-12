@@ -75,12 +75,12 @@
 
 
         <c:choose>
-            <c:when test="${not empty friendRequests}">
+            <c:when test="${not empty friendRequestsMadeOnMe}">
     
               <img id="question-image" src="${context}/resources/img/question.png">    
               <hr>
 
-              <div class="section-header">You have friend requests</div>
+              <div class="section-header">You have friend invitations</div>
 
               <div class="alert alert-success" align="left">
                       <table border="0" cellpadding="5">
@@ -88,7 +88,7 @@
                               <th align="left">Requester</th>
                               <th><th>
                           </tr>
-                          <c:forEach var="friend" items="${friendRequests}">
+                          <c:forEach var="friend" items="${friendRequestsMadeOnMe}">
                               <tr>
                                   <td><c:out value="${friend.requesterEmail}" /></td>
                                   <td><input type=button class="btn-accept" onClick="location.href='acceptFriendRequest?id=${friend.friendId}'" value="Accept">

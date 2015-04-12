@@ -32,15 +32,15 @@ public class AddFriendController {
 
     @RequestMapping(value = "addFriend", method = RequestMethod.POST)
     public ModelAndView addFriend(
-            @RequestParam(value="requesteeEmail", required=true,defaultValue="") String requesteeEmail,
+            @RequestParam(value="beFriendedEmail", required=false) String befriendedEmail,
             Model m, HttpServletRequest request, HttpServletResponse response) {
         String loggedInUser = sessionAttributes.getLoggedInUserId(request);
 
-        System.out.println("addfriend; create request;" + loggedInUser + " " + requesteeEmail);
-        friendFacade.createFriendRequest(loggedInUser, requesteeEmail);
+        System.out.println("addfriend; create request;" + loggedInUser + " " + befriendedEmail);
+        friendFacade.createFriendRequest(loggedInUser, befriendedEmail);
         ModelAndView mav = new ModelAndView("friend");
         mav.addAllObjects(friendCommonModel.getCommonModelAttributes(loggedInUser));
-        mav.addObject("message", "You have sent a friend request to " + requesteeEmail);
+        mav.addObject("message", "You have sent a friend request to " + befriendedEmail);
         return mav;
     }
 }
