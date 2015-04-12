@@ -32,7 +32,8 @@ public class FriendDAOTest {
 
 	@Before
 	public void setup(){
-		friend = createFriend(new Friend(FRIEND_NAME1,FRIEND_NAME2,ACCEPTED),1);
+		friend = new Friend(FRIEND_NAME1,FRIEND_NAME2,ACCEPTED);
+		friend.setFriendId(10);
 		friendDAO = new InMemoryFriendDAO();
 	}
 	
@@ -42,35 +43,29 @@ public class FriendDAOTest {
 	}
 
 	private void saveManyFriends() {
-		friendDAO.save(friend1);
-		friendDAO.save(friend2);
-		friendDAO.save(friend3);
-		friendDAO.save(friend4);
-		friendDAO.save(friend5);
-		friendDAO.save(friend6);
-		friendDAO.save(friend7);
-		friendDAO.save(friend8);
-		friendDAO.save(friend9);
-		friendDAO.save(pendingFriendRequest);
+		friend1.setFriendId(friendDAO.save(friend1));
+		friend2.setFriendId(friendDAO.save(friend2));
+		friend3.setFriendId(friendDAO.save(friend3));
+		friend4.setFriendId(friendDAO.save(friend4));
+		friend5.setFriendId(friendDAO.save(friend5));
+		friend6.setFriendId(friendDAO.save(friend6));
+		friend7.setFriendId(friendDAO.save(friend7));
+		friend8.setFriendId(friendDAO.save(friend8));
+		friend9.setFriendId(friendDAO.save(friend9));
+		pendingFriendRequest.setFriendId(friendDAO.save(pendingFriendRequest));
 	}
 
 	private void createManyFriends() {
-		friend1 = createFriend(new Friend(FRIEND_NAME1, FRIEND_NAME2, ACCEPTED),1);
-		friend2 = createFriend(new Friend(FRIEND_NAME1, FRIEND_NAME3,ACCEPTED),2);
-		friend3 = createFriend(new Friend(FRIEND_NAME1, FRIEND_NAME4,PENDING),3);
-		friend4 = createFriend(new Friend(FRIEND_NAME2, FRIEND_NAME3,ACCEPTED),4);
-		friend5 = createFriend(new Friend(FRIEND_NAME3, FRIEND_NAME4,PENDING),5);
-		friend6 = createFriend(new Friend(FRIEND_NAME5, FRIEND_NAME1,ACCEPTED),6);
-		friend7 = createFriend(new Friend(FRIEND_NAME5, FRIEND_NAME1,PENDING),7);
-		friend8 = createFriend(new Friend(FRIEND_NAME1, FRIEND_NAME6,PENDING),8);
-		friend9 = createFriend(new Friend(FRIEND_NAME8, FRIEND_NAME1,PENDING),9);
-		pendingFriendRequest = createFriend(new Friend(FRIEND_NAME1,FRIEND_NAME7,PENDING),10);
-	}
-
-	private Friend createFriend(Friend friend, int friendId){
-		Friend newFriend = new Friend(friend.getRequesterEmail(), friend.getBeFriendedEmail(), friend.getStatus());
-		newFriend.setFriendId(friendId);
-		return newFriend;
+		friend1 = new Friend(FRIEND_NAME1, FRIEND_NAME2, ACCEPTED);
+		friend2 = new Friend(FRIEND_NAME1, FRIEND_NAME3,ACCEPTED);
+		friend3 = new Friend(FRIEND_NAME1, FRIEND_NAME4,PENDING);
+		friend4 = new Friend(FRIEND_NAME2, FRIEND_NAME3,ACCEPTED);
+		friend5 = new Friend(FRIEND_NAME3, FRIEND_NAME4,PENDING);
+		friend6 = new Friend(FRIEND_NAME5, FRIEND_NAME1,ACCEPTED);
+		friend7 = new Friend(FRIEND_NAME5, FRIEND_NAME1,PENDING);
+		friend8 = new Friend(FRIEND_NAME1, FRIEND_NAME6,PENDING);
+		friend9 = new Friend(FRIEND_NAME8, FRIEND_NAME1,PENDING);
+		pendingFriendRequest = new Friend(FRIEND_NAME1,FRIEND_NAME7,PENDING);
 	}
 
 	@Test
