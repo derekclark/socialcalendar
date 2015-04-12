@@ -64,7 +64,7 @@ Feature: Friend Page
     And I have Ron as a "ACCEPTED" friend
     And I have Lisa as a "ACCEPTED" friend
     When I make a friend request on Jeremy 
-    Then a message is shown "You have sent a friend request to Jeremy" 
+    Then a message is shown "You have sent a friend request to jeremy_email" 
     When I select the friend page 
     Then Ron and Lisa are shown in my friend list 
     And Jeremy is shown as a pending friend request
