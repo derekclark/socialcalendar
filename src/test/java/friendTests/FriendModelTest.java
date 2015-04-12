@@ -10,11 +10,12 @@ import static org.junit.Assert.assertTrue;
 
  public class FriendModelTest {
      FriendModel model;
-
+     public static final String USER_EMAIL = "userEmail1";
+     public static final String USER_NAME = "userName1";
+     public static final String USER_FACEBOOK = "userFacebook1";
      private final static int FRIEND_ID = 1;
      private final static String FACEBOOK_ID = "2";
      private final static String EMAIL = "emailAddress";
-     private final static String NAME = "name";
 
     @Before
     public void setup(){
@@ -48,16 +49,15 @@ import static org.junit.Assert.assertTrue;
      public void canGetAndSetName(){
          model.setName(EMAIL);
          assertEquals(EMAIL,model.getName());
-
      }
 
      @Test
      public void canCreateInstanceFromUserObject(){
-         User user1 = new User("userEmail1", "userName1", "userFacebook1");
+         User user1 = new User(USER_EMAIL, USER_NAME, USER_FACEBOOK);
          model = new FriendModel(user1);
-         assertEquals("userEmail1", model.getEmail());
-         assertEquals("userName1", model.getName());
-         assertEquals("userFacebook1", model.getFacebookId());
+         assertEquals(USER_EMAIL, model.getEmail());
+         assertEquals(USER_NAME, model.getName());
+         assertEquals(USER_FACEBOOK, model.getFacebookId());
 
      }
  }

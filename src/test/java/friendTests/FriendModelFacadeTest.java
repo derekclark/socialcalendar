@@ -22,7 +22,7 @@ public class FriendModelFacadeTest {
     FriendModelFacade friendModelFacade;
     UserFacade mockUserFacade;
     FriendFacade mockFriendFacade;
-    User user1, user2, myUser;
+    User user1, user2;
     List<Friend> friendList;
 
     public final static int FRIEND_ID1 = 1;

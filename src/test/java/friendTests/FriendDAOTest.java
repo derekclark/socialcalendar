@@ -12,12 +12,12 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.*;
+import static uk.co.socialcalendar.entities.FriendStatus.*;
+
 public class FriendDAOTest {
 	Friend friend;
 	Friend friend1, friend2, friend3, friend4, friend5, friend6, friend7, friend8, friend9, pendingFriendRequest;
 	FriendDAO friendDAO;
-	FriendStatus friendStatus;
-	private final static int FRIEND_ID_EXISTENT = 1;
 	private final static int FRIEND_ID_NON_EXISTENT = -1;
 	private final static String FRIEND_NAME1 = "NAME1";
 	private final static String FRIEND_NAME2 = "NAME2";
@@ -32,7 +32,7 @@ public class FriendDAOTest {
 
 	@Before
 	public void setup(){
-		friend = createFriend(new Friend(FRIEND_NAME1,FRIEND_NAME2,FriendStatus.ACCEPTED),1);
+		friend = createFriend(new Friend(FRIEND_NAME1,FRIEND_NAME2,ACCEPTED),1);
 		friendDAO = new InMemoryFriendDAO();
 	}
 	
@@ -55,16 +55,16 @@ public class FriendDAOTest {
 	}
 
 	private void createManyFriends() {
-		friend1 = createFriend(new Friend(FRIEND_NAME1, FRIEND_NAME2, FriendStatus.ACCEPTED),1);
-		friend2 = createFriend(new Friend(FRIEND_NAME1, FRIEND_NAME3,FriendStatus.ACCEPTED),2);
-		friend3 = createFriend(new Friend(FRIEND_NAME1, FRIEND_NAME4,FriendStatus.PENDING),3);
-		friend4 = createFriend(new Friend(FRIEND_NAME2, FRIEND_NAME3,FriendStatus.ACCEPTED),4);
-		friend5 = createFriend(new Friend(FRIEND_NAME3, FRIEND_NAME4,FriendStatus.PENDING),5);
-		friend6 = createFriend(new Friend(FRIEND_NAME5, FRIEND_NAME1,FriendStatus.ACCEPTED),6);
-		friend7 = createFriend(new Friend(FRIEND_NAME5, FRIEND_NAME1,FriendStatus.PENDING),7);
-		friend8 = createFriend(new Friend(FRIEND_NAME1, FRIEND_NAME6,FriendStatus.PENDING),8);
-		friend9 = createFriend(new Friend(FRIEND_NAME8, FRIEND_NAME1,FriendStatus.PENDING),9);
-		pendingFriendRequest = createFriend(new Friend(FRIEND_NAME1,FRIEND_NAME7,FriendStatus.PENDING),10);
+		friend1 = createFriend(new Friend(FRIEND_NAME1, FRIEND_NAME2, ACCEPTED),1);
+		friend2 = createFriend(new Friend(FRIEND_NAME1, FRIEND_NAME3,ACCEPTED),2);
+		friend3 = createFriend(new Friend(FRIEND_NAME1, FRIEND_NAME4,PENDING),3);
+		friend4 = createFriend(new Friend(FRIEND_NAME2, FRIEND_NAME3,ACCEPTED),4);
+		friend5 = createFriend(new Friend(FRIEND_NAME3, FRIEND_NAME4,PENDING),5);
+		friend6 = createFriend(new Friend(FRIEND_NAME5, FRIEND_NAME1,ACCEPTED),6);
+		friend7 = createFriend(new Friend(FRIEND_NAME5, FRIEND_NAME1,PENDING),7);
+		friend8 = createFriend(new Friend(FRIEND_NAME1, FRIEND_NAME6,PENDING),8);
+		friend9 = createFriend(new Friend(FRIEND_NAME8, FRIEND_NAME1,PENDING),9);
+		pendingFriendRequest = createFriend(new Friend(FRIEND_NAME1,FRIEND_NAME7,PENDING),10);
 	}
 
 	private Friend createFriend(Friend friend, int friendId){
@@ -125,7 +125,7 @@ public class FriendDAOTest {
 	@Test
 	public void canUpdateFriendStatus(){
 		saveFriends();
-		friendDAO.updateStatus(pendingFriendRequest.getFriendId(), FriendStatus.DECLINED);
+		friendDAO.updateStatus(pendingFriendRequest.getFriendId(), DECLINED);
 		Friend updatedFriend = friendDAO.read(pendingFriendRequest.getFriendId());
 		assertEquals(FriendStatus.DECLINED, updatedFriend.getStatus());
 	}
@@ -164,27 +164,27 @@ public class FriendDAOTest {
 	@Test
 	public void shouldAcceptFriendRequest(){
 		saveFriends();
-		assertTrue(friendDAO.updateStatus(pendingFriendRequest.getFriendId(), FriendStatus.ACCEPTED));
+		assertTrue(friendDAO.updateStatus(pendingFriendRequest.getFriendId(), ACCEPTED));
 	}
 
 	@Test
 	public void acceptingFriendRequestShouldSetFriendStatusToAccepted(){
 		saveFriends();
-		friendDAO.updateStatus(pendingFriendRequest.getFriendId(), FriendStatus.ACCEPTED);
-		assertEquals(FriendStatus.ACCEPTED,pendingFriendRequest.getStatus());
+		friendDAO.updateStatus(pendingFriendRequest.getFriendId(), ACCEPTED);
+		assertEquals(ACCEPTED,pendingFriendRequest.getStatus());
 	}
 
 	@Test
 	public void shouldDeclineFriendRequest(){
 		saveFriends();
-		assertTrue(friendDAO.updateStatus(pendingFriendRequest.getFriendId(), FriendStatus.DECLINED));
+		assertTrue(friendDAO.updateStatus(pendingFriendRequest.getFriendId(),DECLINED));
 	}
 
 	@Test
 	public void decliningFriendRequestShouldSetFriendStatusToDeclined(){
 		saveFriends();
-		friendDAO.updateStatus(pendingFriendRequest.getFriendId(), FriendStatus.DECLINED);
-		assertEquals(FriendStatus.DECLINED,pendingFriendRequest.getStatus());
+		friendDAO.updateStatus(pendingFriendRequest.getFriendId(),DECLINED);
+		assertEquals(DECLINED,pendingFriendRequest.getStatus());
 	}
 
 	@Test

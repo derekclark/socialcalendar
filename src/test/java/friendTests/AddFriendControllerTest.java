@@ -28,7 +28,6 @@ import static org.mockito.Mockito.*;
 public class AddFriendControllerTest {
     public static final String FRIEND_VIEW = "friend";
     public static final String USER_ID = "me";
-//    public static final String REQUESTEE_NAME = "myProspectiveFriend";
     public static final String REQUESTEE_EMAIL = "requesteeEmail";
     AddFriendController controller;
     ModelAndView mav;
