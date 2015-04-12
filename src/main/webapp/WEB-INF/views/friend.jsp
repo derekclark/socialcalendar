@@ -92,8 +92,32 @@
                               <tr>
                                   <td><c:out value="${friend.requesterEmail}" /></td>
                                   <td><input type=button class="btn-accept" onClick="location.href='acceptFriendRequest?id=${friend.friendId}'" value="Accept">
-                       						<input type=button class="btn-decline" onClick="location.href='declineFriendRequest?id=${friend.friendId}'" value="Decline">
+                       				  <input type=button class="btn-decline" onClick="location.href='declineFriendRequest?id=${friend.friendId}'" value="Decline">
                                   </td>
+                              </tr>
+                          </c:forEach>
+                      </table>
+              </div>
+            </c:when>
+        </c:choose>
+
+        <c:choose>
+            <c:when test="${not empty friendRequestsMadeByMe}">
+
+              <img id="question-image" src="${context}/resources/img/question.png">
+              <hr>
+
+              <div class="section-header">You have outstanding friend requests</div>
+
+              <div class="alert alert-success" align="left">
+                      <table border="0" cellpadding="5">
+                          <tr>
+                              <th align="left">Requester</th>
+                              <th><th>
+                          </tr>
+                          <c:forEach var="friend" items="${friendRequestsMadeByMe}">
+                              <tr>
+                                  <td><c:out value="${friend.beFriendedEmail}" /></td>
                               </tr>
                           </c:forEach>
                       </table>

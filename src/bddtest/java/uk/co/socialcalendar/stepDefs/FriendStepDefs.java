@@ -229,7 +229,7 @@ public class FriendStepDefs {
     @When("^I make a friend request on Jeremy $")
     public void i_make_a_friend_request_on_Jeremy() throws Throwable {
         MockMvc mockMvc = springHolder.getMockMVC();
-        RequestBuilder acceptFriendRequest = MockMvcRequestBuilders.post("/addFriend?requesteeEmail="
+        RequestBuilder acceptFriendRequest = MockMvcRequestBuilders.post("/addFriend?beFriendedEmail="
                 + jeremyUser.getEmail())
                 .session((MockHttpSession) springHolder.getSession());
         results = mockMvc.perform(acceptFriendRequest).andDo(MockMvcResultHandlers.print());
