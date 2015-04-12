@@ -10,13 +10,11 @@ import static org.junit.Assert.assertTrue;
 import static uk.co.socialcalendar.entities.FriendStatus.*;
 
 public class FriendValidatorTest {
-
     FriendValidator friendValidator;
     Friend friend;
-
     private final static String REQUESTER_EMAIL = "requesterEmail";
     private final static String BEFRIENDED_EMAIL = "befriendedEmail";
-    private final static int FRIEND_ID = 1;
+
     @Before
     public void setup(){
         friendValidator = new FriendValidator();
