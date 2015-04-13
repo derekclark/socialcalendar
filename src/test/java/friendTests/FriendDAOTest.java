@@ -59,14 +59,13 @@ public class FriendDAOTest {
 	private void createManyFriends() {
 		myAcceptedFriend1 = new Friend(MY_EMAIL, FRIEND_EMAIL2,ACCEPTED);
 		myAcceptedFriend2 = new Friend(MY_EMAIL, FRIEND_EMAIL3,ACCEPTED);
-		myPendingFriend1 = new Friend(MY_EMAIL, FRIEND_EMAIL4,PENDING);
-		unrelatedFriend1 = new Friend(FRIEND_EMAIL2, FRIEND_EMAIL3,ACCEPTED);
-		unrelatedFriend2 = new Friend(FRIEND_EMAIL3, FRIEND_EMAIL4,PENDING);
 		myAcceptedFriend3 = new Friend(FRIEND_EMAIL5, MY_EMAIL,ACCEPTED);
+		myPendingFriend1 = new Friend(MY_EMAIL, FRIEND_EMAIL4,PENDING);
 		myPendingFriend2 = new Friend(FRIEND_EMAIL5, MY_EMAIL,PENDING);
 		myPendingFriend3 = new Friend(MY_EMAIL, FRIEND_EMAIL6,PENDING);
 		myPendingFriend4 = new Friend(FRIEND_EMAIL8, MY_EMAIL,PENDING);
-//		myPendingFriend5 = new Friend(MY_EMAIL, FRIEND_EMAIL7,PENDING);
+		unrelatedFriend1 = new Friend(FRIEND_EMAIL2, FRIEND_EMAIL3,ACCEPTED);
+		unrelatedFriend2 = new Friend(FRIEND_EMAIL3, FRIEND_EMAIL4,PENDING);
 	}
 
 	@Test
@@ -193,6 +192,19 @@ public class FriendDAOTest {
 		expectedFriendList.add(myPendingFriend4);
 
 		List<Friend> actualFriendList = friendDAO.getFriendRequestsMadeOnMe(MY_EMAIL);
+
+		assertEquals(2,actualFriendList.size());
+		assertEquals(expectedFriendList, actualFriendList);
+	}
+
+	@Test
+	public void getFriendRequestsMadeByMe(){
+		saveFriends();
+		List<Friend> expectedFriendList = new ArrayList<Friend>();
+		expectedFriendList.add(myPendingFriend1);
+		expectedFriendList.add(myPendingFriend3);
+
+		List<Friend> actualFriendList = friendDAO.getFriendRequestsMadeByMe(MY_EMAIL);
 
 		assertEquals(2,actualFriendList.size());
 		assertEquals(expectedFriendList, actualFriendList);
