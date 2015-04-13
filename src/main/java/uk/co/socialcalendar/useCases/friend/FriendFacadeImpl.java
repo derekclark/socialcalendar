@@ -40,7 +40,7 @@ public class FriendFacadeImpl implements FriendFacade {
 
 	@Override
 	public List<Friend> getFriendRequests(String me) {
-		return friendDAO.getMyFriendInvites(me);
+		return friendDAO.getFriendRequestsMadeOnMe(me);
 	}
 
 	@Override

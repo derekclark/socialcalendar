@@ -148,14 +148,14 @@ public class FriendDAOTest {
 	@Test
 	public void returnSeveralFriendInvites(){
 		saveFriends();
-		List<Friend> actualFriendList = friendDAO.getMyFriendInvites(MY_EMAIL);
+		List<Friend> actualFriendList = friendDAO.getFriendRequestsMadeOnMe(MY_EMAIL);
 		assertEquals(2, actualFriendList.size());
 	}
 
 	@Test
 	public void returnNoFriendInvites(){
 		saveFriends();
-		List<Friend> actualFriendList = friendDAO.getMyFriendInvites(INVALID_USER);
+		List<Friend> actualFriendList = friendDAO.getFriendRequestsMadeOnMe(INVALID_USER);
 		assertEquals(0, actualFriendList.size());
 	}
 	
@@ -186,15 +186,16 @@ public class FriendDAOTest {
 	}
 
 	@Test
-	public void getMyFriendInvites(){
+	public void getFriendRequestsMadeOnMe(){
 		saveFriends();
 		List<Friend> expectedFriendList = new ArrayList<Friend>();
 		expectedFriendList.add(myPendingFriend2);
 		expectedFriendList.add(myPendingFriend4);
 
-		List<Friend> actualFriendList = friendDAO.getMyFriendInvites(MY_EMAIL);
+		List<Friend> actualFriendList = friendDAO.getFriendRequestsMadeOnMe(MY_EMAIL);
 
 		assertEquals(2,actualFriendList.size());
 		assertEquals(expectedFriendList, actualFriendList);
 	}
+
 }

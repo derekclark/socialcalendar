@@ -105,7 +105,7 @@ public class InMemoryFriendDAO implements FriendDAO{
 	}
 
 	@Override
-	public List<Friend> getMyFriendInvites(String me) {
+	public List<Friend> getFriendRequestsMadeOnMe(String me) {
 		List<Friend> friendList = new ArrayList<Friend>();
 		for (Friend friend: listOfSavedFriends){
 			System.out.println("friendrequests looking at=" + friend.getRequesterEmail());
