@@ -19,6 +19,13 @@ public class Friend {
 	public Friend(){
 		this.status = FriendStatus.UNKNOWN;
 	}
+
+	public Friend(int friendId, String requesterEmail, String beFriendedEmail, FriendStatus status) {
+		this.friendId = friendId;
+		this.requesterEmail = requesterEmail;
+		this.beFriendedEmail = beFriendedEmail;
+		this.status = status;
+	}
 	
 	public Friend(String requesterEmail, String beFriendedEmail, FriendStatus status){
 		this.requesterEmail = requesterEmail;
@@ -62,13 +69,24 @@ public class Friend {
 			return false;
 		}
 		Friend friend = (Friend) obj;
+
+		if (! this.requesterEmail.equals(friend.getRequesterEmail())) return false;
+		if (! this.beFriendedEmail.equals(friend.getBeFriendedEmail())) return false;
+		if (! this.status.equals(friend.getStatus())) return false;
+
 		return friendId == friend.getFriendId();
 	}
 
 	public int hashcode(){
 		int hash = 7;
-		hash = 31 * hash + friendId;
+		hash = 31 * hash + friendId + requesterEmail.hashCode() + beFriendedEmail.hashCode() + status.hashCode();
 		return hash;
+	}
+
+	@Override
+	public String toString(){
+		return "requester email=" + this.requesterEmail + " befriended email=" + this.beFriendedEmail
+				+ " status=" + this.status.toString() + " friendId=" + this.friendId;
 	}
 	
 }

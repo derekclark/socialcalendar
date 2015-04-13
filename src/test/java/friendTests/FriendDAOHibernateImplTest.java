@@ -16,9 +16,7 @@ import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.Matchers.greaterThan;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import static uk.co.socialcalendar.entities.FriendStatus.*;
 
@@ -185,10 +183,11 @@ public class FriendDAOHibernateImplTest {
         expectedFriendsList.addAll(myAcceptedFriendsWhenIAmNotOwner);
 
         List<FriendHibernateModel> modelIAmOwner = convertFriendListToModelList(myAcceptedFriendsWhenIAmOwner);
-        List<FriendHibernateModel> modelIAmNotOwner = convertFriendListToModelList(myAcceptedFriendsWhenIAmOwner);
+        List<FriendHibernateModel> modelIAmNotOwner = convertFriendListToModelList(myAcceptedFriendsWhenIAmNotOwner);
         when(mockQuery.list()).thenReturn(modelIAmOwner).thenReturn(modelIAmNotOwner);
 
-        assertEquals(expectedFriendsList, friendDAOImpl.getMyAcceptedFriends(REQUESTER_EMAIL));
+        List<Friend> actualList = friendDAOImpl.getMyAcceptedFriends(REQUESTER_EMAIL);
+        assertEquals(expectedFriendsList, actualList);
     }
 
     private List<FriendHibernateModel> convertFriendListToModelList(List<Friend> myAcceptedFriendsWhenIAmOwner) {
@@ -202,15 +201,15 @@ public class FriendDAOHibernateImplTest {
 
     private List<Friend> getMyAcceptedFriendsWhenIAmNotOwner() {
         List<Friend> myAcceptedFriendsWhenIAmNotOwner = new ArrayList<Friend>();
-        myAcceptedFriendsWhenIAmNotOwner.add(new Friend("user3", REQUESTER_EMAIL, ACCEPTED));
-        myAcceptedFriendsWhenIAmNotOwner.add(new Friend("user4", REQUESTER_EMAIL, ACCEPTED));
+        myAcceptedFriendsWhenIAmNotOwner.add(new Friend(3, "user3", REQUESTER_EMAIL, ACCEPTED));
+        myAcceptedFriendsWhenIAmNotOwner.add(new Friend(4, "user4", REQUESTER_EMAIL, ACCEPTED));
         return myAcceptedFriendsWhenIAmNotOwner;
     }
 
     private List<Friend> getMyAcceptedFriendsWhenIAmOwner() {
         List<Friend> myAcceptedFriendsWhenIAmOwner = new ArrayList<Friend>();
-        myAcceptedFriendsWhenIAmOwner.add(new Friend(REQUESTER_EMAIL, "user1", ACCEPTED));
-        myAcceptedFriendsWhenIAmOwner.add(new Friend(REQUESTER_EMAIL, "user2", ACCEPTED));
+        myAcceptedFriendsWhenIAmOwner.add(new Friend(1, REQUESTER_EMAIL, "user1", ACCEPTED));
+        myAcceptedFriendsWhenIAmOwner.add(new Friend(2, REQUESTER_EMAIL, "user2", ACCEPTED));
         return myAcceptedFriendsWhenIAmOwner;
     }
 

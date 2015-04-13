@@ -87,7 +87,7 @@ public class FriendCommonModelTest {
     @Test
     public void populateNewFriendAttribute(){
         Map<String, Object> actualModelMap = friendCommonModel.getNewFriend();
-        assertEquals(new Friend(), actualModelMap.get("newFriend"));
+        assertTrue(actualModelMap.get("newFriend") instanceof  Friend);
     }
 
     @Test
