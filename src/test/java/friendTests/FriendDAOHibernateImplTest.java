@@ -54,7 +54,6 @@ public class FriendDAOHibernateImplTest {
         mockSession = mock(Session.class);
         mockQuery = mock(Query.class);
         when(mockSessionFactory.getCurrentSession()).thenReturn(mockSession);
-
     }
 
 	@Test
@@ -83,57 +82,47 @@ public class FriendDAOHibernateImplTest {
 
     @Test
     public void willNotSaveFriendWithNullRequesterEmail(){
-        emptyFriend = new Friend(null, BEFRIENDED_EMAIL, ACCEPTED);
-        emptyFriend.setFriendId(FRIEND_ID);
+        emptyFriend = new Friend(FRIEND_ID, null, BEFRIENDED_EMAIL, ACCEPTED);
         assertEquals(NOT_SAVED, friendDAOImpl.save(emptyFriend));
     }
 
     @Test
     public void willNotSaveFriendWithEmptyRequesterEmail(){
-        emptyFriend = new Friend("", BEFRIENDED_EMAIL,ACCEPTED);
-        emptyFriend.setFriendId(FRIEND_ID);
+        emptyFriend = new Friend(FRIEND_ID, "", BEFRIENDED_EMAIL,ACCEPTED);
         assertEquals(NOT_SAVED, friendDAOImpl.save(emptyFriend));
     }
 
     @Test
     public void willNotSaveFriendWithNullBeFriendedEmail(){
-        emptyFriend = new Friend(REQUESTER_EMAIL, null, ACCEPTED);
-        emptyFriend.setFriendId(FRIEND_ID);
+        emptyFriend = new Friend(FRIEND_ID, REQUESTER_EMAIL, null, ACCEPTED);
         assertEquals(NOT_SAVED, friendDAOImpl.save(emptyFriend));
     }
 
     @Test
     public void willNotSaveFriendWithEmptyBeFriendedEmail(){
-        emptyFriend = new Friend(REQUESTER_EMAIL, "", ACCEPTED);
-        emptyFriend.setFriendId(FRIEND_ID);
+        emptyFriend = new Friend(FRIEND_ID, REQUESTER_EMAIL, "", ACCEPTED);
         assertEquals(NOT_SAVED, friendDAOImpl.save(emptyFriend));
     }
 
     @Test
     public void willNotSaveFriendWithInvalidStatus(){
-        emptyFriend = new Friend(REQUESTER_EMAIL, BEFRIENDED_EMAIL, UNKNOWN);
-        emptyFriend.setFriendId(FRIEND_ID);
+        emptyFriend = new Friend(FRIEND_ID, REQUESTER_EMAIL, BEFRIENDED_EMAIL, UNKNOWN);
         assertEquals(NOT_SAVED, friendDAOImpl.save(emptyFriend));
     }
 
     @Test
     public void willReadFriend(){
-        friend = new Friend(REQUESTER_EMAIL, BEFRIENDED_EMAIL, ACCEPTED);
-        friend.setFriendId(FRIEND_ID);
+        Friend expectedFriend = new Friend(FRIEND_ID, REQUESTER_EMAIL, BEFRIENDED_EMAIL, ACCEPTED);
 
-        FriendHibernateModel friendHibernateModel = new FriendHibernateModel(friend);
+        FriendHibernateModel friendHibernateModel = new FriendHibernateModel(expectedFriend);
         when(mockSession.get(FriendHibernateModel.class, FRIEND_ID)).thenReturn(friendHibernateModel);
         Friend actual = friendDAOImpl.read(FRIEND_ID);
-        assertEquals(friend.getFriendId(), actual.getFriendId());
-        assertEquals(friend.getBeFriendedEmail(), actual.getBeFriendedEmail());
-        assertEquals(friend.getRequesterEmail(), actual.getRequesterEmail());
-        assertEquals(friend.getStatus(), actual.getStatus());
+        assertEquals(expectedFriend, actual);
     }
 
     @Test
     public void canUpdateStatus(){
-        friend = new Friend(REQUESTER_EMAIL, BEFRIENDED_EMAIL, PENDING);
-        friend.setFriendId(FRIEND_ID);
+        friend = new Friend(FRIEND_ID, REQUESTER_EMAIL, BEFRIENDED_EMAIL, PENDING);
         FriendHibernateModel friendHibernateModel = new FriendHibernateModel(friend);
         when(mockSession.get(FriendHibernateModel.class, FRIEND_ID)).thenReturn(friendHibernateModel);
 
@@ -154,9 +143,7 @@ public class FriendDAOHibernateImplTest {
         ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class);
         verify(mockSessionFactory.getCurrentSession()).createQuery(argument.capture());
         assertEquals(expectedString, argument.getValue());
-
     }
-
 
     @Test
     public void testSettingQueryStringForGettingMyAcceptedFriendsWhereIAmNotOwner(){
@@ -167,27 +154,25 @@ public class FriendDAOHibernateImplTest {
         ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class);
         verify(mockSessionFactory.getCurrentSession()).createQuery(argument.capture());
         assertEquals(expectedString, argument.getValue());
-
-
     }
-
 
     @Test
     public void getListOfMyAcceptedFriends(){
+        List<Friend> expectedFriendsList = setExpectedFriendsList();
+
+        List<FriendHibernateModel> modelIAmOwner = convertFriendListToModelList(getMyAcceptedFriendsWhenIAmOwner());
+        List<FriendHibernateModel> modelIAmNotOwner = convertFriendListToModelList(getMyAcceptedFriendsWhenIAmNotOwner());
+        when(mockQuery.list()).thenReturn(modelIAmOwner).thenReturn(modelIAmNotOwner);
         when(mockSessionFactory.getCurrentSession().createQuery(anyString())).thenReturn(mockQuery);
 
-        List<Friend> myAcceptedFriendsWhenIAmOwner = getMyAcceptedFriendsWhenIAmOwner();
-        List<Friend> myAcceptedFriendsWhenIAmNotOwner = getMyAcceptedFriendsWhenIAmNotOwner();
+        assertEquals(expectedFriendsList, friendDAOImpl.getMyAcceptedFriends(REQUESTER_EMAIL));
+    }
+
+    private List<Friend> setExpectedFriendsList(){
         List<Friend> expectedFriendsList = new ArrayList<Friend>();
-        expectedFriendsList.addAll(myAcceptedFriendsWhenIAmOwner);
-        expectedFriendsList.addAll(myAcceptedFriendsWhenIAmNotOwner);
-
-        List<FriendHibernateModel> modelIAmOwner = convertFriendListToModelList(myAcceptedFriendsWhenIAmOwner);
-        List<FriendHibernateModel> modelIAmNotOwner = convertFriendListToModelList(myAcceptedFriendsWhenIAmNotOwner);
-        when(mockQuery.list()).thenReturn(modelIAmOwner).thenReturn(modelIAmNotOwner);
-
-        List<Friend> actualList = friendDAOImpl.getMyAcceptedFriends(REQUESTER_EMAIL);
-        assertEquals(expectedFriendsList, actualList);
+        expectedFriendsList.addAll(getMyAcceptedFriendsWhenIAmOwner());
+        expectedFriendsList.addAll(getMyAcceptedFriendsWhenIAmNotOwner());
+        return expectedFriendsList;
     }
 
     private List<FriendHibernateModel> convertFriendListToModelList(List<Friend> myAcceptedFriendsWhenIAmOwner) {
