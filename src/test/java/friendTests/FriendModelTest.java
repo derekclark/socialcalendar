@@ -72,13 +72,52 @@ public class FriendModelTest {
      }
 
     @Test
-    public void testEquality(){
+    public void testEqualitySameObject(){
         User user1 = new User(USER_EMAIL, USER_NAME, USER_FACEBOOK);
         FriendModel fm = new FriendModel(user1);
-        FriendModel fm2 = new FriendModel(user1);
         assertTrue(fm.equals(fm));
         assertEquals(fm.hashcode(), fm.hashcode());
     }
+
+    @Test
+    public void shouldBeEqualIfSameValues(){
+        User user1 = new User(USER_EMAIL, USER_NAME, USER_FACEBOOK);
+        FriendModel fm = new FriendModel(user1);
+        FriendModel fm2 = new FriendModel(user1);
+        assertTrue(fm.equals(fm2));
+        assertEquals(fm.hashcode(), fm2.hashcode());
+    }
+
+    @Test
+    public void shouldNotBeEqualIfEmailDifferent(){
+        User user1 = new User(USER_EMAIL, USER_NAME, USER_FACEBOOK);
+        User user2 = new User("", USER_NAME, USER_FACEBOOK);
+        FriendModel fm = new FriendModel(user1);
+        FriendModel fm2 = new FriendModel(user2);
+        assertFalse(fm.equals(fm2));
+        assertNotEquals(fm.hashcode(), fm2.hashcode());
+    }
+
+    @Test
+    public void shouldNotBeEqualIfNameDifferent(){
+        User user1 = new User(USER_EMAIL, USER_NAME, USER_FACEBOOK);
+        User user2 = new User(USER_EMAIL, "", USER_FACEBOOK);
+        FriendModel fm = new FriendModel(user1);
+        FriendModel fm2 = new FriendModel(user2);
+        assertFalse(fm.equals(fm2));
+        assertNotEquals(fm.hashcode(), fm2.hashcode());
+    }
+
+    @Test
+    public void shouldNotBeEqualIfFacebookIdDifferent(){
+        User user1 = new User(USER_EMAIL, USER_NAME, USER_FACEBOOK);
+        User user2 = new User(USER_EMAIL, USER_NAME, "");
+        FriendModel fm = new FriendModel(user1);
+        FriendModel fm2 = new FriendModel(user2);
+        assertFalse(fm.equals(fm2));
+        assertNotEquals(fm.hashcode(), fm2.hashcode());
+    }
+
 
     @Test
     public void testInEquality(){
