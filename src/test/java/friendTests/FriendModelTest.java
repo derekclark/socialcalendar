@@ -5,10 +5,12 @@ import org.junit.Test;
 import uk.co.socialcalendar.entities.User;
 import uk.co.socialcalendar.interfaceAdapters.models.friend.FriendModel;
 
+import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
- public class FriendModelTest {
+public class FriendModelTest {
      FriendModel model;
      public static final String USER_EMAIL = "userEmail1";
      public static final String USER_NAME = "userName1";
@@ -60,4 +62,42 @@ import static org.junit.Assert.assertTrue;
          assertEquals(USER_FACEBOOK, model.getFacebookId());
 
      }
- }
+
+     @Test
+     public void testNullEquality(){
+         User user1 = new User(USER_EMAIL, USER_NAME, USER_FACEBOOK);
+         FriendModel fm = new FriendModel(user1);
+         FriendModel fm2 = new FriendModel(user1);
+         assertFalse(fm.equals(null));
+     }
+
+    @Test
+    public void testEquality(){
+        User user1 = new User(USER_EMAIL, USER_NAME, USER_FACEBOOK);
+        FriendModel fm = new FriendModel(user1);
+        FriendModel fm2 = new FriendModel(user1);
+        assertTrue(fm.equals(fm));
+        assertEquals(fm.hashcode(), fm.hashcode());
+    }
+
+    @Test
+    public void testInEquality(){
+        User user1 = new User(USER_EMAIL, USER_NAME, USER_FACEBOOK);
+        User user2 = new User("", USER_NAME, USER_FACEBOOK);
+
+        FriendModel fm = new FriendModel(user1);
+        FriendModel fm2 = new FriendModel(user2);
+        assertFalse(fm.equals(fm2));
+        assertNotEquals(fm.hashcode(), fm2.hashcode());
+
+    }
+
+    @Test
+    public void testToString(){
+        User user1 = new User(USER_EMAIL, USER_NAME, USER_FACEBOOK);
+        FriendModel fm = new FriendModel(user1);
+        String expectedString = "name=" + USER_NAME + " email=" + USER_EMAIL + " facebookId=" + USER_FACEBOOK + " friendId=0";
+        assertEquals(expectedString, fm.toString());
+    }
+
+}

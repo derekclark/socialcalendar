@@ -65,6 +65,7 @@ public class FriendModel {
         this.hasFacebookId = hasFacebookId;
     }
 
+    @Override
     public boolean equals(Object obj){
         if (this == obj){
             return true;
