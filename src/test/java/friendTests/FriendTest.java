@@ -96,4 +96,3 @@ public class FriendTest {
 		assertEquals(FRIEND_ID, friend.getFriendId());
 	}
 }
-

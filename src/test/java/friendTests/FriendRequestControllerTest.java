@@ -189,6 +189,10 @@ public class FriendRequestControllerTest {
 
         mav = controller.acceptFriendRequest(friend.getFriendId(), model,
                 mockHttpServletRequest, mockHttpServletResponse);
+        checkModelAttributesArePopulated();
+    }
+
+    private void checkModelAttributesArePopulated() {
         assertNotNull(mav.getModelMap().get("newFriend"));
         assertNotNull(mav.getModelMap().get("friendList"));
         assertNotNull(mav.getModelMap().get("userName"));
@@ -204,13 +208,6 @@ public class FriendRequestControllerTest {
 
         mav = controller.declineFriendRequest(friend.getFriendId(), model,
                 mockHttpServletRequest, mockHttpServletResponse);
-        assertNotNull(mav.getModelMap().get("newFriend"));
-        assertNotNull(mav.getModelMap().get("friendList"));
-        assertNotNull(mav.getModelMap().get("userName"));
-        assertNotNull(mav.getModelMap().get("friendRequests"));
-        assertNotNull(mav.getModelMap().get("isAuthenticated"));
-        assertNotNull(mav.getModelMap().get("oauthToken"));
-        assertNotNull(mav.getModelMap().get("userFacebookId"));
-        assertNotNull(mav.getModelMap().get("section"));
+        checkModelAttributesArePopulated();
     }
 }
