@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
 import static uk.co.socialcalendar.entities.FriendStatus.*;
 
 public class FriendDAOTest {
-	Friend friend, myAcceptedFriend1, myAcceptedFriend2, myPendingFriend1,
+	Friend myAcceptedFriend1, myAcceptedFriend2, myPendingFriend1,
 			unrelatedFriend1, unrelatedFriend2, myAcceptedFriend3, myPendingFriend2,
 			myPendingFriend3, myPendingFriend4;
 	FriendDAO friendDAO;
@@ -34,8 +34,6 @@ public class FriendDAOTest {
 
 	@Before
 	public void setup(){
-		friend = new Friend(MY_EMAIL, FRIEND_EMAIL2,ACCEPTED);
-		friend.setFriendId(10);
 		friendDAO = new InMemoryFriendDAO();
 	}
 	
@@ -70,52 +68,54 @@ public class FriendDAOTest {
 
 	@Test
 	public void canSaveFriend(){
-		assertThat(friendDAO.save(friend), greaterThan(0));
+		myAcceptedFriend1 = new Friend(VALID_EMAIL, VALID_EMAIL, ACCEPTED);
+		assertThat(friendDAO.save(myAcceptedFriend1), greaterThan(0));
 	}
 	
 	@Test
 	public void shouldNotSaveFriendIfBeFriendedIsNull(){
-		friend = new Friend(VALID_EMAIL, null, ACCEPTED);
-		assertEquals(NOT_SAVED, friendDAO.save(friend));
+		myAcceptedFriend1 = new Friend(VALID_EMAIL, null, ACCEPTED);
+		assertEquals(NOT_SAVED, friendDAO.save(myAcceptedFriend1));
 	}
 	
 	@Test
 	public void shouldNotSaveFriendIfBeFriendedIsEmpty(){
-		friend = new Friend(VALID_EMAIL, "", ACCEPTED);
-		assertEquals(NOT_SAVED, friendDAO.save(friend));
+		myAcceptedFriend1 = new Friend(VALID_EMAIL, "", ACCEPTED);
+		assertEquals(NOT_SAVED, friendDAO.save(myAcceptedFriend1));
 	}
 
 	@Test
 	public void shouldNotSaveFriendIfRequesterIsNull(){
-		friend = new Friend(null, VALID_EMAIL, ACCEPTED);
-		assertEquals(NOT_SAVED, friendDAO.save(friend));
+		myAcceptedFriend1 = new Friend(null, VALID_EMAIL, ACCEPTED);
+		assertEquals(NOT_SAVED, friendDAO.save(myAcceptedFriend1));
 	}
 
 	@Test
 	public void shouldNotSaveFriendIfRequesterIsEmpty(){
-		friend = new Friend("", VALID_EMAIL, ACCEPTED);
-		friend.setRequesterEmail("");
-		assertEquals(NOT_SAVED, friendDAO.save(friend));
+		myAcceptedFriend1 = new Friend("", VALID_EMAIL, ACCEPTED);
+		assertEquals(NOT_SAVED, friendDAO.save(myAcceptedFriend1));
 	}
 
 	@Test
 	public void shouldNotSaveFriendIfStatusIsUNKNOWN(){
-		friend = new Friend(VALID_EMAIL, VALID_EMAIL, UNKNOWN);
-		assertEquals(NOT_SAVED, friendDAO.save(friend));
+		myAcceptedFriend1 = new Friend(VALID_EMAIL, VALID_EMAIL, UNKNOWN);
+		assertEquals(NOT_SAVED, friendDAO.save(myAcceptedFriend1));
 	}
 	
 	@Test
 	public void canReadFriend(){
-		friend.setFriendId(friendDAO.save(friend));
+		myAcceptedFriend1 = new Friend(VALID_EMAIL, VALID_EMAIL, ACCEPTED);
+		myAcceptedFriend1.setFriendId(friendDAO.save(myAcceptedFriend1));
 
-		int friendId = friend.getFriendId();
+		int friendId = myAcceptedFriend1.getFriendId();
 		Friend returnedFriend = friendDAO.read(friendId);
-		assertEquals(friend.getFriendId(), returnedFriend.getFriendId());
+		assertEquals(myAcceptedFriend1.getFriendId(), returnedFriend.getFriendId());
 	}
 	
 	@Test
 	public void shouldNotReadNonExistentFriend(){
-		friend.setFriendId(FRIEND_ID_INVALID);
+		myAcceptedFriend1 = new Friend(VALID_EMAIL, VALID_EMAIL, ACCEPTED);
+		myAcceptedFriend1.setFriendId(FRIEND_ID_INVALID);
 		assertNull(friendDAO.read(FRIEND_ID_INVALID));
 	}
 
