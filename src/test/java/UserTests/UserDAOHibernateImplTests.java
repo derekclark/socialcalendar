@@ -9,22 +9,19 @@ import uk.co.socialcalendar.entities.User;
 import uk.co.socialcalendar.frameworksAndDrivers.persistence.UserDAOHibernateImpl;
 import uk.co.socialcalendar.frameworksAndDrivers.persistence.UserHibernateModel;
 
-import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
+import static org.mockito.internal.matchers.Equality.areEqual;
 
 public class UserDAOHibernateImplTests {
-
-    public static final String NAME = "name";
-    public static final String FACEBOOK_ID = "facebookId";
     UserDAOHibernateImpl userDAOImpl;
     User user;
     SessionFactory mockSessionFactory;
     Session mockSession;
     Query mockQuery;
-
-    private final static int USER_ID = 1;
+    public static final String NAME = "name";
+    public static final String FACEBOOK_ID = "facebookId";
     private final static String EMAIL = "email";
 
     @Before
@@ -44,17 +41,15 @@ public class UserDAOHibernateImplTests {
 
     @Test
     public void canGetUser(){
-        UserHibernateModel userHibernateModel = getUserHibernateModel();
+        UserHibernateModel userHibernateModel = new UserHibernateModel(user);
         when(mockSession.get(UserHibernateModel.class, EMAIL)).thenReturn(userHibernateModel);
         User actualUser = userDAOImpl.read(EMAIL);
-        assertEquals(user.getEmail(), actualUser.getEmail());
-        assertEquals(user.getName(), actualUser.getName());
-        assertEquals(user.getFacebookId(), actualUser.getFacebookId());
+        areEqual(user, actualUser);
     }
 
     @Test
     public void returnsNullWhenUserNotFound(){
-        UserHibernateModel userHibernateModel = getUserHibernateModel();
+        UserHibernateModel userHibernateModel = new UserHibernateModel(user);
         when(mockSession.get(UserHibernateModel.class, EMAIL)).thenReturn(null);
         User actualUser = userDAOImpl.read(EMAIL);
         assertNull(actualUser);
@@ -73,30 +68,16 @@ public class UserDAOHibernateImplTests {
 
     @Test
     public void convertUserHibernateModelToUser(){
-        UserHibernateModel userHibernateModel = getUserHibernateModel();
+        UserHibernateModel userHibernateModel = new UserHibernateModel(user);
         User expectedUser = new User(EMAIL, NAME, FACEBOOK_ID);
         User actualUser = userDAOImpl.convertToUser(userHibernateModel);
-        assertEquals(expectedUser.getEmail(), actualUser.getEmail());
-        assertEquals(expectedUser.getFacebookId(), actualUser.getFacebookId());
-        assertEquals(expectedUser.getName(), actualUser.getName());
+        areEqual(expectedUser, actualUser);
     }
 
     @Test
     public void convertUserToUserHibernateModel(){
-        UserHibernateModel expectedUserHibernateModel = getUserHibernateModel();
+        UserHibernateModel expectedUserHibernateModel = new UserHibernateModel(user);
         UserHibernateModel actualUserHibernateModel = userDAOImpl.convertToUserHibernateModel(user);
-
-        assertEquals(expectedUserHibernateModel.getEmail(), actualUserHibernateModel.getEmail());
-        assertEquals(expectedUserHibernateModel.getFacebookId(), actualUserHibernateModel.getFacebookId());
-        assertEquals(expectedUserHibernateModel.getName(), actualUserHibernateModel.getName());
-
-    }
-
-    private UserHibernateModel getUserHibernateModel() {
-        UserHibernateModel userHibernateModel = new UserHibernateModel(user);
-        userHibernateModel.setEmail(EMAIL);
-        userHibernateModel.setName(NAME);
-        userHibernateModel.setFacebookId(FACEBOOK_ID);
-        return userHibernateModel;
+        areEqual(expectedUserHibernateModel, actualUserHibernateModel);
     }
 }
