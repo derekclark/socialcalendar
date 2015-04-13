@@ -15,24 +15,26 @@ import static org.junit.Assert.*;
 import static uk.co.socialcalendar.entities.FriendStatus.*;
 
 public class FriendDAOTest {
-	Friend friend;
-	Friend friend1, friend2, friend3, friend4, friend5, friend6, friend7, friend8, friend9, pendingFriendRequest;
+	Friend friend, myAcceptedFriend1, myAcceptedFriend2, myPendingFriend1,
+			unrelatedFriend1, unrelatedFriend2, myAcceptedFriend3, myPendingFriend2,
+			myPendingFriend3, myPendingFriend4;
 	FriendDAO friendDAO;
-	private final static int FRIEND_ID_NON_EXISTENT = -1;
-	private final static String FRIEND_NAME1 = "NAME1";
-	private final static String FRIEND_NAME2 = "NAME2";
-	private final static String FRIEND_NAME3 = "NAME3";
-	private final static String FRIEND_NAME4 = "NAME4";
-	private final static String FRIEND_NAME5 = "NAME5";
-	private final static String FRIEND_NAME6 = "NAME6";
-	private final static String FRIEND_NAME7 = "NAME7";
-	private final static String FRIEND_NAME8 = "NAME8";
-	private final static String FRIEND_REQUESTER_NOT_PRESENT = "FRIEND_REQUESTER_EMAIL_NOT_EXIST";
+	private final static int FRIEND_ID_INVALID = -1;
+	private final static String MY_EMAIL = "MY_EMAIL";
+	private final static String FRIEND_EMAIL2 = "EMAIL2";
+	private final static String FRIEND_EMAIL3 = "EMAIL3";
+	private final static String FRIEND_EMAIL4 = "EMAIL4";
+	private final static String FRIEND_EMAIL5 = "EMAIL5";
+	private final static String FRIEND_EMAIL6 = "EMAIL6";
+	private final static String FRIEND_EMAIL7 = "EMAIL7";
+	private final static String FRIEND_EMAIL8 = "EMAIL8";
+	private final static String INVALID_USER = "invalid user";
 	private static final int NOT_SAVED = -1;
+	private final static String VALID_EMAIL = "validEmail";
 
 	@Before
 	public void setup(){
-		friend = new Friend(FRIEND_NAME1,FRIEND_NAME2,ACCEPTED);
+		friend = new Friend(MY_EMAIL, FRIEND_EMAIL2,ACCEPTED);
 		friend.setFriendId(10);
 		friendDAO = new InMemoryFriendDAO();
 	}
@@ -43,29 +45,28 @@ public class FriendDAOTest {
 	}
 
 	private void saveManyFriends() {
-		friend1.setFriendId(friendDAO.save(friend1));
-		friend2.setFriendId(friendDAO.save(friend2));
-		friend3.setFriendId(friendDAO.save(friend3));
-		friend4.setFriendId(friendDAO.save(friend4));
-		friend5.setFriendId(friendDAO.save(friend5));
-		friend6.setFriendId(friendDAO.save(friend6));
-		friend7.setFriendId(friendDAO.save(friend7));
-		friend8.setFriendId(friendDAO.save(friend8));
-		friend9.setFriendId(friendDAO.save(friend9));
-		pendingFriendRequest.setFriendId(friendDAO.save(pendingFriendRequest));
+		myAcceptedFriend1.setFriendId(friendDAO.save(myAcceptedFriend1));
+		myAcceptedFriend2.setFriendId(friendDAO.save(myAcceptedFriend2));
+		myPendingFriend1.setFriendId(friendDAO.save(myPendingFriend1));
+		unrelatedFriend1.setFriendId(friendDAO.save(unrelatedFriend1));
+		unrelatedFriend2.setFriendId(friendDAO.save(unrelatedFriend2));
+		myAcceptedFriend3.setFriendId(friendDAO.save(myAcceptedFriend3));
+		myPendingFriend2.setFriendId(friendDAO.save(myPendingFriend2));
+		myPendingFriend3.setFriendId(friendDAO.save(myPendingFriend3));
+		myPendingFriend4.setFriendId(friendDAO.save(myPendingFriend4));
 	}
 
 	private void createManyFriends() {
-		friend1 = new Friend(FRIEND_NAME1, FRIEND_NAME2, ACCEPTED);
-		friend2 = new Friend(FRIEND_NAME1, FRIEND_NAME3,ACCEPTED);
-		friend3 = new Friend(FRIEND_NAME1, FRIEND_NAME4,PENDING);
-		friend4 = new Friend(FRIEND_NAME2, FRIEND_NAME3,ACCEPTED);
-		friend5 = new Friend(FRIEND_NAME3, FRIEND_NAME4,PENDING);
-		friend6 = new Friend(FRIEND_NAME5, FRIEND_NAME1,ACCEPTED);
-		friend7 = new Friend(FRIEND_NAME5, FRIEND_NAME1,PENDING);
-		friend8 = new Friend(FRIEND_NAME1, FRIEND_NAME6,PENDING);
-		friend9 = new Friend(FRIEND_NAME8, FRIEND_NAME1,PENDING);
-		pendingFriendRequest = new Friend(FRIEND_NAME1,FRIEND_NAME7,PENDING);
+		myAcceptedFriend1 = new Friend(MY_EMAIL, FRIEND_EMAIL2,ACCEPTED);
+		myAcceptedFriend2 = new Friend(MY_EMAIL, FRIEND_EMAIL3,ACCEPTED);
+		myPendingFriend1 = new Friend(MY_EMAIL, FRIEND_EMAIL4,PENDING);
+		unrelatedFriend1 = new Friend(FRIEND_EMAIL2, FRIEND_EMAIL3,ACCEPTED);
+		unrelatedFriend2 = new Friend(FRIEND_EMAIL3, FRIEND_EMAIL4,PENDING);
+		myAcceptedFriend3 = new Friend(FRIEND_EMAIL5, MY_EMAIL,ACCEPTED);
+		myPendingFriend2 = new Friend(FRIEND_EMAIL5, MY_EMAIL,PENDING);
+		myPendingFriend3 = new Friend(MY_EMAIL, FRIEND_EMAIL6,PENDING);
+		myPendingFriend4 = new Friend(FRIEND_EMAIL8, MY_EMAIL,PENDING);
+//		myPendingFriend5 = new Friend(MY_EMAIL, FRIEND_EMAIL7,PENDING);
 	}
 
 	@Test
@@ -74,38 +75,40 @@ public class FriendDAOTest {
 	}
 	
 	@Test
-	public void shouldNotSaveFriendIfRequesteeNameIsNull(){
-		friend.setBeFriendedEmail(null);
+	public void shouldNotSaveFriendIfBeFriendedIsNull(){
+		friend = new Friend(VALID_EMAIL, null, ACCEPTED);
 		assertEquals(NOT_SAVED, friendDAO.save(friend));
 	}
 	
 	@Test
-	public void shouldNotSaveFriendIfRequesteeNameIsEmpty(){
-		friend.setBeFriendedEmail("");
+	public void shouldNotSaveFriendIfBeFriendedIsEmpty(){
+		friend = new Friend(VALID_EMAIL, "", ACCEPTED);
 		assertEquals(NOT_SAVED, friendDAO.save(friend));
 	}
 
 	@Test
-	public void shouldNotSaveFriendIfRequesterNameIsNull(){
-		friend.setRequesterEmail("");
+	public void shouldNotSaveFriendIfRequesterIsNull(){
+		friend = new Friend(null, VALID_EMAIL, ACCEPTED);
 		assertEquals(NOT_SAVED, friendDAO.save(friend));
 	}
 
 	@Test
-	public void shouldNotSaveFriendIfRequesterNameIsEmpty(){
+	public void shouldNotSaveFriendIfRequesterIsEmpty(){
+		friend = new Friend("", VALID_EMAIL, ACCEPTED);
 		friend.setRequesterEmail("");
 		assertEquals(NOT_SAVED, friendDAO.save(friend));
 	}
 
 	@Test
 	public void shouldNotSaveFriendIfStatusIsUNKNOWN(){
-		friend.setStatus(FriendStatus.UNKNOWN);
+		friend = new Friend(VALID_EMAIL, VALID_EMAIL, UNKNOWN);
 		assertEquals(NOT_SAVED, friendDAO.save(friend));
 	}
 	
 	@Test
 	public void canReadFriend(){
-		saveFriends();
+		friend.setFriendId(friendDAO.save(friend));
+
 		int friendId = friend.getFriendId();
 		Friend returnedFriend = friendDAO.read(friendId);
 		assertEquals(friend.getFriendId(), returnedFriend.getFriendId());
@@ -113,83 +116,83 @@ public class FriendDAOTest {
 	
 	@Test
 	public void shouldNotReadNonExistentFriend(){
-		friend.setFriendId(FRIEND_ID_NON_EXISTENT);
-		assertNull(friendDAO.read(-1));
+		friend.setFriendId(FRIEND_ID_INVALID);
+		assertNull(friendDAO.read(FRIEND_ID_INVALID));
 	}
 
 	@Test
 	public void canUpdateFriendStatus(){
 		saveFriends();
-		friendDAO.updateStatus(pendingFriendRequest.getFriendId(), DECLINED);
-		Friend updatedFriend = friendDAO.read(pendingFriendRequest.getFriendId());
+		friendDAO.updateStatus(myPendingFriend1.getFriendId(), DECLINED);
+		Friend updatedFriend = friendDAO.read(myPendingFriend1.getFriendId());
 		assertEquals(FriendStatus.DECLINED, updatedFriend.getStatus());
 	}
 
 	@Test
 	public void returnMyAcceptedFriends(){
 		saveFriends();
-		List<Friend> actualFriendList = friendDAO.getMyAcceptedFriends(FRIEND_NAME1);
-		assertEquals(friend1.getFriendId(), actualFriendList.get(0).getFriendId());
-		assertEquals(friend2.getFriendId(), actualFriendList.get(1).getFriendId());
-		assertEquals(friend6.getFriendId(), actualFriendList.get(2).getFriendId());
+		List<Friend> actualFriendList = friendDAO.getMyAcceptedFriends(MY_EMAIL);
+		assertEquals(myAcceptedFriend1.getFriendId(), actualFriendList.get(0).getFriendId());
+		assertEquals(myAcceptedFriend2.getFriendId(), actualFriendList.get(1).getFriendId());
+		assertEquals(myAcceptedFriend3.getFriendId(), actualFriendList.get(2).getFriendId());
 		assertEquals(3,actualFriendList.size());
 	}
 	
 	@Test
 	public void returnNoAcceptedFriends(){
 		saveFriends();
-		List<Friend> actualFriendList = friendDAO.getMyAcceptedFriends(FRIEND_REQUESTER_NOT_PRESENT);
+		List<Friend> actualFriendList = friendDAO.getMyAcceptedFriends(INVALID_USER);
 		assertEquals(0, actualFriendList.size());
 	}
 	
 	@Test
 	public void returnSeveralFriendInvites(){
 		saveFriends();
-		List<Friend> actualFriendList = friendDAO.getMyFriendInvites(FRIEND_NAME1);
+		List<Friend> actualFriendList = friendDAO.getMyFriendInvites(MY_EMAIL);
 		assertEquals(2, actualFriendList.size());
 	}
 
 	@Test
 	public void returnNoFriendInvites(){
 		saveFriends();
-		List<Friend> actualFriendList = friendDAO.getMyFriendInvites(FRIEND_REQUESTER_NOT_PRESENT);
+		List<Friend> actualFriendList = friendDAO.getMyFriendInvites(INVALID_USER);
 		assertEquals(0, actualFriendList.size());
 	}
 	
 	@Test
 	public void shouldAcceptFriendRequest(){
 		saveFriends();
-		assertTrue(friendDAO.updateStatus(pendingFriendRequest.getFriendId(), ACCEPTED));
+		assertTrue(friendDAO.updateStatus(myPendingFriend1.getFriendId(), ACCEPTED));
 	}
 
 	@Test
 	public void acceptingFriendRequestShouldSetFriendStatusToAccepted(){
 		saveFriends();
-		friendDAO.updateStatus(pendingFriendRequest.getFriendId(), ACCEPTED);
-		assertEquals(ACCEPTED,pendingFriendRequest.getStatus());
+		friendDAO.updateStatus(myPendingFriend1.getFriendId(), ACCEPTED);
+		assertEquals(ACCEPTED, myPendingFriend1.getStatus());
 	}
 
 	@Test
 	public void shouldDeclineFriendRequest(){
 		saveFriends();
-		assertTrue(friendDAO.updateStatus(pendingFriendRequest.getFriendId(),DECLINED));
+		assertTrue(friendDAO.updateStatus(myPendingFriend1.getFriendId(), DECLINED));
 	}
 
 	@Test
 	public void decliningFriendRequestShouldSetFriendStatusToDeclined(){
 		saveFriends();
-		friendDAO.updateStatus(pendingFriendRequest.getFriendId(),DECLINED);
-		assertEquals(DECLINED,pendingFriendRequest.getStatus());
+		friendDAO.updateStatus(myPendingFriend1.getFriendId(),DECLINED);
+		assertEquals(DECLINED, myPendingFriend1.getStatus());
 	}
 
 	@Test
 	public void getMyFriendInvites(){
 		saveFriends();
 		List<Friend> expectedFriendList = new ArrayList<Friend>();
-		expectedFriendList.add(friend7);
-		expectedFriendList.add(friend9);
+		expectedFriendList.add(myPendingFriend2);
+		expectedFriendList.add(myPendingFriend4);
 
-		List<Friend> actualFriendList = friendDAO.getMyFriendInvites(FRIEND_NAME1);
+		List<Friend> actualFriendList = friendDAO.getMyFriendInvites(MY_EMAIL);
 
 		assertEquals(2,actualFriendList.size());
 		assertEquals(expectedFriendList, actualFriendList);
