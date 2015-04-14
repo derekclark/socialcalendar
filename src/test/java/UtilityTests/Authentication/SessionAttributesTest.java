@@ -57,6 +57,11 @@ public class SessionAttributesTest {
         assertTrue(sessionAttributes.isAuthenticated(mockHttpServletRequest));
     }
 
+    @Test
+    public void getFacebookId(){
+        when(mockSession.getAttribute("FACEBOOK_ID")).thenReturn("facebookId");
+        assertEquals("facebookId",sessionAttributes.getFacebookId(mockHttpServletRequest));
+    }
 
 
 }

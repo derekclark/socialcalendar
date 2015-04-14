@@ -16,4 +16,8 @@ public class SessionAttributes {
         return (boolean) session.getAttribute("IS_AUTHENTICATED");
     }
 
+    public String getFacebookId(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        return (String) session.getAttribute("FACEBOOK_ID");
+    }
 }
