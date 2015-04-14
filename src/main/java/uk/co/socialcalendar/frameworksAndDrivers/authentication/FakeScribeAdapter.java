@@ -24,10 +24,6 @@ public class FakeScribeAdapter implements Oauth {
         return wasGetTokenCalled;
     }
 
-    public boolean wasGetCodeCalled() {
-        return wasGetCodeCalled;
-    }
-
     public boolean wasGetResponseCalled() {
         return wasGetResponseCalled;
     }
