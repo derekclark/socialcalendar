@@ -35,6 +35,8 @@ public class FakeAuthenticationTest {
         assertEquals("123", authentication.getUserFacebookId());
     }
 
+
+
 //    @Test
 //    public void shouldGetOauthToken(){
 //        authentication.setOauthToken("456");

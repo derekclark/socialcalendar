@@ -13,18 +13,6 @@ public class FakeAuthentication implements Authentication {
         fb = new FacebookUserData();
     }
 
-    public String getEmail(){
-        return fb.getEmail();
-    }
-
-    public String getName(){
-        return fb.getName();
-    }
-
-    public String getFacebookId(){
-        return fb.getId();
-    }
-
     @Override
     public boolean isAuthenticated() {
         return authenticated==true;
@@ -41,9 +29,4 @@ public class FakeAuthentication implements Authentication {
     public void setUserFacebookId(String userFacebookId) {
         this.userFacebookId = userFacebookId;
     }
-
-
-
-
-
 }
