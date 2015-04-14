@@ -11,4 +11,9 @@ public class SessionAttributes {
         return (String) session.getAttribute("USER_ID");
     }
 
+    public boolean isAuthenticated(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        return (boolean) session.getAttribute("IS_AUTHENTICATED");
+    }
+
 }

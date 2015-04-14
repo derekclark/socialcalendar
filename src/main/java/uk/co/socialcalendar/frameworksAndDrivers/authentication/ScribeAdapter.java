@@ -31,6 +31,7 @@ public class ScribeAdapter implements Oauth {
     }
 
     public ScribeAdapter(String apiKey, String apiSecret, String callback){
+        System.out.println("in scribeAdapter constructor");
         service = createService(apiKey, apiSecret, callback);
     }
 

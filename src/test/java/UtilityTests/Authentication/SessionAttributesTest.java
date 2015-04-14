@@ -36,7 +36,7 @@ public class SessionAttributesTest {
         mockHttpServletResponse = mock(HttpServletResponse.class);
         mockSession = mock(HttpSession.class);
         when(mockHttpServletRequest.getSession()).thenReturn(mockSession);
-        when(mockSession.getAttribute("USER_ID")).thenReturn(USER_ID);
+
 
     }
 
@@ -47,6 +47,16 @@ public class SessionAttributesTest {
 
     @Test
     public void getLoggedInUserId(){
+        when(mockSession.getAttribute("USER_ID")).thenReturn(USER_ID);
         assertEquals("userId", sessionAttributes.getLoggedInUserId(mockHttpServletRequest));
     }
+
+    @Test
+    public void getIsAuthenticated(){
+        when(mockSession.getAttribute("IS_AUTHENTICATED")).thenReturn(true);
+        assertTrue(sessionAttributes.isAuthenticated(mockHttpServletRequest));
+    }
+
+
+
 }

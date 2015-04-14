@@ -179,9 +179,9 @@ public class FriendCommonModelTest {
         assertNotNull(actualMap.get("friendList"));
         assertNotNull(actualMap.get("friendRequestsMadeOnMe"));
         assertNotNull(actualMap.get("friendRequestsMadeByMe"));
-        assertNotNull(actualMap.get("isAuthenticated"));
-        assertNotNull(actualMap.get("oauthToken"));
-        assertNotNull(actualMap.get("userFacebookId"));
+//        assertNotNull(actualMap.get("isAuthenticated"));
+//        assertNotNull(actualMap.get("oauthToken"));
+//        assertNotNull(actualMap.get("userFacebookId"));
         assertNotNull(actualMap.get("newFriend"));
         assertNotNull(actualMap.get("section"));
     }

@@ -41,7 +41,7 @@ public class FacebookOauth implements HttpRequestHandler {
     }
 
     public FacebookOauth(String apiKey, String apiSecret, String callback) {
-
+        System.out.println("in FacebookOauth constructor");
         System.out.println("apikey=" + apiKey);
         System.out.println("apisecret=" + apiSecret);
         this.apiSecret = apiSecret;
@@ -116,7 +116,10 @@ public class FacebookOauth implements HttpRequestHandler {
 //        return authentication.getcode();
 //    }
 
+
+    //put this method in SessionAttributes??????
     public void setSessionAttributes(FacebookUserData fb){
+        System.out.println("facebookoauth setting session vars");
         HttpSession session = request.getSession();
         session.setAttribute("token", accessToken);
         session.setAttribute("IS_AUTHENTICATED", true);

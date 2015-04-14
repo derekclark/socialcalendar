@@ -5,7 +5,7 @@
 <%
     Boolean isAuthenticated = (Boolean) session.getAttribute("IS_AUTHENTICATED");
     String token = (String) session.getAttribute("OAUTH_TOKEN");
-    String userFacebookId = (String) session.getAttribute("USER_FACEBOOK_ID");
+    String facebookId = (String) session.getAttribute("FACEBOOK_ID");
 %>
 
 <head>
@@ -51,7 +51,7 @@
                                 </fmt:bundle>
                             </td>
                             <td class="user-picture">
-                                <img id="user-picture" src="https://graph.facebook.com/<%=userFacebookId%>/picture?type=square">    
+                                <img id="user-picture" src="https://graph.facebook.com/<%=facebookId%>/picture?type=square">
                             </td>
                         </tr>
                     </table>

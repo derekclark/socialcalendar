@@ -38,7 +38,7 @@ public class FriendCommonModel {
         mav.putAll(getFriendRequestsMadeByMe(myId));
         mav.putAll(getSection());
         mav.putAll(getUserName(myId));
-        mav.putAll(authenticationFacade.getAuthenticationAttributes());
+//        mav.putAll(authenticationFacade.getAuthenticationAttributes());
         mav.putAll(getNewFriend());
         return mav;
     }
