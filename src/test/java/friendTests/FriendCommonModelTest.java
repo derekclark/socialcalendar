@@ -9,7 +9,6 @@ import uk.co.socialcalendar.entities.User;
 import uk.co.socialcalendar.interfaceAdapters.controllers.friend.FriendCommonModel;
 import uk.co.socialcalendar.interfaceAdapters.models.friend.FriendModel;
 import uk.co.socialcalendar.interfaceAdapters.models.friend.FriendModelFacade;
-import uk.co.socialcalendar.interfaceAdapters.utilities.AuthenticationFacade;
 import uk.co.socialcalendar.useCases.friend.FriendFacade;
 import uk.co.socialcalendar.useCases.friend.FriendFacadeImpl;
 import uk.co.socialcalendar.useCases.user.UserFacade;
@@ -19,9 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -30,7 +27,6 @@ public class FriendCommonModelTest {
 
     FriendCommonModel friendCommonModel;
     FriendFacade mockFriendFacade;
-    AuthenticationFacade mockAuthenticationFacade;
     UserFacade mockUserFacade;
     FriendModelFacade mockFriendModelFacade;
     ModelAndView mav;
@@ -48,13 +44,10 @@ public class FriendCommonModelTest {
         friendCommonModel = new FriendCommonModel();
         mockFriendFacade = mock(FriendFacadeImpl.class);
         mockFriendModelFacade = mock(FriendModelFacade.class);
-        mockAuthenticationFacade = mock(AuthenticationFacade.class);
         mockUserFacade = mock(UserFacade.class);
         friendCommonModel.setUserFacade(mockUserFacade);
-        friendCommonModel.setAuthenticationFacade(mockAuthenticationFacade);
         friendCommonModel.setFriendFacade(mockFriendFacade);
         friendCommonModel.setFriendModelFacade(mockFriendModelFacade);
-
         setupUserMock();
     }
 
@@ -72,7 +65,6 @@ public class FriendCommonModelTest {
     public void populatesFriendListAttribute(){
         List<FriendModel> expectedFriendModelList = create1Friend();
         when(mockFriendModelFacade.getFriendModelList(anyString())).thenReturn(expectedFriendModelList);
-
         Map<String, Object> actualModelMap = friendCommonModel.getFriendList(USER_ID);
         assertEquals(expectedFriendModelList, actualModelMap.get("friendList"));
     }
@@ -90,30 +82,6 @@ public class FriendCommonModelTest {
         assertTrue(actualModelMap.get("newFriend") instanceof  Friend);
     }
 
-    @Test
-    public void populateAuthenticatedAttribute(){
-        Map<String, Object> actualModelMap = createAuthenticationModel();
-        when(mockAuthenticationFacade.getAuthenticationAttributes()).thenReturn(actualModelMap);
-        assertEquals(true, actualModelMap.get("isAuthenticated"));
-    }
-
-    @Test
-    public void populateFacebookIdModelAttribute(){
-        Map<String, Object> actualModelMap = createAuthenticationModel();
-		when(mockAuthenticationFacade.getAuthenticationAttributes()).thenReturn(actualModelMap);
-        assertEquals(USER_FACEBOOK_ID,actualModelMap.get("userFacebookId"));
-    }
-
-    @Test
-    public void populateOauthTokenAttribute(){
-        Map<String, Object> actualModelMap = createAuthenticationModel();
-		when(mockAuthenticationFacade.getAuthenticationAttributes()).thenReturn(actualModelMap);
-        assertEquals(OAUTH_TOKEN,actualModelMap.get("oauthToken"));
-    }
-
-
-
-
     private Map<String, Object> createAuthenticationModel() {
         Map<String, Object> commonModelMap = new HashMap<String, Object>();
         commonModelMap.put("isAuthenticated", true);
@@ -129,7 +97,6 @@ public class FriendCommonModelTest {
 		when(mockFriendFacade.getFriendRequests(anyString())).thenReturn(expectedFriendRequests);
         Map<String, Object> actualModelMap = friendCommonModel.getFriendRequestsMadeOnMe(USER_ID);
         assertEquals(expectedFriendRequests, actualModelMap.get("friendRequestsMadeOnMe"));
-
     }
 
     @Test
@@ -148,8 +115,6 @@ public class FriendCommonModelTest {
         return expectedFriendRequests;
     }
 
-
-
     private List<FriendModel> create1Friend() {
         List<FriendModel>expectedFriendModelList = new ArrayList<FriendModel>();
         FriendModel friendModel = new FriendModel();
@@ -162,7 +127,6 @@ public class FriendCommonModelTest {
         return expectedFriendModelList;
     }
 
-
     @Test
     public void populateUserNameInModel(){
         Map<String, Object> actualModelMap = friendCommonModel.getUserName(USER_ID);
@@ -172,16 +136,11 @@ public class FriendCommonModelTest {
     @Test
     public void returnsAllAttributes(){
         Map<String, Object> actualModelMap = createAuthenticationModel();
-        when(mockAuthenticationFacade.getAuthenticationAttributes()).thenReturn(actualModelMap);
-
         Map<String, Object> actualMap = friendCommonModel.getCommonModelAttributes(USER_ID);
         assertNotNull(actualMap.get("userName"));
         assertNotNull(actualMap.get("friendList"));
         assertNotNull(actualMap.get("friendRequestsMadeOnMe"));
         assertNotNull(actualMap.get("friendRequestsMadeByMe"));
-//        assertNotNull(actualMap.get("isAuthenticated"));
-//        assertNotNull(actualMap.get("oauthToken"));
-//        assertNotNull(actualMap.get("userFacebookId"));
         assertNotNull(actualMap.get("newFriend"));
         assertNotNull(actualMap.get("section"));
     }

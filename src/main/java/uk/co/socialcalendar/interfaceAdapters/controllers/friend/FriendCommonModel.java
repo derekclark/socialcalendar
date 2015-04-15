@@ -2,7 +2,6 @@ package uk.co.socialcalendar.interfaceAdapters.controllers.friend;
 
 import uk.co.socialcalendar.entities.Friend;
 import uk.co.socialcalendar.interfaceAdapters.models.friend.FriendModelFacade;
-import uk.co.socialcalendar.interfaceAdapters.utilities.AuthenticationFacade;
 import uk.co.socialcalendar.useCases.friend.FriendFacade;
 import uk.co.socialcalendar.useCases.user.UserFacade;
 
@@ -12,7 +11,6 @@ import java.util.Map;
 public class FriendCommonModel {
     FriendFacade friendFacade;
     FriendModelFacade friendModelFacade;
-    AuthenticationFacade authenticationFacade;
     UserFacade userFacade;
 
     public void setFriendFacade(FriendFacade friendFacade) {
@@ -21,10 +19,6 @@ public class FriendCommonModel {
 
     public void setFriendModelFacade(FriendModelFacade friendModelFacade) {
         this.friendModelFacade = friendModelFacade;
-    }
-
-    public void setAuthenticationFacade(AuthenticationFacade authenticationFacade) {
-        this.authenticationFacade = authenticationFacade;
     }
 
     public void setUserFacade(UserFacade userFacade) {
@@ -38,7 +32,6 @@ public class FriendCommonModel {
         mav.putAll(getFriendRequestsMadeByMe(myId));
         mav.putAll(getSection());
         mav.putAll(getUserName(myId));
-//        mav.putAll(authenticationFacade.getAuthenticationAttributes());
         mav.putAll(getNewFriend());
         return mav;
     }

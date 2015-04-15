@@ -22,6 +22,5 @@
 		<property name="userFacade" ref="userFacadeImpl" />
 		<property name="friendFacade" ref="friendFacadeImpl" />
 		<property name="friendModelFacade" ref="friendModelFacade" />
-		<property name="authenticationFacade" ref="authenticationFacade" />
 	</bean>
 </beans>

@@ -9,8 +9,6 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<bean id="authentication" class="uk.co.socialcalendar.frameworksAndDrivers.authentication.AuthenticationImpl" />
-
 	<bean id="oauth" class="uk.co.socialcalendar.frameworksAndDrivers.authentication.ScribeAdapter">
 		<constructor-arg name="apiKey" value="${facebookApiKey}"/>
 	    <constructor-arg name="apiSecret" value="${facebookApiSecret}"/>
@@ -22,7 +20,6 @@
 	    <constructor-arg name="apiSecret" value="${facebookApiSecret}"/>
 	    <constructor-arg name="callback" value="${facebookCallback}"/>
 	    <property name="oauth" ref="oauth" />
-	    <property name="authentication" ref="authentication" />
     </bean>
 
 </beans>

@@ -4,7 +4,6 @@ import org.scribe.model.Token;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.HttpRequestHandler;
 import uk.co.socialcalendar.interfaceAdapters.models.facebook.FacebookUserData;
-import uk.co.socialcalendar.interfaceAdapters.utilities.Authentication;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +12,6 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class FacebookOauth implements HttpRequestHandler {
-    Authentication authentication;
     Oauth oauth;
     HttpSession httpSession;
     public final static String OAUTH_CODE = "code";
@@ -30,10 +28,6 @@ public class FacebookOauth implements HttpRequestHandler {
 
     public void setOauth(Oauth oauth) {
         this.oauth = oauth;
-    }
-
-    public void setAuthentication(Authentication authentication) {
-        this.authentication = authentication;
     }
 
     public void setHttpSession(HttpSession httpSession) {
@@ -111,11 +105,6 @@ public class FacebookOauth implements HttpRequestHandler {
     public Token getToken(String code){
         return oauth.getToken(code);
     }
-
-//    public String getAuthCode(){
-//        return authentication.getcode();
-//    }
-
 
     //put this method in SessionAttributes??????
     public void setSessionAttributes(FacebookUserData fb){

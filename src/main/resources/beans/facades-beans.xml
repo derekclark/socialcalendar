@@ -16,12 +16,5 @@
 	<bean id="userFacade" class="uk.co.socialcalendar.useCases.user.UserFacadeImpl">
         <property name="userDAO" ref="userDAO"/>
 	</bean>    	
-
-
-	<bean id="authenticationFacade" class="uk.co.socialcalendar.interfaceAdapters.utilities.AuthenticationFacade">
-        <property name="authentication" ref="authentication"/>
-        <property name="oauth" ref="oauth"/>
-	</bean>
-
 	<bean id="sessionAttributes" class="uk.co.socialcalendar.interfaceAdapters.utilities.SessionAttributes" />
 </beans>
