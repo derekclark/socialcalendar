@@ -15,7 +15,7 @@
 	    <constructor-arg name="callback" value="${facebookCallback}"/>
 	</bean>
 	<bean id="loginController" class="uk.co.socialcalendar.authentication.controllers.LoginController" />
-    <bean name="facebook" class="uk.co.socialcalendar.authentication.FacebookOauth">
+    <bean name="facebook" class="uk.co.socialcalendar.authentication.facebookAuth.FacebookOauth">
 	    <constructor-arg name="apiKey" value="${facebookApiKey}"/>
 	    <constructor-arg name="apiSecret" value="${facebookApiSecret}"/>
 	    <constructor-arg name="callback" value="${facebookCallback}"/>

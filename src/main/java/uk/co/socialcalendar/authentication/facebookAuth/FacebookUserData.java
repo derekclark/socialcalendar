@@ -1,4 +1,4 @@
-package uk.co.socialcalendar.authentication.models;
+package uk.co.socialcalendar.authentication.facebookAuth;
 
 public class FacebookUserData {
     private String id;

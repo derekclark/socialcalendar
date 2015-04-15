@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.scribe.model.Token;
 import org.springframework.mock.web.MockHttpSession;
-import uk.co.socialcalendar.authentication.FacebookOauth;
+import uk.co.socialcalendar.authentication.facebookAuth.FacebookOauth;
 import uk.co.socialcalendar.authentication.FakeScribeAdapter;
 
 import javax.servlet.ServletException;

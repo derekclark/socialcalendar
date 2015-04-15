@@ -1,7 +1,7 @@
 package uk.co.socialcalendar.authentication;
 
 import org.scribe.model.Token;
-import uk.co.socialcalendar.authentication.models.FacebookUserData;
+import uk.co.socialcalendar.authentication.facebookAuth.FacebookUserData;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;

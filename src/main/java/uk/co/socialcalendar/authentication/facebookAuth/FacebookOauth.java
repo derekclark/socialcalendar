@@ -1,9 +1,10 @@
-package uk.co.socialcalendar.authentication;
+package uk.co.socialcalendar.authentication.facebookAuth;
 
 import org.scribe.model.Token;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.HttpRequestHandler;
-import uk.co.socialcalendar.authentication.models.FacebookUserData;
+import uk.co.socialcalendar.authentication.Oauth;
+import uk.co.socialcalendar.authentication.facebookAuth.FacebookUserData;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
