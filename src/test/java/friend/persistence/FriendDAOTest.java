@@ -2,17 +2,17 @@ package friend.persistence;
 
 import org.junit.Before;
 import org.junit.Test;
-import uk.co.socialcalendar.entities.Friend;
-import uk.co.socialcalendar.entities.FriendStatus;
-import uk.co.socialcalendar.frameworksAndDrivers.persistence.InMemoryFriendDAO;
-import uk.co.socialcalendar.useCases.friend.FriendDAO;
+import uk.co.socialcalendar.friend.entities.Friend;
+import uk.co.socialcalendar.friend.entities.FriendStatus;
+import uk.co.socialcalendar.friend.persistence.InMemoryFriendDAO;
+import uk.co.socialcalendar.friend.useCases.FriendDAO;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.*;
-import static uk.co.socialcalendar.entities.FriendStatus.*;
+import static uk.co.socialcalendar.friend.entities.FriendStatus.*;
 
 public class FriendDAOTest {
 	Friend myAcceptedFriend1, myAcceptedFriend2, myPendingFriend1,

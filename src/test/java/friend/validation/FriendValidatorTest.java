@@ -2,12 +2,12 @@ package friend.validation;
 
 import org.junit.Before;
 import org.junit.Test;
-import uk.co.socialcalendar.entities.Friend;
-import uk.co.socialcalendar.interfaceAdapters.models.friend.FriendValidator;
+import uk.co.socialcalendar.friend.entities.Friend;
+import uk.co.socialcalendar.friend.entities.FriendValidator;
 
 import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static uk.co.socialcalendar.entities.FriendStatus.*;
+import static uk.co.socialcalendar.friend.entities.FriendStatus.*;
 
 public class FriendValidatorTest {
     FriendValidator friendValidator;

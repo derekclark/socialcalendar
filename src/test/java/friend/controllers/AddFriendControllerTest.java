@@ -6,11 +6,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
-import uk.co.socialcalendar.entities.User;
-import uk.co.socialcalendar.interfaceAdapters.controllers.friend.AddFriendController;
-import uk.co.socialcalendar.interfaceAdapters.controllers.friend.FriendCommonModel;
-import uk.co.socialcalendar.interfaceAdapters.utilities.SessionAttributes;
-import uk.co.socialcalendar.useCases.friend.FriendFacadeImpl;
+import uk.co.socialcalendar.user.entities.User;
+import uk.co.socialcalendar.friend.controllers.AddFriendController;
+import uk.co.socialcalendar.friend.controllers.FriendCommonModel;
+import uk.co.socialcalendar.authentication.SessionAttributes;
+import uk.co.socialcalendar.friend.useCases.FriendFacadeImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

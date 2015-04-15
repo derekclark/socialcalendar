@@ -2,13 +2,13 @@ package friend.controllers;
 
 import org.junit.Before;
 import org.junit.Test;
-import uk.co.socialcalendar.entities.Friend;
-import uk.co.socialcalendar.entities.FriendStatus;
-import uk.co.socialcalendar.entities.User;
-import uk.co.socialcalendar.interfaceAdapters.models.friend.FriendModel;
-import uk.co.socialcalendar.interfaceAdapters.models.friend.FriendModelFacade;
-import uk.co.socialcalendar.useCases.friend.FriendFacade;
-import uk.co.socialcalendar.useCases.user.UserFacade;
+import uk.co.socialcalendar.friend.entities.Friend;
+import uk.co.socialcalendar.friend.entities.FriendStatus;
+import uk.co.socialcalendar.user.entities.User;
+import uk.co.socialcalendar.friend.controllers.FriendModel;
+import uk.co.socialcalendar.friend.controllers.FriendModelFacade;
+import uk.co.socialcalendar.friend.useCases.FriendFacade;
+import uk.co.socialcalendar.user.useCases.UserFacade;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static uk.co.socialcalendar.entities.FriendStatus.ACCEPTED;
+import static uk.co.socialcalendar.friend.entities.FriendStatus.ACCEPTED;
 
 public class FriendModelFacadeTest {
     FriendModelFacade friendModelFacade;

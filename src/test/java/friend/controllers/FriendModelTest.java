@@ -2,8 +2,8 @@ package friend.controllers;
 
 import org.junit.Before;
 import org.junit.Test;
-import uk.co.socialcalendar.entities.User;
-import uk.co.socialcalendar.interfaceAdapters.models.friend.FriendModel;
+import uk.co.socialcalendar.user.entities.User;
+import uk.co.socialcalendar.friend.controllers.FriendModel;
 
 import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertEquals;

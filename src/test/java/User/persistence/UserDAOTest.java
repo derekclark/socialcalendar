@@ -1,9 +1,9 @@
 package user.persistence;
 
 import org.junit.Test;
-import uk.co.socialcalendar.entities.User;
-import uk.co.socialcalendar.frameworksAndDrivers.persistence.InMemoryUserDAO;
-import uk.co.socialcalendar.useCases.user.UserDAO;
+import uk.co.socialcalendar.user.persistence.InMemoryUserDAO;
+import uk.co.socialcalendar.user.entities.User;
+import uk.co.socialcalendar.user.persistence.UserDAO;
 
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertTrue;

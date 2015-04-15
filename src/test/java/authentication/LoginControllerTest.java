@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
-import uk.co.socialcalendar.interfaceAdapters.controllers.login.LoginController;
+import uk.co.socialcalendar.authentication.controllers.LoginController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

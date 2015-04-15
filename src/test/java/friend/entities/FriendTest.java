@@ -2,11 +2,11 @@ package friend.entities;
 
 import org.junit.Before;
 import org.junit.Test;
-import uk.co.socialcalendar.entities.Friend;
-import uk.co.socialcalendar.entities.FriendStatus;
+import uk.co.socialcalendar.friend.entities.Friend;
+import uk.co.socialcalendar.friend.entities.FriendStatus;
 
 import static org.junit.Assert.*;
-import static uk.co.socialcalendar.entities.FriendStatus.*;
+import static uk.co.socialcalendar.friend.entities.FriendStatus.*;
 
 public class FriendTest {
 	public static final int FRIEND_ID = 1;

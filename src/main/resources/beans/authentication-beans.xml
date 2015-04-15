@@ -9,13 +9,13 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<bean id="oauth" class="uk.co.socialcalendar.frameworksAndDrivers.authentication.ScribeAdapter">
+	<bean id="oauth" class="uk.co.socialcalendar.authentication.ScribeAdapter">
 		<constructor-arg name="apiKey" value="${facebookApiKey}"/>
 	    <constructor-arg name="apiSecret" value="${facebookApiSecret}"/>
 	    <constructor-arg name="callback" value="${facebookCallback}"/>
 	</bean>
-	<bean id="loginController" class="uk.co.socialcalendar.interfaceAdapters.controllers.login.LoginController" />
-    <bean name="facebook" class="uk.co.socialcalendar.frameworksAndDrivers.authentication.FacebookOauth">
+	<bean id="loginController" class="uk.co.socialcalendar.authentication.controllers.LoginController" />
+    <bean name="facebook" class="uk.co.socialcalendar.authentication.FacebookOauth">
 	    <constructor-arg name="apiKey" value="${facebookApiKey}"/>
 	    <constructor-arg name="apiSecret" value="${facebookApiSecret}"/>
 	    <constructor-arg name="callback" value="${facebookCallback}"/>

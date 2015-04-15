@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.web.context.WebApplicationContext;
-import uk.co.socialcalendar.entities.User;
+import uk.co.socialcalendar.user.entities.User;
 
 import javax.servlet.http.HttpSession;
 

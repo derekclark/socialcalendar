@@ -2,7 +2,7 @@ package user;
 
 import org.junit.Before;
 import org.junit.Test;
-import uk.co.socialcalendar.interfaceAdapters.models.facebook.FacebookUserData;
+import uk.co.socialcalendar.authentication.models.FacebookUserData;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

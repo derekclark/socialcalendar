@@ -9,19 +9,19 @@
                 http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
                 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<bean id="friendController" class="uk.co.socialcalendar.interfaceAdapters.controllers.friend.FriendController">
+	<bean id="friendController" class="uk.co.socialcalendar.friend.controllers.FriendController">
                 <property name="friendCommonModel" ref="friendCommonModel"/>
                 <property name="sessionAttributes" ref="sessionAttributes"/>	        
 	</bean>    	
 
-	<bean id="addFriendController" class="uk.co.socialcalendar.interfaceAdapters.controllers.friend.AddFriendController">
+	<bean id="addFriendController" class="uk.co.socialcalendar.friend.controllers.AddFriendController">
                 <property name="friendCommonModel" ref="friendCommonModel"/>
                 <property name="sessionAttributes" ref="sessionAttributes"/>
                 <property name="friendFacade" ref="friendFacadeImpl"/>
 	</bean>    	
 
 
-	<bean id="friendRequestController" class="uk.co.socialcalendar.interfaceAdapters.controllers.friend.FriendRequestController">
+	<bean id="friendRequestController" class="uk.co.socialcalendar.friend.controllers.FriendRequestController">
                 <property name="friendFacade" ref="friendFacadeImpl"/>
                 <property name="friendCommonModel" ref="friendCommonModel"/>
                 <property name="userNotification" ref="userNotification"/>

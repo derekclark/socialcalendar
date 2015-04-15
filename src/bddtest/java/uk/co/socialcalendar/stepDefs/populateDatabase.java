@@ -1,9 +1,9 @@
 package uk.co.socialcalendar.stepDefs;
 
-import uk.co.socialcalendar.entities.Friend;
-import uk.co.socialcalendar.entities.User;
-import uk.co.socialcalendar.useCases.friend.FriendDAO;
-import uk.co.socialcalendar.useCases.user.UserDAO;
+import uk.co.socialcalendar.friend.entities.Friend;
+import uk.co.socialcalendar.user.entities.User;
+import uk.co.socialcalendar.friend.useCases.FriendDAO;
+import uk.co.socialcalendar.user.persistence.UserDAO;
 
 public class PopulateDatabase {
     UserDAO userDAO;

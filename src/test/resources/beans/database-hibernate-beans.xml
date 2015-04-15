@@ -28,16 +28,16 @@
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
 
-	<bean id="friendDAO" class="uk.co.socialcalendar.frameworksAndDrivers.persistence.FriendDAOHibernateImpl">
+	<bean id="friendDAO" class="uk.co.socialcalendar.friend.persistence.FriendDAOHibernateImpl">
 		<property name="sessionFactory" ref="sessionFactory" />
 		<property name="friendValidator" ref="friendValidator" />
 	</bean>
 
-    <bean id="userDAO" class="uk.co.socialcalendar.frameworksAndDrivers.persistence.UserDAOHibernateImpl">
+    <bean id="userDAO" class="uk.co.socialcalendar.user.persistence.UserDAOHibernateImpl">
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
 
-    <bean id="databaseActions" class="uk.co.socialcalendar.frameworksAndDrivers.persistence.TestDatabaseActions">
+    <bean id="databaseActions" class="uk.co.socialcalendar.testPersistence.TestDatabaseActions">
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
 

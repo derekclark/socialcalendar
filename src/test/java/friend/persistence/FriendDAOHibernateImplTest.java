@@ -6,10 +6,10 @@ import org.hibernate.SessionFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import uk.co.socialcalendar.entities.Friend;
-import uk.co.socialcalendar.frameworksAndDrivers.persistence.FriendDAOHibernateImpl;
-import uk.co.socialcalendar.frameworksAndDrivers.persistence.FriendHibernateModel;
-import uk.co.socialcalendar.interfaceAdapters.models.friend.FriendValidator;
+import uk.co.socialcalendar.friend.entities.Friend;
+import uk.co.socialcalendar.friend.persistence.FriendDAOHibernateImpl;
+import uk.co.socialcalendar.friend.persistence.FriendHibernateModel;
+import uk.co.socialcalendar.friend.entities.FriendValidator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
-import static uk.co.socialcalendar.entities.FriendStatus.*;
+import static uk.co.socialcalendar.friend.entities.FriendStatus.*;
 
 
 public class FriendDAOHibernateImplTest {

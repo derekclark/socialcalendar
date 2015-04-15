@@ -5,12 +5,12 @@ import org.junit.Test;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
-import uk.co.socialcalendar.entities.Friend;
-import uk.co.socialcalendar.interfaceAdapters.controllers.friend.FriendCommonModel;
-import uk.co.socialcalendar.interfaceAdapters.controllers.friend.FriendRequestController;
-import uk.co.socialcalendar.interfaceAdapters.utilities.SessionAttributes;
-import uk.co.socialcalendar.interfaceAdapters.utilities.StubMailNotification;
-import uk.co.socialcalendar.useCases.friend.FriendFacadeImpl;
+import uk.co.socialcalendar.friend.entities.Friend;
+import uk.co.socialcalendar.friend.controllers.FriendCommonModel;
+import uk.co.socialcalendar.friend.controllers.FriendRequestController;
+import uk.co.socialcalendar.authentication.SessionAttributes;
+import uk.co.socialcalendar.notification.StubMailNotification;
+import uk.co.socialcalendar.friend.useCases.FriendFacadeImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +23,7 @@ import java.util.Map;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
-import static uk.co.socialcalendar.entities.FriendStatus.*;
+import static uk.co.socialcalendar.friend.entities.FriendStatus.*;
 
 public class FriendRequestControllerTest {
     FriendRequestController controller;

@@ -3,7 +3,7 @@ package uk.co.socialcalendar.stepDefs;
 import org.hamcrest.Matchers;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import uk.co.socialcalendar.interfaceAdapters.models.friend.FriendModel;
+import uk.co.socialcalendar.friend.controllers.FriendModel;
 
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;

@@ -3,13 +3,13 @@ package friend.persistence;
 
 import org.junit.Before;
 import org.junit.Test;
-import uk.co.socialcalendar.entities.Friend;
-import uk.co.socialcalendar.entities.FriendStatus;
-import uk.co.socialcalendar.frameworksAndDrivers.persistence.FriendHibernateModel;
+import uk.co.socialcalendar.friend.entities.Friend;
+import uk.co.socialcalendar.friend.entities.FriendStatus;
+import uk.co.socialcalendar.friend.persistence.FriendHibernateModel;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static uk.co.socialcalendar.entities.FriendStatus.ACCEPTED;
+import static uk.co.socialcalendar.friend.entities.FriendStatus.ACCEPTED;
 
 public class FriendHibernateModelTest {
 

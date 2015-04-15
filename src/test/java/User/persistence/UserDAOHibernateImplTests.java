@@ -5,9 +5,9 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Before;
 import org.junit.Test;
-import uk.co.socialcalendar.entities.User;
-import uk.co.socialcalendar.frameworksAndDrivers.persistence.UserDAOHibernateImpl;
-import uk.co.socialcalendar.frameworksAndDrivers.persistence.UserHibernateModel;
+import uk.co.socialcalendar.user.entities.User;
+import uk.co.socialcalendar.user.persistence.UserDAOHibernateImpl;
+import uk.co.socialcalendar.user.persistence.UserHibernateModel;
 
 import static junit.framework.TestCase.assertNull;
 import static org.junit.Assert.assertTrue;

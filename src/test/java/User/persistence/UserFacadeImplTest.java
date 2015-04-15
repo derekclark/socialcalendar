@@ -2,9 +2,9 @@ package user.persistence;
 
 import org.junit.Before;
 import org.junit.Test;
-import uk.co.socialcalendar.entities.User;
-import uk.co.socialcalendar.useCases.user.UserDAO;
-import uk.co.socialcalendar.useCases.user.UserFacadeImpl;
+import uk.co.socialcalendar.user.entities.User;
+import uk.co.socialcalendar.user.persistence.UserDAO;
+import uk.co.socialcalendar.user.useCases.UserFacadeImpl;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;

@@ -14,11 +14,11 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.web.context.WebApplicationContext;
-import uk.co.socialcalendar.entities.Friend;
-import uk.co.socialcalendar.entities.FriendStatus;
-import uk.co.socialcalendar.entities.User;
-import uk.co.socialcalendar.frameworksAndDrivers.persistence.TestDatabaseActions;
-import uk.co.socialcalendar.interfaceAdapters.models.friend.FriendModel;
+import uk.co.socialcalendar.friend.entities.Friend;
+import uk.co.socialcalendar.friend.entities.FriendStatus;
+import uk.co.socialcalendar.user.entities.User;
+import uk.co.socialcalendar.testPersistence.TestDatabaseActions;
+import uk.co.socialcalendar.friend.controllers.FriendModel;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;

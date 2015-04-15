@@ -2,7 +2,7 @@ package user.entities;
 
 import org.junit.Before;
 import org.junit.Test;
-import uk.co.socialcalendar.entities.User;
+import uk.co.socialcalendar.user.entities.User;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
