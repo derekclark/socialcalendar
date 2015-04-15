@@ -28,17 +28,12 @@ public class FakeScribeAdapter implements Oauth {
         return wasGetResponseCalled;
     }
 
-    public void setOauthToken(String oauthToken) {
-        this.oauthToken = oauthToken;
-    }
-
     public FakeScribeAdapter(){
         wasGetTokenCalled = false;
         wasGetCodeCalled = false;
         wasGetAuthorizationUrlCalled = false;
         wasGetResponseCalled = false;
         fb = new FacebookUserData();
-
     }
 
     @Override
@@ -50,10 +45,10 @@ public class FakeScribeAdapter implements Oauth {
         return fb;
     }
 
-    @Override
-    public String getOauthToken() {
-        return oauthToken;
-    }
+//    @Override
+//    public String getOauthToken() {
+//        return oauthToken;
+//    }
 
     @Override
     public String getAuthorizationUrl(Token token) {

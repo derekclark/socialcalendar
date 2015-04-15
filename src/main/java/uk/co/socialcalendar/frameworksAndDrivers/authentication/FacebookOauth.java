@@ -95,13 +95,6 @@ public class FacebookOauth implements HttpRequestHandler {
         return true;
     }
 
-    public boolean hasOauthCode(String code) {
-        if (code == null){
-            return false;
-        }
-        return true;
-    }
-
     public Token getToken(String code){
         return oauth.getToken(code);
     }

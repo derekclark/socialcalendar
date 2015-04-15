@@ -8,9 +8,6 @@ import java.io.IOException;
 
 public interface Oauth {
     public FacebookUserData getResponse(Token accessToken, String fbResource, HttpServletResponse response) throws IOException;
-
-    public String getOauthToken();
-
     public String getAuthorizationUrl(Token token);
     public Token getToken(String code);
 

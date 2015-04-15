@@ -57,10 +57,6 @@ public class Friend {
 		this.friendId = friendId;
 	}
 
-	public Object getStatusString() {
-		return status.toString();
-	}
-
 	public boolean equals(Object obj){
 		if (this == obj){
 			return true;

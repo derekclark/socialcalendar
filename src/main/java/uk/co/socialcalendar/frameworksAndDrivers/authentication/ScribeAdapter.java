@@ -53,10 +53,10 @@ public class ScribeAdapter implements Oauth {
 
     }
 
-    @Override
-    public String getOauthToken() {
-        return null;
-    }
+//    @Override
+//    public String getOauthToken() {
+//        return null;
+//    }
 
     @Override
     public String getAuthorizationUrl(Token token) {

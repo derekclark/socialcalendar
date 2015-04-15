@@ -23,6 +23,7 @@ public class UserDAOTest {
     @Test
     public void canSaveUser(){
         User user = new User(EMAIL, NAME, FACEBOOKID);
+
         assertTrue(userDAO.save(user));
     }
     @Test

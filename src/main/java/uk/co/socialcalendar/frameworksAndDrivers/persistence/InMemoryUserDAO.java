@@ -36,10 +36,9 @@ public class InMemoryUserDAO implements UserDAO {
     public boolean save(User user) {
         if (read(user.getEmail()) == null) {
             listOfUsers.add(user);
-        }else {
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     public void populate(){
