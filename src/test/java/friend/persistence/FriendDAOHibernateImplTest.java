@@ -1,4 +1,4 @@
-package friendTests;
+package friend.persistence;
 
 import org.hibernate.Query;
 import org.hibernate.Session;

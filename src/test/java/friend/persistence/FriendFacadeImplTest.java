@@ -1,4 +1,4 @@
-package friendTests;
+package friend.persistence;
 import org.junit.Before;
 import org.junit.Test;
 import uk.co.socialcalendar.entities.Friend;

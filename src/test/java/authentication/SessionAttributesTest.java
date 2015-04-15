@@ -1,4 +1,4 @@
-package UtilityTests.Authentication;
+package authentication;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -60,7 +60,7 @@ public class SessionAttributesTest {
     @Test
     public void getFacebookId(){
         when(mockSession.getAttribute("FACEBOOK_ID")).thenReturn("facebookId");
-        assertEquals("facebookId",sessionAttributes.getFacebookId(mockHttpServletRequest));
+        assertEquals("facebookId", sessionAttributes.getFacebookId(mockHttpServletRequest));
     }
 
 

@@ -1,4 +1,4 @@
-package friendTests;
+package friend.validation;
 
 import org.junit.Before;
 import org.junit.Test;

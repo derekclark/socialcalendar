@@ -1,4 +1,4 @@
-package UserTests;
+package user.persistence;
 
 import org.hibernate.Query;
 import org.hibernate.Session;

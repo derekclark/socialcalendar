@@ -1,4 +1,4 @@
-package friendTests;
+package friend.entities;
 
 import org.junit.Before;
 import org.junit.Test;

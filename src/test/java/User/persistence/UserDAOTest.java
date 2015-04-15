@@ -1,4 +1,4 @@
-package UserTests;
+package user.persistence;
 
 import org.junit.Test;
 import uk.co.socialcalendar.entities.User;

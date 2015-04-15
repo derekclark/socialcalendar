@@ -1,4 +1,4 @@
-package UtilityTests.Authentication;
+package authentication;
 
 import org.junit.Before;
 import org.junit.Test;
