@@ -2,14 +2,14 @@ package uk.co.socialcalendar.authentication.facebookAuth;
 
 public class FacebookUserData {
     private String id;
-    private String first_name;
+    private String firstName;
     private String gender;
-    private String last_name;
+    private String lastName;
     private String link;
     private String locale;
     private String name;
     private int timezone;
-    private String updated_time;
+    private String updatedTime;
     private boolean verified;
     private String email;
 
@@ -26,10 +26,10 @@ public class FacebookUserData {
         this.id = id;
     }
     public String getFirstName() {
-        return first_name;
+        return firstName;
     }
     public void setFirstName(String firstName) {
-        this.first_name = firstName;
+        this.firstName = firstName;
     }
     public String getGender() {
         return gender;
@@ -38,10 +38,10 @@ public class FacebookUserData {
         this.gender = gender;
     }
     public String getLastName() {
-        return last_name;
+        return lastName;
     }
     public void setLastName(String lastName) {
-        this.last_name = lastName;
+        this.lastName = lastName;
     }
     public String getLink() {
         return link;
@@ -68,10 +68,10 @@ public class FacebookUserData {
         this.timezone = timezone;
     }
     public String getUpdatedTime() {
-        return updated_time;
+        return updatedTime;
     }
     public void setUpdatedTime(String updatedTime) {
-        this.updated_time = updatedTime;
+        this.updatedTime = updatedTime;
     }
     public boolean isVerified() {
         return verified;

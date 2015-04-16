@@ -13,19 +13,18 @@ import java.io.IOException;
 public class ScribeAdapter implements Oauth {
 
     OAuthService service;
-
-    OAuthRequest oauthRequest;
+    Verifier verifier;
+//    OAuthRequest oauthRequest;
     public final static Token EMPTY_TOKEN = null;
 
-    public void setOauthRequest(OAuthRequest oauthRequest) {
-        this.oauthRequest = oauthRequest;
-    }
+//    public void setOauthRequest(OAuthRequest oauthRequest) {
+//        this.oauthRequest = oauthRequest;
+//    }
 
     public void setVerifier(Verifier verifier) {
         this.verifier = verifier;
     }
 
-    Verifier verifier;
     public void setService(OAuthService service) {
         this.service = service;
     }
@@ -40,17 +39,21 @@ public class ScribeAdapter implements Oauth {
     }
 
     @Override
-    public FacebookUserData getResponse(Token accessToken, String fbResource, HttpServletResponse response) throws IOException {
+    public FacebookUserData getResponse(Token accessToken, String fbResource,
+                                        HttpServletResponse response) throws IOException {
         OAuthRequest request = new OAuthRequest(Verb.GET, fbResource);
         service.signRequest(accessToken, request);
         Response apiResponse = request.send();
         response.setContentType("application/json");
         response.setStatus(apiResponse.getCode());
         response.getWriter().write(apiResponse.getBody());
-        Gson gson = new Gson();
-        FacebookUserData fb = gson.fromJson(apiResponse.getBody(), FacebookUserData.class);
+        FacebookUserData fb = unmarshallToObject(apiResponse.getBody(), FacebookUserData.class);
         return fb;
+    }
 
+    public <T> T unmarshallToObject(String jsonString, Class<T> clazz) {
+        Gson gson = new Gson();
+        return gson.fromJson(jsonString, clazz);
     }
 
 //    @Override
@@ -61,15 +64,12 @@ public class ScribeAdapter implements Oauth {
     @Override
     public String getAuthorizationUrl(Token token) {
         return service.getAuthorizationUrl(EMPTY_TOKEN);
-
     }
 
     @Override
     public Token getToken(String code) {
-
         Verifier verifier = new Verifier(code);
         return service.getAccessToken(EMPTY_TOKEN, verifier);
-
     }
 
     public OAuthService createService(String apiKey, String apiSecret, String callback) {

@@ -1,4 +1,4 @@
-package user;
+package authentication;
 
 import org.junit.Before;
 import org.junit.Test;
