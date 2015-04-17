@@ -5,12 +5,18 @@ import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.FacebookApi;
 import org.scribe.model.*;
 import org.scribe.oauth.OAuthService;
+import org.springframework.beans.factory.annotation.Autowired;
+import uk.co.socialcalendar.authentication.facebookAuth.AbstractFactory;
 import uk.co.socialcalendar.authentication.facebookAuth.FacebookUserData;
+import uk.co.socialcalendar.authentication.facebookAuth.OauthRequestResource;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class ScribeAdapter implements Oauth {
+
+    @Autowired
+    private AbstractFactory abstractFactory;
 
     OAuthService service;
     Verifier verifier;
@@ -41,7 +47,7 @@ public class ScribeAdapter implements Oauth {
     @Override
     public FacebookUserData getResponse(Token accessToken, String fbResource,
                                         HttpServletResponse response) throws IOException {
-        OAuthRequest request = new OAuthRequest(Verb.GET, fbResource);
+        OAuthRequest request = getFacebookUserData(fbResource);
         service.signRequest(accessToken, request);
         Response apiResponse = request.send();
         response.setContentType("application/json");
@@ -49,6 +55,11 @@ public class ScribeAdapter implements Oauth {
         response.getWriter().write(apiResponse.getBody());
         FacebookUserData fb = unmarshallToObject(apiResponse.getBody(), FacebookUserData.class);
         return fb;
+    }
+
+    private OAuthRequest getFacebookUserData(String fbResource) {
+        OauthRequestResource resourceA = abstractFactory.getResourceA();
+        return resourceA.getFacebookUserData(fbResource);
     }
 
     public <T> T unmarshallToObject(String jsonString, Class<T> clazz) {
