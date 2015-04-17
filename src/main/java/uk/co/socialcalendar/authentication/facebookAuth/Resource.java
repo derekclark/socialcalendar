@@ -5,7 +5,7 @@ import org.scribe.model.Verb;
 
 public class Resource implements OauthRequestResource {
     @Override
-    public OAuthRequest getFacebookUserData(String fbResource) {
+    public OAuthRequest getFacebookResource(String fbResource) {
         return new OAuthRequest(Verb.GET, fbResource);
     }
 }

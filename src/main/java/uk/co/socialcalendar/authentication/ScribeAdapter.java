@@ -47,7 +47,7 @@ public class ScribeAdapter implements Oauth {
     @Override
     public FacebookUserData getResponse(Token accessToken, String fbResource,
                                         HttpServletResponse response) throws IOException {
-        OAuthRequest request = getFacebookUserData(fbResource);
+        OAuthRequest request = getOauthRequest(fbResource);
         service.signRequest(accessToken, request);
         Response apiResponse = request.send();
         response.setContentType("application/json");
@@ -57,9 +57,9 @@ public class ScribeAdapter implements Oauth {
         return fb;
     }
 
-    private OAuthRequest getFacebookUserData(String fbResource) {
-        OauthRequestResource resourceA = abstractFactory.getResourceA();
-        return resourceA.getFacebookUserData(fbResource);
+    private OAuthRequest getOauthRequest(String fbResource) {
+        OauthRequestResource resource = abstractFactory.getOauthRequestResource();
+        return resource.getFacebookResource(fbResource);
     }
 
     public <T> T unmarshallToObject(String jsonString, Class<T> clazz) {

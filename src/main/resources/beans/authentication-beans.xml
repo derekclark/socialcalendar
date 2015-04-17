@@ -22,10 +22,10 @@
 	    <property name="oauth" ref="oauth" />
     </bean>
 
-	<bean id="resourceA" class="uk.co.socialcalendar.authentication.facebookAuth.Resource" scope="prototype" />
+	<bean id="facebookResource" class="uk.co.socialcalendar.authentication.facebookAuth.Resource" scope="prototype" />
 
 	<bean id="factory" class="uk.co.socialcalendar.authentication.facebookAuth.AbstractFactory" >
-		<lookup-method name="getResourceA" bean="resourceA"/>
+		<lookup-method name="getOauthRequestResource" bean="facebookResource"/>
 	</bean>
 
 </beans>
