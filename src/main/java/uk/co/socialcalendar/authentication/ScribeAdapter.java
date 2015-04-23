@@ -12,20 +12,18 @@ import uk.co.socialcalendar.authentication.facebookAuth.OauthRequestResource;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 public class ScribeAdapter implements Oauth {
 
-    @Autowired
-    private AbstractFactory abstractFactory;
-
+    @Autowired private AbstractFactory abstractFactory;
     OAuthService service;
     Verifier verifier;
-//    OAuthRequest oauthRequest;
     public final static Token EMPTY_TOKEN = null;
 
-//    public void setOauthRequest(OAuthRequest oauthRequest) {
-//        this.oauthRequest = oauthRequest;
-//    }
+    public void setAbstractFactory(AbstractFactory abstractFactory) {
+        this.abstractFactory = abstractFactory;
+    }
 
     public void setVerifier(Verifier verifier) {
         this.verifier = verifier;
@@ -41,7 +39,6 @@ public class ScribeAdapter implements Oauth {
     }
 
     public ScribeAdapter(){
-
     }
 
     @Override
@@ -49,15 +46,20 @@ public class ScribeAdapter implements Oauth {
                                         HttpServletResponse response) throws IOException {
         OAuthRequest request = getOauthRequest(fbResource);
         service.signRequest(accessToken, request);
+        Response apiResponse = getApiResponse(response, request);
+        return unmarshallToObject(apiResponse.getBody(), FacebookUserData.class);
+    }
+
+    public Response getApiResponse(HttpServletResponse response, OAuthRequest request) throws IOException {
         Response apiResponse = request.send();
         response.setContentType("application/json");
         response.setStatus(apiResponse.getCode());
-        response.getWriter().write(apiResponse.getBody());
-        FacebookUserData fb = unmarshallToObject(apiResponse.getBody(), FacebookUserData.class);
-        return fb;
+        PrintWriter printWriter = response.getWriter();
+        printWriter.write(apiResponse.getBody());
+        return apiResponse;
     }
 
-    private OAuthRequest getOauthRequest(String fbResource) {
+    public OAuthRequest getOauthRequest(String fbResource) {
         OauthRequestResource resource = abstractFactory.getOauthRequestResource();
         return resource.getFacebookResource(fbResource);
     }
@@ -66,11 +68,6 @@ public class ScribeAdapter implements Oauth {
         Gson gson = new Gson();
         return gson.fromJson(jsonString, clazz);
     }
-
-//    @Override
-//    public String getOauthToken() {
-//        return null;
-//    }
 
     @Override
     public String getAuthorizationUrl(Token token) {
