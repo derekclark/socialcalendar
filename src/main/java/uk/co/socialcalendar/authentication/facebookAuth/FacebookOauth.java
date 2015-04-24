@@ -1,10 +1,11 @@
 package uk.co.socialcalendar.authentication.facebookAuth;
 
 import org.scribe.model.Token;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.HttpRequestHandler;
 import uk.co.socialcalendar.authentication.Oauth;
-import uk.co.socialcalendar.authentication.facebookAuth.FacebookUserData;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +14,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class FacebookOauth implements HttpRequestHandler {
+
+    private static final Logger LOG = LoggerFactory.getLogger(FacebookOauth.class);
     Oauth oauth;
     HttpSession httpSession;
     public final static String OAUTH_CODE = "code";
@@ -36,9 +39,7 @@ public class FacebookOauth implements HttpRequestHandler {
     }
 
     public FacebookOauth(String apiKey, String apiSecret, String callback) {
-        System.out.println("in FacebookOauth constructor");
-        System.out.println("apikey=" + apiKey);
-        System.out.println("apisecret=" + apiSecret);
+        LOG.info("in FacebookOauth constructor;apikey=" + apiKey + " apisecret=" + apiSecret);
         this.apiSecret = apiSecret;
     }
 
@@ -49,17 +50,17 @@ public class FacebookOauth implements HttpRequestHandler {
 
         String token = request.getParameter(OAUTH_TOKEN);
         String code = request.getParameter(OAUTH_CODE);
-        System.out.println("in handleRequest; token=" + token + " code=" + code);
+        LOG.info("in handleRequest; token=" + token + " code=" + code);
         if (isSet(token)) {
-            System.out.println("got token");
+            LOG.info("got token");
             handleGetFacebookUserData(response, token);
             return;
         }else if (isSet(code)) {
-            System.out.println("got code, get token");
+            LOG.info("got code, get token");
             handleGetToken(response, code);
             redirect(HOMEPAGE, response);
         }else {
-            System.out.println("get code");
+            LOG.info("get code");
             handleGetAuthCode(request,response);
             return;
         }
@@ -81,7 +82,7 @@ public class FacebookOauth implements HttpRequestHandler {
         String authorizationUrl = oauth.getAuthorizationUrl(EMPTY_TOKEN);
         HttpSession session = request.getSession();
         session.setAttribute("IS_AUTHENTICATED", false);
-        System.out.println("in getAuthcode, authorizationUrl=" + authorizationUrl);
+        LOG.info("in getAuthcode, authorizationUrl=" + authorizationUrl);
         redirect(authorizationUrl, response);
     }
 
@@ -102,7 +103,6 @@ public class FacebookOauth implements HttpRequestHandler {
 
     //put this method in SessionAttributes??????
     public void setSessionAttributes(FacebookUserData fb){
-        System.out.println("facebookoauth setting session vars");
         HttpSession session = request.getSession();
         session.setAttribute("token", accessToken);
         session.setAttribute("IS_AUTHENTICATED", true);
