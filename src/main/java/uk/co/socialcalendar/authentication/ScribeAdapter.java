@@ -16,7 +16,7 @@ import java.io.PrintWriter;
 
 public class ScribeAdapter implements Oauth {
 
-    @Autowired private AbstractFactory abstractFactory;
+    @Autowired public AbstractFactory abstractFactory;
     OAuthService service;
     Verifier verifier;
     public final static Token EMPTY_TOKEN = null;
