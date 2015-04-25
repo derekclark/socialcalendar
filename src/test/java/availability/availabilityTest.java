@@ -63,4 +63,17 @@ public class availabilityTest {
         availability.setId(1);
         assertEquals(1,availability.getId());
     }
+
+    @Test
+    public void canCreateAvailabilityWithArgs(){
+        DateTime startDate = new DateTime(2015, 1, 2, 0, 0, 0);
+        DateTime endDate = new DateTime(2015, 1, 3, 0, 1, 0);
+        availability = new Availability("ownerEmail","ownerName","title",startDate, endDate, "status");
+        assertEquals("ownerEmail",availability.getOwnerEmail());
+        assertEquals("ownerName",availability.getOwnerName());
+        assertEquals("title",availability.getTitle());
+        assertEquals(startDate,availability.getStartDate());
+        assertEquals(endDate,availability.getEndDate());
+        assertEquals("status",availability.getStatus());
+    }
 }

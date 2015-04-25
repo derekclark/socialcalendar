@@ -13,6 +13,15 @@ public class Availability {
     private String ownerName;
     private String status;
 
+    public Availability(String ownerEmail, String ownerName, String title, DateTime startDate, DateTime endDate, String status) {
+        this.title = title;
+        this.ownerEmail = ownerEmail;
+        this.ownerName = ownerName;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.status = status;
+    }
+
     public int getId() {
         return id;
     }
