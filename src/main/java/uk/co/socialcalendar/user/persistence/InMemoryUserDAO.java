@@ -50,7 +50,5 @@ public class InMemoryUserDAO implements UserDAO {
         for (User u:listOfUsers){
             System.out.println(u.getEmail());
         }
-
     }
-
 }
