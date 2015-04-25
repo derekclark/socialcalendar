@@ -83,4 +83,30 @@ public class Availability {
 
     }
 
+    public boolean equals(Object obj){
+        if (this == obj){
+            return true;
+        }
+        if ((obj == null) || (obj.getClass() != this.getClass())){
+            return false;
+        }
+        Availability availability = (Availability) obj;
+
+        if (! this.ownerEmail.equals(availability.getOwnerEmail())) return false;
+        if (! this.ownerName.equals(availability.getOwnerName())) return false;
+        if (! this.title.equals(availability.getTitle())) return false;
+        if (! this.startDate.equals(availability.getStartDate())) return false;
+        if (! this.endDate.equals(availability.getEndDate())) return false;
+        if (! this.status.equals(availability.getStatus())) return false;
+
+        return id == availability.getId();
+    }
+
+    public int hashcode(){
+        int hash = 7;
+        hash = 31 * hash + id + ownerEmail.hashCode() + ownerName.hashCode()
+                + title.hashCode() + startDate.hashCode() + endDate.hashCode() + status.hashCode();
+        return hash;
+    }
+
 }

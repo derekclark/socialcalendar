@@ -6,6 +6,7 @@ import org.junit.Test;
 import uk.co.socialcalendar.availability.Availability;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 public class availabilityTest {
@@ -80,4 +81,59 @@ public class availabilityTest {
         assertEquals(END_DATE,availability.getEndDate());
         assertEquals(STATUS,availability.getStatus());
     }
+
+    @Test
+    public void testEquals(){
+        Availability availability1 = new Availability(OWNER_EMAIL, OWNER_NAME, TITLE,START_DATE, END_DATE, STATUS);
+        Availability availability2 = new Availability(OWNER_EMAIL, OWNER_NAME, TITLE,START_DATE, END_DATE, STATUS);
+        assertEquals(availability1, availability2);
+    }
+
+    @Test
+    public void testNotEqualsOwnerEmail(){
+        Availability availability1 = new Availability(OWNER_EMAIL, OWNER_NAME, TITLE,START_DATE, END_DATE, STATUS);
+        Availability availability2 = new Availability("differentEmail", OWNER_NAME, TITLE,START_DATE, END_DATE, STATUS);
+        assertNotEquals(availability1, availability2);
+    }
+
+    @Test
+    public void testNotEqualsOwnerName(){
+        Availability availability1 = new Availability(OWNER_EMAIL, OWNER_NAME, TITLE,START_DATE, END_DATE, STATUS);
+        Availability availability2 = new Availability(OWNER_EMAIL, "different", TITLE,START_DATE, END_DATE, STATUS);
+        assertNotEquals(availability1, availability2);
+    }
+
+    @Test
+    public void testNotEqualsTitle(){
+        Availability availability1 = new Availability(OWNER_EMAIL, OWNER_NAME, TITLE,START_DATE, END_DATE, STATUS);
+        Availability availability2 = new Availability(OWNER_EMAIL, OWNER_NAME, "different",START_DATE, END_DATE, STATUS);
+        assertNotEquals(availability1, availability2);
+    }
+
+    @Test
+    public void testNotEqualsStartDate(){
+        DateTime differentDateTime = new DateTime();
+        Availability availability1 = new Availability(OWNER_EMAIL, OWNER_NAME, TITLE,START_DATE, END_DATE, STATUS);
+        Availability availability2 = new Availability(OWNER_EMAIL, OWNER_NAME, TITLE,differentDateTime, END_DATE, STATUS);
+        assertNotEquals(availability1, availability2);
+    }
+
+    @Test
+    public void testNotEqualsEndDate(){
+        DateTime differentDateTime = new DateTime();
+        Availability availability1 = new Availability(OWNER_EMAIL, OWNER_NAME, TITLE,START_DATE, END_DATE, STATUS);
+        Availability availability2 = new Availability(OWNER_EMAIL, OWNER_NAME, TITLE,START_DATE, differentDateTime, STATUS);
+        assertNotEquals(availability1, availability2);
+    }
+    @Test
+    public void testNotEqualsStatus(){
+        Availability availability1 = new Availability(OWNER_EMAIL, OWNER_NAME, TITLE,START_DATE, END_DATE, STATUS);
+        Availability availability2 = new Availability(OWNER_EMAIL, OWNER_NAME, TITLE,START_DATE, END_DATE, "different");
+        assertNotEquals(availability1, availability2);
+    }
+
+
+
+
+
 }
