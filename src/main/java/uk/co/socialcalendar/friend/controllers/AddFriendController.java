@@ -1,5 +1,7 @@
 package uk.co.socialcalendar.friend.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @Controller
 public class AddFriendController {
+    private static final Logger LOG = LoggerFactory.getLogger(AddFriendController.class);
     SessionAttributes sessionAttributes;
     FriendCommonModel friendCommonModel;
     FriendFacade friendFacade;
@@ -36,7 +39,7 @@ public class AddFriendController {
             Model m, HttpServletRequest request, HttpServletResponse response) {
         String loggedInUser = sessionAttributes.getLoggedInUserId(request);
 
-        System.out.println("addfriend; create request;" + loggedInUser + " " + befriendedEmail);
+        LOG.info("addfriend; create request;" + loggedInUser + " " + befriendedEmail);
         friendFacade.createFriendRequest(loggedInUser, befriendedEmail);
         ModelAndView mav = new ModelAndView("friend");
         mav.addAllObjects(friendCommonModel.getCommonModelAttributes(loggedInUser));

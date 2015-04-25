@@ -1,5 +1,7 @@
 package uk.co.socialcalendar.friend.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @Controller
 public class FriendController{
+	private static final Logger LOG = LoggerFactory.getLogger(FriendController.class);
 	SessionAttributes sessionAttributes;
 	FriendCommonModel friendCommonModel;
 
@@ -29,12 +32,12 @@ public class FriendController{
 		String myUserId = getMyUserId(request);
 		if (!iAmAuthenticated(myUserId)){
 			ModelAndView mav = new ModelAndView("login");
-			System.out.println("not authenticated, redirected!");
+			LOG.info("not authenticated, redirected!");
 			return mav;
 		}
-		System.out.println("in friendPage; userid=" + sessionAttributes.getLoggedInUserId(request));
-		System.out.println("facebookId=" + request.getSession().getAttribute("FACEBOOK_ID"));
-		System.out.println("IS_AUTHENTICATED=" + sessionAttributes.isAuthenticated(request));
+		LOG.info("in friendPage; userid=" + sessionAttributes.getLoggedInUserId(request));
+		LOG.info("facebookId=" + request.getSession().getAttribute("FACEBOOK_ID"));
+		LOG.info("IS_AUTHENTICATED=" + sessionAttributes.isAuthenticated(request));
 
 		ModelAndView mav = new ModelAndView("friend");
 

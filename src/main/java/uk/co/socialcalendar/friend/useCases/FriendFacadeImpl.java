@@ -14,7 +14,6 @@ public class FriendFacadeImpl implements FriendFacade {
 
 	public int createFriendRequest(String requesterName,
 			String requesteeName) {
-		System.out.println("creating friend request for " + requesterName + " " + requesteeName);
 		int id = friendDAO.save(new Friend(requesterName, requesteeName, PENDING));
 		return id;
 	}

@@ -25,7 +25,6 @@ public class FriendModelFacade {
         List<Friend> friendList = friendFacade.getMyAcceptedFriends(myId);
         List<FriendModel> friendModelList = new ArrayList<FriendModel>();
         for (Friend f : friendList){
-            System.out.println("requester="+f.getRequesterEmail() + " befriended=" + f.getBeFriendedEmail() + " me=" + myId);
             friendModelList.add(populateModel(myId, f));
         }
         return friendModelList;
@@ -33,9 +32,7 @@ public class FriendModelFacade {
 
     private FriendModel populateModel(String myId, Friend f) {
         String u = returnFriendsEmailNotMine(f, myId);
-        System.out.println("your email not mine = " + u);
         User user = userFacade.getUser(u);
-        System.out.println("user = " + user.getName());
         FriendModel friendModel = new FriendModel();
         friendModel.setFacebookId(user.getFacebookId());
         setHasFacebookId(friendModel);

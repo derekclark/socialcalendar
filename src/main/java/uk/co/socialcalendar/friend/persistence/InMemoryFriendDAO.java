@@ -1,5 +1,7 @@
 package uk.co.socialcalendar.friend.persistence;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.co.socialcalendar.friend.entities.FriendStatus;
 import uk.co.socialcalendar.friend.entities.Friend;
 import uk.co.socialcalendar.friend.useCases.FriendDAO;
@@ -8,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InMemoryFriendDAO implements FriendDAO{
+	private static final Logger LOG = LoggerFactory.getLogger(InMemoryFriendDAO.class);
 	private static final int NOT_SAVED = -1;
 
 	List<Friend> listOfSavedFriends = new ArrayList<Friend>();
@@ -26,7 +29,7 @@ public class InMemoryFriendDAO implements FriendDAO{
 			return NOT_SAVED;
 		}
 		listOfSavedFriends.add(friend);
-		System.out.println("friend added");
+		LOG.info("friend added");
 		return friend.getFriendId();
 	}
 
@@ -65,13 +68,8 @@ public class InMemoryFriendDAO implements FriendDAO{
 
 	@Override
 	public List<Friend> getMyAcceptedFriends(String me) {
-		System.out.println("in inMemoryFriendDAO getMyAcceptedFriends for " + me);
-		for (Friend f:listOfSavedFriends){
-			System.out.println("saved friend=" + f.getRequesterEmail());
-		}
 		List<Friend> friendList = new ArrayList<Friend>();
 		for (Friend friend: listOfSavedFriends){
-			System.out.println("checking friend=" + friend.getRequesterEmail() + " " + friend.getBeFriendedEmail());
 			if (youAreMyAcceptedFriend(me, friend) || iAmYourAcceptedFriend(me, friend)){
 				friendList.add(friend);
 			}
@@ -91,9 +89,7 @@ public class InMemoryFriendDAO implements FriendDAO{
 	public List<Friend> getFriendRequestsMadeOnMe(String me) {
 		List<Friend> friendList = new ArrayList<Friend>();
 		for (Friend friend: listOfSavedFriends){
-			System.out.println("friendrequests looking at=" + friend.getRequesterEmail());
 			if (friend.getBeFriendedEmail().equals(me) && friend.getStatus() == FriendStatus.PENDING){
-				System.out.println("yes");
 				friendList.add(friend);
 			}
 		}
@@ -104,9 +100,7 @@ public class InMemoryFriendDAO implements FriendDAO{
 	public List<Friend> getFriendRequestsMadeByMe(String me) {
 		List<Friend> friendList = new ArrayList<Friend>();
 		for (Friend friend: listOfSavedFriends){
-			System.out.println("friendRequestsMadeByMe looking at=" + friend.getRequesterEmail());
 			if (friend.getRequesterEmail().equals(me) && friend.getStatus() == FriendStatus.PENDING){
-				System.out.println("yes");
 				friendList.add(friend);
 			}
 		}

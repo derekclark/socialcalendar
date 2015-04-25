@@ -48,10 +48,6 @@ public class FriendHibernateModel {
         return status;
     }
 
-//    public void setFriendId(int friendId) {
-//        this.friendId = friendId;
-//    }
-
     public void setRequesterEmail(String requesterEmail) {
         this.requesterEmail = requesterEmail;
     }
