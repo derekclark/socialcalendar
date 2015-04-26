@@ -26,12 +26,14 @@ public class AvailabilityControllerTest {
     HttpServletRequest mockHttpServletRequest;
     HttpServletResponse mockHttpServletResponse;
     HttpSession mockSession;
-
+    ModelAndView mav;
 
     @Before
     public void setup(){
         controller = new AvailabilityController();
         mockHttp();
+        mav = controller.addAvailability(model, mockHttpServletRequest, mockHttpServletResponse);
+
     }
 
     public void mockHttp(){
@@ -49,7 +51,11 @@ public class AvailabilityControllerTest {
 
     @Test
     public void rendersAvailabilityView(){
-        ModelAndView mav = controller.addAvailability(model, mockHttpServletRequest, mockHttpServletResponse);
         assertEquals("addAvailability",mav.getViewName());
+    }
+
+    @Test
+    public void sectionIsAvailability(){
+        assertEquals("availability",mav.getModelMap().get("section"));
     }
 }

@@ -13,6 +13,7 @@ public class AvailabilityController {
     @RequestMapping(value = "addAvailability", method = RequestMethod.GET)
     public ModelAndView addAvailability(Model m, HttpServletRequest request, HttpServletResponse response) {
         ModelAndView mav = new ModelAndView("addAvailability");
+        mav.addObject("section","availability");
         return mav;
     }
 }
