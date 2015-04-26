@@ -9,7 +9,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
-public class availabilityTest {
+public class AvailabilityTest {
     public static final String OWNER_EMAIL = "ownerEmail";
     public static final DateTime START_DATE = new DateTime(2015, 1, 2, 0, 0, 0);
     public static final DateTime END_DATE = new DateTime(2015, 1, 2, 1, 2, 30);
