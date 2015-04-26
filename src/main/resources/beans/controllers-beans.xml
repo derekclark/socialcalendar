@@ -26,5 +26,11 @@
                 <property name="friendCommonModel" ref="friendCommonModel"/>
                 <property name="userNotification" ref="userNotification"/>
                 <property name="sessionAttributes" ref="sessionAttributes"/>
-        </bean>
+    </bean>
+
+    <bean id="availabilityController" class="uk.co.socialcalendar.availability.AvailabilityController">
+                <property name="friendModelFacade" ref="friendModelFacade"/>
+                <property name="sessionAttributes" ref="sessionAttributes"/>
+    </bean>
+
 </beans>

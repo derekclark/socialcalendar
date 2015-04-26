@@ -24,7 +24,7 @@
 		<property name="suffix" value=".jsp" />
 	</bean>
 
-	<context:component-scan base-package="uk.co.socialcalendar.interfaceAdapters.controllers" />
+	<context:component-scan base-package="uk.co.socialcalendar" />
 	<context:property-placeholder location="classpath:propertyPlaceholder.properties" />	
 
 	<bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping" />

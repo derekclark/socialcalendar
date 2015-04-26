@@ -37,4 +37,6 @@
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
 
+    <bean id="availabilityDAO" class="uk.co.socialcalendar.availability.InMemoryAvailability" />
+
 </beans>

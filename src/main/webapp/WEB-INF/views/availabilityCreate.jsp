@@ -123,7 +123,7 @@ function validateForm() {
       <b>Choose Friends</b>
       <br>
       <c:forEach var="friend" items='${friendList}'>
-          <input type="checkbox" name="selectedFriends" value="${friend.emailAddress}">
+          <input type="checkbox" name="selectedFriends" value="${friend.email}">
           <c:choose>
             <c:when test="${not empty friend.facebookId}">
               <img src="https://graph.facebook.com/<c:out value="${friend.facebookId}"/>/picture?type=square">    
