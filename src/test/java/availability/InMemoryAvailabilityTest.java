@@ -7,6 +7,7 @@ import uk.co.socialcalendar.availability.Availability;
 import uk.co.socialcalendar.availability.AvailabilityDAO;
 import uk.co.socialcalendar.availability.InMemoryAvailability;
 
+import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -40,7 +41,6 @@ public class InMemoryAvailabilityTest {
         int id = availabilityDAO.save(availability1);
         Availability actualAvailability = availabilityDAO.read(id);
         assertEquals(availability1, actualAvailability);
-
     }
 
     @Test
@@ -59,4 +59,18 @@ public class InMemoryAvailabilityTest {
         assertEquals(availability2, availabilityDAO.read(id2));
     }
 
+    @Test
+    public void canUpdateAvailability(){
+        availabilityDAO.save(availability1);
+        availability1.setTitle("changedTitle");
+
+        assertTrue(availabilityDAO.update(availability1));
+        Availability actualAvailability = availabilityDAO.read(availability1.getId());
+        assertEquals("changedTitle", actualAvailability.getTitle());
+    }
+
+    @Test
+    public void doesNotUpdateIfRecordDoesNotExist(){
+        assertFalse(availabilityDAO.update(availability1));
+    }
 }

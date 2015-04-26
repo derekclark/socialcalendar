@@ -29,6 +29,19 @@ public class InMemoryAvailability implements AvailabilityDAO{
 
     @Override
     public Availability read(int id) {
-        return listOfAvailabilities.get(id-1);
+        if (!listOfAvailabilities.isEmpty()) {
+            return listOfAvailabilities.get(id - 1);
+        }else{
+            return null;
+        }
+    }
+
+    @Override
+    public boolean update(Availability availability) {
+        Availability savedAvailability = read(availability.getId());
+        if (savedAvailability != null){
+            return true;
+        }
+        return false;
     }
 }
