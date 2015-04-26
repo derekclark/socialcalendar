@@ -14,6 +14,7 @@ public class AvailabilityController {
     public ModelAndView addAvailability(Model m, HttpServletRequest request, HttpServletResponse response) {
         ModelAndView mav = new ModelAndView("addAvailability");
         mav.addObject("section","availability");
+        mav.addObject("newAvailability",new Availability());
         return mav;
     }
 }

@@ -13,8 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -58,4 +57,10 @@ public class AvailabilityControllerTest {
     public void sectionIsAvailability(){
         assertEquals("availability",mav.getModelMap().get("section"));
     }
+
+    @Test
+    public void modelReturnsNewAvailabilityAttribute() {
+        assertNotNull(mav.getModelMap().get("newAvailability"));
+    }
+
 }
