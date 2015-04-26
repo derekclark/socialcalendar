@@ -11,19 +11,20 @@ public class InMemoryAvailability implements AvailabilityDAO{
     }
     @Override
     public int save(Availability availability) {
-
-        int id;
-        if (listOfAvailabilities.size() == 0){
-            id=1;
-        }else {
-            id = listOfAvailabilities.get(listOfAvailabilities.size() - 1).getId();
-        }
-
+        int id = getNextId();
         availability.setId(id);
-
-
         listOfAvailabilities.add(availability);
         return id;
+    }
+
+    private int getNextId() {
+        int nextId;
+        if (listOfAvailabilities.size() == 0){
+            nextId=1;
+        }else {
+            nextId = listOfAvailabilities.get(listOfAvailabilities.size() - 1).getId() + 1;
+        }
+        return nextId;
     }
 
     @Override
