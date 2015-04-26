@@ -12,8 +12,10 @@ public class InMemoryAvailability implements AvailabilityDAO{
     @Override
     public int save(Availability availability) {
         int id = getNextId();
-        availability.setId(id);
-        listOfAvailabilities.add(availability);
+        Availability savedAvailability = new Availability(availability.getOwnerEmail(), availability.getOwnerName(),
+                availability.getTitle(), availability.getStartDate(), availability.getEndDate(), availability.getStatus());
+        savedAvailability.setId(getNextId());
+        listOfAvailabilities.add(savedAvailability);
         return id;
     }
 
@@ -40,6 +42,7 @@ public class InMemoryAvailability implements AvailabilityDAO{
     public boolean update(Availability availability) {
         Availability savedAvailability = read(availability.getId());
         if (savedAvailability != null){
+            listOfAvailabilities.set(availability.getId() -1,availability);
             return true;
         }
         return false;

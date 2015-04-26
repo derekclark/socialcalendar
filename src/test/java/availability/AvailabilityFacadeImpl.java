@@ -1,0 +1,28 @@
+package availability;
+
+import uk.co.socialcalendar.availability.Availability;
+import uk.co.socialcalendar.availability.AvailabilityDAO;
+import uk.co.socialcalendar.availability.AvailabilityFacade;
+
+public class AvailabilityFacadeImpl implements AvailabilityFacade{
+    AvailabilityDAO availabilityDAO;
+
+    public void setAvailabilityDAO(AvailabilityDAO availabilityDAO) {
+        this.availabilityDAO = availabilityDAO;
+    }
+
+    @Override
+    public int create(Availability availability) {
+        return availabilityDAO.save(availability);
+    }
+
+    @Override
+    public Availability get(int id) {
+        return availabilityDAO.read(id);
+    }
+
+    @Override
+    public boolean update(Availability availability) {
+        return availabilityDAO.update(availability);
+    }
+}
