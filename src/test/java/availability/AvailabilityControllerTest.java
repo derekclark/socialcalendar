@@ -8,19 +8,29 @@ import org.springframework.web.servlet.ModelAndView;
 import uk.co.socialcalendar.authentication.SessionAttributes;
 import uk.co.socialcalendar.availability.AvailabilityController;
 import uk.co.socialcalendar.friend.controllers.FriendCommonModel;
+import uk.co.socialcalendar.friend.entities.Friend;
+import uk.co.socialcalendar.friend.entities.FriendStatus;
+import uk.co.socialcalendar.friend.useCases.FriendFacade;
+import uk.co.socialcalendar.friend.useCases.FriendFacadeImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class AvailabilityControllerTest {
+    public static final String ME = "me";
     AvailabilityController controller;
     SessionAttributes sessionAttributes;
     FriendCommonModel mockFriendCommonModel;
+
+    FriendFacade mockFriendFacade;
+
     Model model;
     HttpServletRequest mockHttpServletRequest;
     HttpServletResponse mockHttpServletResponse;
@@ -30,6 +40,10 @@ public class AvailabilityControllerTest {
     @Before
     public void setup(){
         controller = new AvailabilityController();
+        sessionAttributes = new SessionAttributes();
+        mockFriendFacade = mock(FriendFacadeImpl.class);
+        controller.setFriendFacade(mockFriendFacade);
+        controller.setSessionAttributes(sessionAttributes);
         mockHttp();
         mav = controller.addAvailability(model, mockHttpServletRequest, mockHttpServletResponse);
 
@@ -61,6 +75,20 @@ public class AvailabilityControllerTest {
     @Test
     public void modelReturnsNewAvailabilityAttribute() {
         assertNotNull(mav.getModelMap().get("newAvailability"));
+    }
+
+    @Test
+    public void modelReturnsFriendList(){
+        Friend friend1=new Friend(1, ME,"friend1", FriendStatus.ACCEPTED);
+        Friend friend2=new Friend(2,"friend2", ME, FriendStatus.ACCEPTED);
+
+        List<Friend> expectedFriendList = new ArrayList<Friend>();
+        expectedFriendList.add(friend1);
+        expectedFriendList.add(friend2);
+
+        when(mockFriendFacade.getMyAcceptedFriends(ME)).thenReturn(expectedFriendList);
+
+        assertNotNull(mav.getModelMap().get("friendList"));
     }
 
 }
