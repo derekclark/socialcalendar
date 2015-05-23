@@ -25,7 +25,7 @@ public class AvailabilityController {
         this.friendModelFacade = friendModelFacade;
     }
 
-    @RequestMapping(value = "createAvailability", method = RequestMethod.GET)
+    @RequestMapping(value = "availability", method = RequestMethod.GET)
     public ModelAndView addAvailability(Model m, HttpServletRequest request, HttpServletResponse response) {
         String me = sessionAttributes.getLoggedInUserId(request);
         ModelAndView mav = new ModelAndView("availabilityCreate");

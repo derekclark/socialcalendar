@@ -21,7 +21,7 @@
 			         <li <c:if test="${section=='Friends'}"> class="active" </c:if> >
 						<a href="friend">Friends</a></li>
 			         <li <c:if test="${section=='Availability'}"> class="active" </c:if> >
-			         	<a href="createAvailability">Availability</a></li>
+			         	<a href="availability">Availability</a></li>
 			      </ul>
 			   </div>
 			</nav>        
