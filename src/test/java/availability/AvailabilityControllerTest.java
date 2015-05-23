@@ -6,7 +6,7 @@ import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
 import uk.co.socialcalendar.authentication.SessionAttributes;
-import uk.co.socialcalendar.availability.AvailabilityController;
+import uk.co.socialcalendar.availability.controllers.AvailabilityController;
 import uk.co.socialcalendar.friend.controllers.FriendCommonModel;
 import uk.co.socialcalendar.friend.controllers.FriendModel;
 import uk.co.socialcalendar.friend.controllers.FriendModelFacade;

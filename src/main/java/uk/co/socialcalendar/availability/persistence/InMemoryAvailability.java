@@ -1,9 +1,11 @@
-package uk.co.socialcalendar.availability;
+package uk.co.socialcalendar.availability.persistence;
+
+import uk.co.socialcalendar.availability.entities.Availability;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class InMemoryAvailability implements AvailabilityDAO{
+public class InMemoryAvailability implements AvailabilityDAO {
     List<Availability> listOfAvailabilities;
 
     public InMemoryAvailability(){

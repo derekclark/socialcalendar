@@ -1,4 +1,7 @@
-package uk.co.socialcalendar.availability;
+package uk.co.socialcalendar.availability.useCases;
+
+import uk.co.socialcalendar.availability.entities.Availability;
+import uk.co.socialcalendar.availability.persistence.AvailabilityDAO;
 
 public class AvailabilityFacadeImpl implements AvailabilityFacade{
     AvailabilityDAO availabilityDAO;

@@ -3,9 +3,9 @@ package availability;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
-import uk.co.socialcalendar.availability.Availability;
-import uk.co.socialcalendar.availability.AvailabilityDAO;
-import uk.co.socialcalendar.availability.InMemoryAvailability;
+import uk.co.socialcalendar.availability.entities.Availability;
+import uk.co.socialcalendar.availability.persistence.AvailabilityDAO;
+import uk.co.socialcalendar.availability.persistence.InMemoryAvailability;
 
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertNull;

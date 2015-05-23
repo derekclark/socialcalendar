@@ -28,7 +28,7 @@
                 <property name="sessionAttributes" ref="sessionAttributes"/>
     </bean>
 
-    <bean id="availabilityController" class="uk.co.socialcalendar.availability.AvailabilityController">
+    <bean id="availabilityController" class="uk.co.socialcalendar.availability.controllers.AvailabilityController">
                 <property name="friendModelFacade" ref="friendModelFacade"/>
                 <property name="sessionAttributes" ref="sessionAttributes"/>
     </bean>

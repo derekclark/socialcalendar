@@ -1,4 +1,6 @@
-package uk.co.socialcalendar.availability;
+package uk.co.socialcalendar.availability.useCases;
+
+import uk.co.socialcalendar.availability.entities.Availability;
 
 public interface AvailabilityFacade {
     public int create(Availability availability);

@@ -1,4 +1,4 @@
-package uk.co.socialcalendar.availability;
+package uk.co.socialcalendar.availability.entities;
 
 import org.joda.time.DateTime;
 

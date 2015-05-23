@@ -3,8 +3,8 @@ package availability;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
-import uk.co.socialcalendar.availability.Availability;
-import uk.co.socialcalendar.availability.AvailabilityHibernateModel;
+import uk.co.socialcalendar.availability.entities.Availability;
+import uk.co.socialcalendar.availability.persistence.AvailabilityHibernateModel;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

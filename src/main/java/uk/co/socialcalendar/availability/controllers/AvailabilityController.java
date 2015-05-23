@@ -1,4 +1,4 @@
-package uk.co.socialcalendar.availability;
+package uk.co.socialcalendar.availability.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import uk.co.socialcalendar.authentication.SessionAttributes;
+import uk.co.socialcalendar.availability.entities.Availability;
 import uk.co.socialcalendar.friend.controllers.FriendModelFacade;
 
 import javax.servlet.http.HttpServletRequest;

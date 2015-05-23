@@ -59,7 +59,6 @@ public class AddFriendControllerTest {
         mockSession = mock(HttpSession.class);
         when(mockHttpServletRequest.getSession()).thenReturn(mockSession);
         when(mockSession.getAttribute("USER_ID")).thenReturn(USER_ID);
-
     }
 
     @Test

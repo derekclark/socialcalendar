@@ -1,4 +1,6 @@
-package uk.co.socialcalendar.availability;
+package uk.co.socialcalendar.availability.persistence;
+
+import uk.co.socialcalendar.availability.entities.Availability;
 
 public interface AvailabilityDAO {
     public int save(Availability availability);

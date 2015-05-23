@@ -1,6 +1,7 @@
-package uk.co.socialcalendar.availability;
+package uk.co.socialcalendar.availability.persistence;
 
 import org.joda.time.DateTime;
+import uk.co.socialcalendar.availability.entities.Availability;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
