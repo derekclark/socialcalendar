@@ -38,11 +38,11 @@ public class SecurityFilter implements Filter {
     public boolean redirectRequestToLogin(ServletRequest request){
         HttpServletRequest req = (HttpServletRequest) request;
         String userId = (String) req.getSession().getAttribute("USER_ID");
-        LOG.info("userId="+userId);
         String uri = req.getRequestURI();
-        LOG.info("uri = " + uri);
-
         HttpSession session = req.getSession();
+
+        LOG.info("userId="+userId);
+        LOG.info("uri = " + uri);
         LOG.info("session="+session.toString());
 
         return (userId == null
