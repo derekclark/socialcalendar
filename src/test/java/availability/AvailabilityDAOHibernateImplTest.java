@@ -64,44 +64,44 @@ public class AvailabilityDAOHibernateImplTest {
 
     @Test
     public void canSaveAvailability(){
-        assertThat(availabilityDAOImpl.create(availability), is(1));
+        assertThat(availabilityDAOImpl.save(availability), is(1));
     }
 
 
     @Test
     public void doesNotSaveAvailabilityWithEmptyOwnerEmail(){
         availability = new Availability("", "ownerName", "title", new DateTime(), new DateTime(), "status");
-        assertThat(availabilityDAOImpl.create(availability), is(FAILED_TO_CREATE));
+        assertThat(availabilityDAOImpl.save(availability), is(FAILED_TO_CREATE));
     }
 
     @Test
     public void doesNotSaveAvailabilityWithEmptyOwnerName(){
         availability = new Availability("ownerEmail", "", "title", new DateTime(), new DateTime(), "status");
-        assertThat(availabilityDAOImpl.create(availability), is(FAILED_TO_CREATE));
+        assertThat(availabilityDAOImpl.save(availability), is(FAILED_TO_CREATE));
     }
 
     @Test
     public void doesNotSaveAvailabilityWithEmptyTitle(){
         availability = new Availability("ownerEmail", "ownerName", "", new DateTime(), new DateTime(), "status");
-        assertThat(availabilityDAOImpl.create(availability), is(FAILED_TO_CREATE));
+        assertThat(availabilityDAOImpl.save(availability), is(FAILED_TO_CREATE));
     }
 
     @Test
     public void doesNotSaveAvailabilityWithEmptyStatus(){
         availability = new Availability("ownerEmail", "ownerName", "title", new DateTime(), new DateTime(), "");
-        assertThat(availabilityDAOImpl.create(availability), is(FAILED_TO_CREATE));
+        assertThat(availabilityDAOImpl.save(availability), is(FAILED_TO_CREATE));
     }
 
     @Test
     public void doesNotSaveAvailabilityWithEmptyStartDate(){
         availability = new Availability("ownerEmail", "ownerName", "title", null, new DateTime(), "status");
-        assertThat(availabilityDAOImpl.create(availability), is(FAILED_TO_CREATE));
+        assertThat(availabilityDAOImpl.save(availability), is(FAILED_TO_CREATE));
     }
 
     @Test
     public void doesNotSaveAvailabilityWithEmptyEndDate(){
         availability = new Availability("ownerEmail", "ownerName", "title", new DateTime(), null, "status");
-        assertThat(availabilityDAOImpl.create(availability), is(FAILED_TO_CREATE));
+        assertThat(availabilityDAOImpl.save(availability), is(FAILED_TO_CREATE));
     }
 
 

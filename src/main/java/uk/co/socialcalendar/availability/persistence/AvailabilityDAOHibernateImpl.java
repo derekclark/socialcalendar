@@ -3,9 +3,8 @@ package uk.co.socialcalendar.availability.persistence;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import uk.co.socialcalendar.availability.entities.Availability;
-import uk.co.socialcalendar.availability.useCases.AvailabilityFacade;
 
-public class AvailabilityDAOHibernateImpl implements AvailabilityFacade {
+public class AvailabilityDAOHibernateImpl implements AvailabilityDAO {
     SessionFactory sessionFactory;
 
     public void setSessionFactory(SessionFactory sessionFactory) {
@@ -13,7 +12,7 @@ public class AvailabilityDAOHibernateImpl implements AvailabilityFacade {
     }
 
     @Override
-    public int create(Availability availability) {
+    public int save(Availability availability) {
         if (!canUpdate(availability)) {
             return -1;
         }
@@ -23,7 +22,7 @@ public class AvailabilityDAOHibernateImpl implements AvailabilityFacade {
     }
 
     @Override
-    public Availability get(int id) {
+    public Availability read(int id) {
         return null;
     }
 
