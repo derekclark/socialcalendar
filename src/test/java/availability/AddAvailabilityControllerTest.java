@@ -1,6 +1,7 @@
 package availability;
 
 import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormat;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.ui.Model;
@@ -23,6 +24,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 public class AddAvailabilityControllerTest {
+    public static final String END_DATE = "2012-01-27 14:15";
+    public static final String START_DATE = "2012-01-25 11:12";
+    public static final String TITLE = "title";
     AddAvailabilityController controller;
     ModelAndView mav;
     Model model;
@@ -49,23 +53,30 @@ public class AddAvailabilityControllerTest {
 
     @Test
     public void addAvailabilityRendersAvailabilityView() throws IOException, ServletException {
-        List<String> selectedFriends = new ArrayList<String>();
-        mav = controller.addAvailability(selectedFriends, new Availability(),model, mockHttpServletRequest, mockHttpServletResponse);
+        mav = callAddAvailability(TITLE, START_DATE, END_DATE);
         assertEquals("availability",mav.getViewName());
+    }
+
+    public ModelAndView callAddAvailability(String title, String startDate, String endDate) throws IOException, ServletException {
+        List<String> selectedFriends = new ArrayList<String>();
+        return controller.addAvailability(TITLE, startDate, endDate, selectedFriends, model, mockHttpServletRequest, mockHttpServletResponse);
     }
 
     @Test
     public void addAvailabilityReturnsExpectedMessage() throws IOException, ServletException {
-        List<String> selectedFriends = new ArrayList<String>();
-        mav = controller.addAvailability(selectedFriends, new Availability(),model, mockHttpServletRequest, mockHttpServletResponse);
+        mav = callAddAvailability(TITLE, START_DATE, END_DATE);
         assertEquals("You have just created a new availability",mav.getModelMap().get("message"));
     }
 
     @Test
     public void addAvailabilityShouldCallCreateAvailability() throws IOException, ServletException {
-        List<String> selectedFriends = new ArrayList<String>();
-        Availability availability = new Availability("ownerEmail", "ownerName", "title", new LocalDateTime(), new LocalDateTime(), "status");
-        mav = controller.addAvailability(selectedFriends, availability, model, mockHttpServletRequest, mockHttpServletResponse);
-        verify(mockAvailabilityFacade).create(availability);
+        mav = callAddAvailability(TITLE, START_DATE, END_DATE);
+        String pattern = "yyyy-MM-dd HH:mm";
+        LocalDateTime startDateFormatted = LocalDateTime.parse(START_DATE, DateTimeFormat.forPattern(pattern));
+        LocalDateTime endDateFormatted = LocalDateTime.parse(END_DATE, DateTimeFormat.forPattern(pattern));
+
+        Availability expectedAvailability = new Availability("ownerEmail","ownerName", TITLE,
+                startDateFormatted, endDateFormatted, "status");
+        verify(mockAvailabilityFacade).create(expectedAvailability);
     }
 }

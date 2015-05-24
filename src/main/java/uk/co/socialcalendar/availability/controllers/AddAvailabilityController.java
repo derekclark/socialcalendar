@@ -1,5 +1,7 @@
 package uk.co.socialcalendar.availability.controllers;
 
+import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,7 +14,6 @@ import uk.co.socialcalendar.availability.useCases.AvailabilityFacade;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
@@ -32,14 +33,17 @@ public class AddAvailabilityController {
             @RequestParam(value="endDate", required=false,defaultValue="") String endDate,
             @RequestParam(value="selectedFriends", required=false, defaultValue="")
                 List<String> friendNotifyList,
-            @Valid Availability availabilities,
+//            @Valid Availability availabilities,
             Model m,
             HttpServletRequest request,
             HttpServletResponse response) throws IOException, ServletException {
 
-//        availabilityFacade.create(
-//                new Availability("ownerEmail", "ownerName", "title", new LocalDateTime("2012-06-15"), new LocalDateTime("2013-01-02"), "status"));
-        availabilityFacade.create(availabilities);
+        String pattern = "yyyy-MM-dd HH:mm";
+        LocalDateTime startDateFormatted = LocalDateTime.parse(startDate, DateTimeFormat.forPattern(pattern));
+        LocalDateTime endDateFormatted = LocalDateTime.parse(endDate, DateTimeFormat.forPattern(pattern));
+        Availability availability = new Availability("ownerEmail","ownerName",title,
+                startDateFormatted, endDateFormatted, "status");
+        availabilityFacade.create(availability);
         ModelAndView mav = new ModelAndView("availability");
         mav.addObject("message","You have just created a new availability");
         return mav;
