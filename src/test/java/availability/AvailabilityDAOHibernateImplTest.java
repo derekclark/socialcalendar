@@ -7,11 +7,12 @@ import org.junit.Before;
 import org.junit.Test;
 import uk.co.socialcalendar.availability.entities.Availability;
 import uk.co.socialcalendar.availability.persistence.AvailabilityDAOHibernateImpl;
+import uk.co.socialcalendar.availability.persistence.AvailabilityHibernateModel;
 
 import static junit.framework.TestCase.assertTrue;
-import static org.mockito.Matchers.anyObject;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class AvailabilityDAOHibernateImplTest {
@@ -33,6 +34,19 @@ public class AvailabilityDAOHibernateImplTest {
         mockSessionFactory = mock(SessionFactory.class);
         availabilityDAOImpl.setSessionFactory(mockSessionFactory);
         when(mockSessionFactory.getCurrentSession()).thenReturn(mockSession);
+        AvailabilityHibernateModel availabilityHibernateModel = convertToHibernateModel(availability);
+        when(mockSession.save(availabilityHibernateModel)).thenReturn(1);
+    }
+
+    public AvailabilityHibernateModel convertToHibernateModel(Availability availability){
+        AvailabilityHibernateModel availabilityHibernateModel = new AvailabilityHibernateModel();
+        availabilityHibernateModel.setOwnerEmail(availability.getOwnerEmail());
+        availabilityHibernateModel.setTitle(availability.getTitle());
+        availabilityHibernateModel.setEndDate(availability.getEndDate());
+        availabilityHibernateModel.setStartDate(availability.getStartDate());
+        availabilityHibernateModel.setOwnerName(availability.getOwnerName());
+        availabilityHibernateModel.setStatus(availability.getStatus());
+        return availabilityHibernateModel;
     }
 
     @Test
@@ -41,9 +55,29 @@ public class AvailabilityDAOHibernateImplTest {
     }
 
     @Test
-    public void canSaveAvailability(){
-        when(mockSession.save(anyObject())).thenReturn(1);
-        availabilityDAOImpl.create(availability);
-        verify(mockSession).save(anyObject());
+    public void canConvertAvailabilityToHibernateModel(){
+        AvailabilityHibernateModel expectedModel = convertToHibernateModel(availability);
+        AvailabilityHibernateModel actualModel = availabilityDAOImpl.convertToHibernateModel(availability);
+        assertThat(expectedModel.getStatus(), is(actualModel.getStatus()));
+        assertThat(expectedModel.getId(), is(actualModel.getId()));
+        assertThat(expectedModel.getOwnerEmail(), is(actualModel.getOwnerEmail()));
+        assertThat(expectedModel.getOwnerName(), is(actualModel.getOwnerName()));
+        assertThat(expectedModel.getStartDate(), is(actualModel.getStartDate()));
+        assertThat(expectedModel.getEndDate(), is(actualModel.getEndDate()));
+        assertThat(expectedModel.getTitle(), is(actualModel.getTitle()));
     }
+
+//    @Test
+//    public void canSaveAvailability(){
+//        assertThat(availabilityDAOImpl.create(availability), is(1));
+//    }
+
+
+//    @Test
+//    public void doesNotSaveAvailabilityWithEmptyOwnerEmail(){
+//        availability = new Availability("", "ownerName", "title", new DateTime(), new DateTime(), "status");
+//        assertThat(availabilityDAOImpl.create(availability), is(-1));
+//    }
+
+
 }

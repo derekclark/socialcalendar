@@ -14,6 +14,9 @@ public class AvailabilityDAOHibernateImpl implements AvailabilityFacade {
 
     @Override
     public int create(Availability availability) {
+        if (availability.getOwnerEmail().isEmpty()) {
+            return -1;
+        }
         Session session = sessionFactory.getCurrentSession();
         int id = (int) session.save(new AvailabilityHibernateModel());
         return id;
@@ -28,4 +31,16 @@ public class AvailabilityDAOHibernateImpl implements AvailabilityFacade {
     public boolean update(Availability availability) {
         return false;
     }
+
+    public AvailabilityHibernateModel convertToHibernateModel(Availability availability){
+        AvailabilityHibernateModel availabilityHibernateModel = new AvailabilityHibernateModel();
+        availabilityHibernateModel.setOwnerEmail(availability.getOwnerEmail());
+        availabilityHibernateModel.setTitle(availability.getTitle());
+        availabilityHibernateModel.setEndDate(availability.getEndDate());
+        availabilityHibernateModel.setStartDate(availability.getStartDate());
+        availabilityHibernateModel.setOwnerName(availability.getOwnerName());
+        availabilityHibernateModel.setStatus(availability.getStatus());
+        return availabilityHibernateModel;
+    }
+
 }
