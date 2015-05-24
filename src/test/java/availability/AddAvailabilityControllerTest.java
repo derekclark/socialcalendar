@@ -27,6 +27,7 @@ public class AddAvailabilityControllerTest {
     public static final String END_DATE = "2012-01-27 14:15";
     public static final String START_DATE = "2012-01-25 11:12";
     public static final String TITLE = "title";
+    public static final String DATE_FORMAT_PATTERN = "yyyy-MM-dd HH:mm";
     AddAvailabilityController controller;
     ModelAndView mav;
     Model model;
@@ -59,7 +60,7 @@ public class AddAvailabilityControllerTest {
 
     public ModelAndView callAddAvailability(String title, String startDate, String endDate) throws IOException, ServletException {
         List<String> selectedFriends = new ArrayList<String>();
-        return controller.addAvailability(TITLE, startDate, endDate, selectedFriends, model, mockHttpServletRequest, mockHttpServletResponse);
+        return controller.addAvailability(title, startDate, endDate, selectedFriends, model, mockHttpServletRequest, mockHttpServletResponse);
     }
 
     @Test
@@ -71,12 +72,14 @@ public class AddAvailabilityControllerTest {
     @Test
     public void addAvailabilityShouldCallCreateAvailability() throws IOException, ServletException {
         mav = callAddAvailability(TITLE, START_DATE, END_DATE);
-        String pattern = "yyyy-MM-dd HH:mm";
-        LocalDateTime startDateFormatted = LocalDateTime.parse(START_DATE, DateTimeFormat.forPattern(pattern));
-        LocalDateTime endDateFormatted = LocalDateTime.parse(END_DATE, DateTimeFormat.forPattern(pattern));
-
-        Availability expectedAvailability = new Availability("ownerEmail","ownerName", TITLE,
-                startDateFormatted, endDateFormatted, "status");
+        Availability expectedAvailability = createExpectedAvailability();
         verify(mockAvailabilityFacade).create(expectedAvailability);
+    }
+
+    public Availability createExpectedAvailability(){
+        LocalDateTime startDateFormatted = LocalDateTime.parse(START_DATE, DateTimeFormat.forPattern(DATE_FORMAT_PATTERN));
+        LocalDateTime endDateFormatted = LocalDateTime.parse(END_DATE, DateTimeFormat.forPattern(DATE_FORMAT_PATTERN));
+        return new Availability("ownerEmail","ownerName", TITLE,
+                startDateFormatted, endDateFormatted, "status");
     }
 }
