@@ -101,4 +101,31 @@ public class AvailabilityHibernateModel {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public boolean equals(Object obj){
+        if (this == obj){
+            return true;
+        }
+        if ((obj == null) || (obj.getClass() != this.getClass())){
+            return false;
+        }
+        AvailabilityHibernateModel availabilityHibernateModel = (AvailabilityHibernateModel) obj;
+
+        if (! this.title.equals(availabilityHibernateModel.getTitle())) return false;
+        if (! this.ownerEmail.equals(availabilityHibernateModel.getOwnerEmail())) return false;
+        if (! this.ownerName.equals(availabilityHibernateModel.getOwnerName())) return false;
+        if (! this.startDate.equals(availabilityHibernateModel.getStartDate())) return false;
+        if (! this.endDate.equals(availabilityHibernateModel.getEndDate())) return false;
+        if (! this.status.equals(availabilityHibernateModel.getStatus())) return false;
+
+        return id == availabilityHibernateModel.getId();
+    }
+
+    public int hashcode(){
+        int hash = 7;
+        hash = 31 * hash + id + title.hashCode() + ownerEmail.hashCode() + ownerName.hashCode() +
+                startDate.hashCode() + endDate.hashCode() + status.hashCode();
+        return hash;
+    }
+
 }

@@ -58,13 +58,7 @@ public class AvailabilityDAOHibernateImplTest {
     public void canConvertAvailabilityToHibernateModel(){
         AvailabilityHibernateModel expectedModel = convertToHibernateModel(availability);
         AvailabilityHibernateModel actualModel = availabilityDAOImpl.convertToHibernateModel(availability);
-        assertThat(expectedModel.getStatus(), is(actualModel.getStatus()));
-        assertThat(expectedModel.getId(), is(actualModel.getId()));
-        assertThat(expectedModel.getOwnerEmail(), is(actualModel.getOwnerEmail()));
-        assertThat(expectedModel.getOwnerName(), is(actualModel.getOwnerName()));
-        assertThat(expectedModel.getStartDate(), is(actualModel.getStartDate()));
-        assertThat(expectedModel.getEndDate(), is(actualModel.getEndDate()));
-        assertThat(expectedModel.getTitle(), is(actualModel.getTitle()));
+        assertThat(expectedModel, is(actualModel));
     }
 
 //    @Test
