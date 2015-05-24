@@ -18,7 +18,7 @@ public class AvailabilityDAOHibernateImpl implements AvailabilityFacade {
             return -1;
         }
         Session session = sessionFactory.getCurrentSession();
-        int id = (int) session.save(new AvailabilityHibernateModel());
+        int id = (int) session.save(convertToHibernateModel(availability));
         return id;
     }
 

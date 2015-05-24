@@ -61,17 +61,17 @@ public class AvailabilityDAOHibernateImplTest {
         assertThat(expectedModel, is(actualModel));
     }
 
-//    @Test
-//    public void canSaveAvailability(){
-//        assertThat(availabilityDAOImpl.create(availability), is(1));
-//    }
+    @Test
+    public void canSaveAvailability(){
+        assertThat(availabilityDAOImpl.create(availability), is(1));
+    }
 
 
-//    @Test
-//    public void doesNotSaveAvailabilityWithEmptyOwnerEmail(){
-//        availability = new Availability("", "ownerName", "title", new DateTime(), new DateTime(), "status");
-//        assertThat(availabilityDAOImpl.create(availability), is(-1));
-//    }
+    @Test
+    public void doesNotSaveAvailabilityWithEmptyOwnerEmail(){
+        availability = new Availability("", "ownerName", "title", new DateTime(), new DateTime(), "status");
+        assertThat(availabilityDAOImpl.create(availability), is(-1));
+    }
 
 
 }
