@@ -14,7 +14,7 @@ public class AvailabilityDAOHibernateImpl implements AvailabilityFacade {
 
     @Override
     public int create(Availability availability) {
-        if (availability.getOwnerEmail().isEmpty()) {
+        if (!canUpdate(availability)) {
             return -1;
         }
         Session session = sessionFactory.getCurrentSession();
@@ -30,6 +30,19 @@ public class AvailabilityDAOHibernateImpl implements AvailabilityFacade {
     @Override
     public boolean update(Availability availability) {
         return false;
+    }
+
+    public boolean canUpdate(Availability availability){
+        if (availability.getOwnerEmail().isEmpty() ||
+                availability.getOwnerName().isEmpty() ||
+                availability.getTitle().isEmpty() ||
+                availability.getStatus().isEmpty() ||
+                availability.getStartDate() == null ||
+                availability.getEndDate() == null
+                ) {
+            return false;
+        }
+        return true;
     }
 
     public AvailabilityHibernateModel convertToHibernateModel(Availability availability){
