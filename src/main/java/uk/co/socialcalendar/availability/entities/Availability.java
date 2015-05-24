@@ -1,19 +1,19 @@
 package uk.co.socialcalendar.availability.entities;
 
-import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 
 public class Availability {
 
     private int id;
     private String title;
-    private DateTime startDate;
-    private DateTime endDate;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
 
     private String ownerEmail;
     private String ownerName;
     private String status;
 
-    public Availability(String ownerEmail, String ownerName, String title, DateTime startDate, DateTime endDate, String status) {
+    public Availability(String ownerEmail, String ownerName, String title, LocalDateTime startDate, LocalDateTime endDate, String status) {
         this.title = title;
         this.ownerEmail = ownerEmail;
         this.ownerName = ownerName;
@@ -54,19 +54,19 @@ public class Availability {
         this.status = status;
     }
 
-    public DateTime getEndDate() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(DateTime endDate) {
+    public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
     }
 
-    public DateTime getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(DateTime startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
 

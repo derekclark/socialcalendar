@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import uk.co.socialcalendar.availability.entities.Availability;
 import uk.co.socialcalendar.availability.useCases.AvailabilityFacade;
@@ -26,15 +27,18 @@ public class AddAvailabilityController {
 
     @RequestMapping(value="addAvailability", method= RequestMethod.POST)
     public ModelAndView addAvailability(
-//            @RequestParam(value="title", required=false,defaultValue="") String title,
-//            @RequestParam(value="startDate", required=false,defaultValue="") String startDate,
-//            @RequestParam(value="endDate", required=false,defaultValue="") String endDate,
-//            @RequestParam(value="selectedFriends", required=false, defaultValue="")
-            List<String> friendNotifyList,
-            @Valid Availability availabilities,Model m,
+            @RequestParam(value="title", required=false,defaultValue="") String title,
+            @RequestParam(value="startDate", required=false,defaultValue="") String startDate,
+            @RequestParam(value="endDate", required=false,defaultValue="") String endDate,
+            @RequestParam(value="selectedFriends", required=false, defaultValue="")
+                List<String> friendNotifyList,
+            @Valid Availability availabilities,
+            Model m,
             HttpServletRequest request,
             HttpServletResponse response) throws IOException, ServletException {
 
+//        availabilityFacade.create(
+//                new Availability("ownerEmail", "ownerName", "title", new LocalDateTime("2012-06-15"), new LocalDateTime("2013-01-02"), "status"));
         availabilityFacade.create(availabilities);
         ModelAndView mav = new ModelAndView("availability");
         mav.addObject("message","You have just created a new availability");

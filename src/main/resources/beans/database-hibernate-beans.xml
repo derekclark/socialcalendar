@@ -37,6 +37,8 @@
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
 
-    <bean id="availabilityDAO" class="uk.co.socialcalendar.availability.persistence.InMemoryAvailability" />
+    <bean id="availabilityDAO" class="uk.co.socialcalendar.availability.persistence.AvailabilityDAOHibernateImpl">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
 
 </beans>

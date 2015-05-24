@@ -1,18 +1,16 @@
 package availability;
 
-import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 import org.junit.Before;
 import org.junit.Test;
 import uk.co.socialcalendar.availability.entities.Availability;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class AvailabilityTest {
     public static final String OWNER_EMAIL = "ownerEmail";
-    public static final DateTime START_DATE = new DateTime(2015, 1, 2, 0, 0, 0);
-    public static final DateTime END_DATE = new DateTime(2015, 1, 2, 1, 2, 30);
+    public static final LocalDateTime START_DATE = new LocalDateTime(2015, 1, 2, 0, 0, 0);
+    public static final LocalDateTime END_DATE = new LocalDateTime(2015, 1, 2, 1, 2, 30);
     public static final String OWNER_NAME = "ownerName";
     public static final String TITLE = "title";
     public static final String STATUS = "status";
@@ -35,14 +33,14 @@ public class AvailabilityTest {
 
     @Test
     public void canSetStartDate(){
-        DateTime dt = new DateTime();
+        LocalDateTime dt = new LocalDateTime();
         availability.setStartDate(dt);
         assertEquals(dt,availability.getStartDate());
     }
 
     @Test
     public void canSetEndDate(){
-        DateTime dt = new DateTime();
+        LocalDateTime dt = new LocalDateTime();
         availability.setEndDate(dt);
         assertEquals(dt,availability.getEndDate());
     }
@@ -112,7 +110,7 @@ public class AvailabilityTest {
 
     @Test
     public void testNotEqualsStartDate(){
-        DateTime differentDateTime = new DateTime();
+        LocalDateTime differentDateTime = new LocalDateTime();
         Availability availability1 = new Availability(OWNER_EMAIL, OWNER_NAME, TITLE,START_DATE, END_DATE, STATUS);
         Availability availability2 = new Availability(OWNER_EMAIL, OWNER_NAME, TITLE,differentDateTime, END_DATE, STATUS);
         assertNotEquals(availability1, availability2);
@@ -120,7 +118,7 @@ public class AvailabilityTest {
 
     @Test
     public void testNotEqualsEndDate(){
-        DateTime differentDateTime = new DateTime();
+        LocalDateTime differentDateTime = new LocalDateTime();
         Availability availability1 = new Availability(OWNER_EMAIL, OWNER_NAME, TITLE,START_DATE, END_DATE, STATUS);
         Availability availability2 = new Availability(OWNER_EMAIL, OWNER_NAME, TITLE,START_DATE, differentDateTime, STATUS);
         assertNotEquals(availability1, availability2);

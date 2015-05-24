@@ -1,6 +1,6 @@
 package availability;
 
-import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 import org.junit.Before;
 import org.junit.Test;
 import uk.co.socialcalendar.availability.entities.Availability;
@@ -15,14 +15,14 @@ import static org.junit.Assert.assertTrue;
 public class InMemoryAvailabilityTest {
     public static final int NON_EXISTENT_ID = 9999;
     AvailabilityDAO availabilityDAO;
-    DateTime startDate, endDate;
+    LocalDateTime startDate, endDate;
     Availability availability1, availability2;
 
     @Before
     public void setup(){
         availabilityDAO = new InMemoryAvailability();
-        startDate = new DateTime();
-        endDate = new DateTime();
+        startDate = new LocalDateTime();
+        endDate = new LocalDateTime();
         availability1 = new Availability("ownerEmail1","ownerName1","title1", startDate, endDate, "status1");
         availability2 = new Availability("ownerEmail2","ownerName2","title2", startDate, endDate, "status2");
     }

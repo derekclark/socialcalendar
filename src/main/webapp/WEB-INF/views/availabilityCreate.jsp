@@ -89,7 +89,7 @@ function validateForm() {
     <img id="edit-image" src="${context}/resources/img/edit.png">    
     <hr>
 
-    <form:form modelAttribute="newAvailability" action="/createAvailability" onsubmit="return validateForm()">
+    <form:form modelAttribute="newAvailability" action="/addAvailability" onsubmit="return validateForm()">
     <table border="0" cellpadding="10" width="100%">
     <tr>
       <td align="top">

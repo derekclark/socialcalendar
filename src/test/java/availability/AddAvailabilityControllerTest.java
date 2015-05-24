@@ -1,6 +1,6 @@
 package availability;
 
-import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.ui.Model;
@@ -64,8 +64,8 @@ public class AddAvailabilityControllerTest {
     @Test
     public void addAvailabilityShouldCallCreateAvailability() throws IOException, ServletException {
         List<String> selectedFriends = new ArrayList<String>();
-        Availability availability = new Availability("ownerEmail", "ownerName", "title", new DateTime(), new DateTime(), "status");
-        mav = controller.addAvailability(selectedFriends, availability,model, mockHttpServletRequest, mockHttpServletResponse);
+        Availability availability = new Availability("ownerEmail", "ownerName", "title", new LocalDateTime(), new LocalDateTime(), "status");
+        mav = controller.addAvailability(selectedFriends, availability, model, mockHttpServletRequest, mockHttpServletResponse);
         verify(mockAvailabilityFacade).create(availability);
     }
 }

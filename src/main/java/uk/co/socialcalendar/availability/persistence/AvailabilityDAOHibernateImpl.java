@@ -4,6 +4,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import uk.co.socialcalendar.availability.entities.Availability;
 
+import javax.transaction.Transactional;
+
 public class AvailabilityDAOHibernateImpl implements AvailabilityDAO {
     SessionFactory sessionFactory;
 
@@ -12,6 +14,7 @@ public class AvailabilityDAOHibernateImpl implements AvailabilityDAO {
     }
 
     @Override
+    @Transactional
     public int save(Availability availability) {
         if (!canUpdate(availability)) {
             return -1;
@@ -22,11 +25,13 @@ public class AvailabilityDAOHibernateImpl implements AvailabilityDAO {
     }
 
     @Override
+    @Transactional
     public Availability read(int id) {
         return null;
     }
 
     @Override
+    @Transactional
     public boolean update(Availability availability) {
         return false;
     }

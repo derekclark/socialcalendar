@@ -1,6 +1,6 @@
 package availability;
 
-import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 import org.junit.Before;
 import org.junit.Test;
 import uk.co.socialcalendar.availability.entities.Availability;
@@ -15,8 +15,8 @@ public class AvailabilityHibernateModelTest {
     public static final String NAME = "name";
     public static final String TITLE = "title";
     public static final String STATUS = "status";
-    public static final DateTime START_DATE = new DateTime();
-    public static final DateTime END_DATE = new DateTime();
+    public static final LocalDateTime START_DATE = new LocalDateTime();
+    public static final LocalDateTime END_DATE = new LocalDateTime();
     AvailabilityHibernateModel model;
     Availability availability;
 

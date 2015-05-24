@@ -10,5 +10,6 @@
     <property name="show_sql">false</property>  
     <mapping class="uk.co.socialcalendar.friend.persistence.FriendHibernateModel"/>
     <mapping class="uk.co.socialcalendar.user.persistence.UserHibernateModel"/>
+    <mapping class="uk.co.socialcalendar.availability.persistence.AvailabilityHibernateModel"/>
   </session-factory>
 </hibernate-configuration>

@@ -1,13 +1,12 @@
 package uk.co.socialcalendar.availability.persistence;
 
-import org.joda.time.DateTime;
+import org.hibernate.annotations.Type;
+import org.joda.time.LocalDateTime;
 import uk.co.socialcalendar.availability.entities.Availability;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
+@Entity
 public class AvailabilityHibernateModel {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -18,10 +17,12 @@ public class AvailabilityHibernateModel {
     private String title;
 
     @Column(name="START_DATE")
-    private DateTime startDate;
+    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
+    private LocalDateTime startDate;
 
     @Column(name="END_DATE")
-    private DateTime endDate;
+    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
+    private LocalDateTime endDate;
 
     @Column(name="OWNER_EMAIL")
     private String ownerEmail;
@@ -62,19 +63,19 @@ public class AvailabilityHibernateModel {
         this.title = title;
     }
 
-    public DateTime getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(DateTime startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public DateTime getEndDate() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(DateTime endDate) {
+    public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
     }
 

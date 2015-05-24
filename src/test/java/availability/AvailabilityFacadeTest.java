@@ -1,6 +1,6 @@
 package availability;
 
-import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 import org.junit.Before;
 import org.junit.Test;
 import uk.co.socialcalendar.availability.entities.Availability;
@@ -16,14 +16,14 @@ public class AvailabilityFacadeTest {
     AvailabilityFacadeImpl availabilityFacade;
     AvailabilityDAO availabilityDAO;
     Availability availability1, availability2;
-    DateTime startDate, endDate;
+    LocalDateTime startDate, endDate;
     @Before
     public void setup(){
         availabilityFacade = new AvailabilityFacadeImpl();
         availabilityDAO = new InMemoryAvailability();
         availabilityFacade.setAvailabilityDAO(availabilityDAO);
-        startDate = new DateTime();
-        endDate = new DateTime();
+        startDate = new LocalDateTime();
+        endDate = new LocalDateTime();
         availability1 = new Availability("ownerEmail","ownerName","title", startDate, endDate, "status");
         availability2 = new Availability("ownerEmail","ownerName","title", startDate, endDate, "status");
     }

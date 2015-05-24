@@ -2,7 +2,7 @@ package availability;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 import org.junit.Before;
 import org.junit.Test;
 import uk.co.socialcalendar.availability.entities.Availability;
@@ -26,7 +26,7 @@ public class AvailabilityDAOHibernateImplTest {
     @Before
     public void setup(){
         availabilityDAOImpl = new AvailabilityDAOHibernateImpl();
-        availability = new Availability("ownerEmail", "ownerName", "title", new DateTime(), new DateTime(), "status");
+        availability = new Availability("ownerEmail", "ownerName", "title", new LocalDateTime(), new LocalDateTime(), "status");
         setupMocks();
     }
 
@@ -70,37 +70,37 @@ public class AvailabilityDAOHibernateImplTest {
 
     @Test
     public void doesNotSaveAvailabilityWithEmptyOwnerEmail(){
-        availability = new Availability("", "ownerName", "title", new DateTime(), new DateTime(), "status");
+        availability = new Availability("", "ownerName", "title", new LocalDateTime(), new LocalDateTime(), "status");
         assertThat(availabilityDAOImpl.save(availability), is(FAILED_TO_CREATE));
     }
 
     @Test
     public void doesNotSaveAvailabilityWithEmptyOwnerName(){
-        availability = new Availability("ownerEmail", "", "title", new DateTime(), new DateTime(), "status");
+        availability = new Availability("ownerEmail", "", "title", new LocalDateTime(), new LocalDateTime(), "status");
         assertThat(availabilityDAOImpl.save(availability), is(FAILED_TO_CREATE));
     }
 
     @Test
     public void doesNotSaveAvailabilityWithEmptyTitle(){
-        availability = new Availability("ownerEmail", "ownerName", "", new DateTime(), new DateTime(), "status");
+        availability = new Availability("ownerEmail", "ownerName", "", new LocalDateTime(), new LocalDateTime(), "status");
         assertThat(availabilityDAOImpl.save(availability), is(FAILED_TO_CREATE));
     }
 
     @Test
     public void doesNotSaveAvailabilityWithEmptyStatus(){
-        availability = new Availability("ownerEmail", "ownerName", "title", new DateTime(), new DateTime(), "");
+        availability = new Availability("ownerEmail", "ownerName", "title", new LocalDateTime(), new LocalDateTime(), "");
         assertThat(availabilityDAOImpl.save(availability), is(FAILED_TO_CREATE));
     }
 
     @Test
     public void doesNotSaveAvailabilityWithEmptyStartDate(){
-        availability = new Availability("ownerEmail", "ownerName", "title", null, new DateTime(), "status");
+        availability = new Availability("ownerEmail", "ownerName", "title", null, new LocalDateTime(), "status");
         assertThat(availabilityDAOImpl.save(availability), is(FAILED_TO_CREATE));
     }
 
     @Test
     public void doesNotSaveAvailabilityWithEmptyEndDate(){
-        availability = new Availability("ownerEmail", "ownerName", "title", new DateTime(), null, "status");
+        availability = new Availability("ownerEmail", "ownerName", "title", new LocalDateTime(), null, "status");
         assertThat(availabilityDAOImpl.save(availability), is(FAILED_TO_CREATE));
     }
 
