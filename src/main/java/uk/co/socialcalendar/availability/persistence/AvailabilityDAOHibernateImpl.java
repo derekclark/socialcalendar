@@ -39,7 +39,6 @@ public class AvailabilityDAOHibernateImpl implements AvailabilityDAO {
     public boolean canUpdate(Availability availability){
         if (availability.getOwnerEmail().isEmpty() ||
                 availability.getOwnerName().isEmpty() ||
-                availability.getTitle().isEmpty() ||
                 availability.getStatus().isEmpty() ||
                 availability.getStartDate() == null ||
                 availability.getEndDate() == null

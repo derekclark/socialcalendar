@@ -43,6 +43,7 @@ public class AddAvailabilityController {
         LocalDateTime endDateFormatted = LocalDateTime.parse(endDate, DateTimeFormat.forPattern(pattern));
         Availability availability = new Availability("ownerEmail","ownerName",title,
                 startDateFormatted, endDateFormatted, "status");
+        System.out.println("startDate=" + startDate);
         availabilityFacade.create(availability);
         ModelAndView mav = new ModelAndView("availability");
         mav.addObject("message","You have just created a new availability");

@@ -11,6 +11,7 @@ import uk.co.socialcalendar.availability.persistence.AvailabilityHibernateModel;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -81,9 +82,11 @@ public class AvailabilityDAOHibernateImplTest {
     }
 
     @Test
-    public void doesNotSaveAvailabilityWithEmptyTitle(){
+    public void doesSaveAvailabilityWithEmptyTitle(){
         availability = new Availability("ownerEmail", "ownerName", "", new LocalDateTime(), new LocalDateTime(), "status");
-        assertThat(availabilityDAOImpl.save(availability), is(FAILED_TO_CREATE));
+        AvailabilityHibernateModel availabilityHibernateModel = convertToHibernateModel(availability);
+        when(mockSession.save(availabilityHibernateModel)).thenReturn(1);
+        assertThat(availabilityDAOImpl.save(availability), greaterThan(FAILED_TO_CREATE));
     }
 
     @Test
