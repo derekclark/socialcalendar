@@ -79,7 +79,7 @@ public class AddAvailabilityController {
 
     public ModelAndView buildModel(){
         ModelAndView mav = new ModelAndView("availabilityCreate");
-        mav.addObject("message","You have just created a new availability");
+        mav.addObject("alertMessage","You have just created a new availability");
         mav.addObject("section","availability");
         mav.addObject("newAvailability",new Availability());
         mav.addObject("friendList", friendModelFacade.getFriendModelList(me));

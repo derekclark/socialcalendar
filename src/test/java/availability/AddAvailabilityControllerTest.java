@@ -93,7 +93,7 @@ public class AddAvailabilityControllerTest {
     @Test
     public void addAvailabilityReturnsExpectedMessage() throws IOException, ServletException {
         mav = callAddAvailability(TITLE, START_DATE, END_DATE);
-        assertEquals("You have just created a new availability",mav.getModelMap().get("message"));
+        assertEquals("You have just created a new availability",mav.getModelMap().get("alertMessage"));
     }
 
     @Test

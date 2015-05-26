@@ -22,6 +22,7 @@
                 <property name="availabilityFacade" ref="availabilityFacade"/>
                 <property name="sessionAttributes" ref="sessionAttributes"/>
                 <property name="userFacade" ref="userFacade"/>
+                <property name="friendModelFacade" ref="friendModelFacade"/>                
     </bean>
 
     <!--DAO-->
