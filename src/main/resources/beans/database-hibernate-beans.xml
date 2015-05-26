@@ -28,11 +28,6 @@
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
 
-	<bean id="friendDAO" class="uk.co.socialcalendar.friend.persistence.FriendDAOHibernateImpl">
-		<property name="sessionFactory" ref="sessionFactory" />
-		<property name="friendValidator" ref="friendValidator" />
-	</bean>
-
     <bean id="userDAO" class="uk.co.socialcalendar.user.persistence.UserDAOHibernateImpl">
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>

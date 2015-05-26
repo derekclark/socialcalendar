@@ -10,5 +10,4 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
 	<bean id="user" class="uk.co.socialcalendar.user.entities.User" />
-	<bean id="friend" class="uk.co.socialcalendar.friend.entities.Friend" />
 </beans>
