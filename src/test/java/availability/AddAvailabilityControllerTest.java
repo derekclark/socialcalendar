@@ -133,4 +133,11 @@ public class AddAvailabilityControllerTest {
         assertEquals(expectedDate, fakeAvailabilityFacade.getAvailability().getEndDate());
     }
 
+    @Test
+    public void setsAvailabilityWithStatus() throws IOException, ServletException {
+        mav = callAddAvailability(TITLE, START_DATE, END_DATE);
+        assertEquals("status", fakeAvailabilityFacade.getAvailability().getStatus());
+    }
+
+
 }
