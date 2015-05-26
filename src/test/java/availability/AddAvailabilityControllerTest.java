@@ -9,14 +9,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
 import uk.co.socialcalendar.authentication.SessionAttributes;
 import uk.co.socialcalendar.availability.controllers.AddAvailabilityController;
-import uk.co.socialcalendar.availability.entities.Availability;
 import uk.co.socialcalendar.user.entities.User;
 import uk.co.socialcalendar.user.useCases.UserFacade;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +35,6 @@ public class AddAvailabilityControllerTest {
     Model model;
     HttpServletRequest mockHttpServletRequest;
     HttpServletResponse mockHttpServletResponse;
-    HttpSession mockSession;
     FakeAvailabilityFacadeImpl fakeAvailabilityFacade;
     UserFacade mockUserFacade;
     User user;
@@ -47,24 +44,26 @@ public class AddAvailabilityControllerTest {
     @Before
     public void setup(){
         controller = new AddAvailabilityController();
-
+        model = new ExtendedModelMap();
         user = new User(ME, MY_NAME, "facebookId");
         fakeAvailabilityFacade = new FakeAvailabilityFacadeImpl();
         setMocks();
-        setupHttpSessions();
+        controller.setAvailabilityFacade(fakeAvailabilityFacade);
+        controller.setUserFacade(mockUserFacade);
     }
 
     public void setMocks(){
-        mockUserFacade = mock(UserFacade.class);
-        controller.setAvailabilityFacade(fakeAvailabilityFacade);
-        controller.setUserFacade(mockUserFacade);
-        when(mockUserFacade.getUser(ME)).thenReturn(user);
+        setupMockUserFacade();
+        setupMockSessionAttributes();
     }
 
-    public void setupHttpSessions(){
-        model = new ExtendedModelMap();
+    public void setupMockUserFacade(){
+        mockUserFacade = mock(UserFacade.class);
+        when(mockUserFacade.getUser(ME)).thenReturn(user);
+
+    }
+    public void setupMockSessionAttributes(){
         mockSessionAttributes = mock(SessionAttributes.class);
-        mockSession = mock(HttpSession.class);
         controller.setSessionAttributes(mockSessionAttributes);
         when(mockSessionAttributes.getLoggedInUserId((HttpServletRequest) anyObject())).thenReturn(ME);
     }
@@ -94,15 +93,7 @@ public class AddAvailabilityControllerTest {
     @Test
     public void addAvailabilityShouldCallCreateAvailability() throws IOException, ServletException {
         mav = callAddAvailability(TITLE, START_DATE, END_DATE);
-        Availability expectedAvailability = createExpectedAvailability();
         assertTrue(fakeAvailabilityFacade.isCreateMethodCalled());
-    }
-
-    public Availability createExpectedAvailability(){
-        LocalDateTime startDateFormatted = LocalDateTime.parse(START_DATE, DateTimeFormat.forPattern(DATE_PATTERN));
-        LocalDateTime endDateFormatted = LocalDateTime.parse(END_DATE, DateTimeFormat.forPattern(DATE_PATTERN));
-        return new Availability(ME,MY_NAME, TITLE,
-                startDateFormatted, endDateFormatted, "status");
     }
 
     @Test
@@ -121,7 +112,6 @@ public class AddAvailabilityControllerTest {
     public void setsAvailabilityWithStartDate() throws IOException, ServletException {
         mav = callAddAvailability(TITLE, START_DATE, END_DATE);
         LocalDateTime expectedDate = LocalDateTime.parse(START_DATE, DateTimeFormat.forPattern(DATE_PATTERN));
-
         assertEquals(expectedDate, fakeAvailabilityFacade.getAvailability().getStartDate());
     }
 
@@ -129,7 +119,6 @@ public class AddAvailabilityControllerTest {
     public void setsAvailabilityWithEndDate() throws IOException, ServletException {
         mav = callAddAvailability(TITLE, START_DATE, END_DATE);
         LocalDateTime expectedDate = LocalDateTime.parse(END_DATE, DateTimeFormat.forPattern(DATE_PATTERN));
-
         assertEquals(expectedDate, fakeAvailabilityFacade.getAvailability().getEndDate());
     }
 
@@ -144,7 +133,4 @@ public class AddAvailabilityControllerTest {
         mav = callAddAvailability(TITLE, START_DATE, END_DATE);
         assertEquals(TITLE, fakeAvailabilityFacade.getAvailability().getTitle());
     }
-
-
-
 }
