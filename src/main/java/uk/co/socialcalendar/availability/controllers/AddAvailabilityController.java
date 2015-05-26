@@ -73,6 +73,7 @@ public class AddAvailabilityController {
         ModelAndView mav = new ModelAndView("availabilityCreate");
         mav.addObject("message","You have just created a new availability");
         mav.addObject("section","availability");
+        mav.addObject("newAvailability",new Availability());
         return mav;
     }
 }

@@ -21,6 +21,7 @@ import java.util.List;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
 
 public class AddAvailabilityControllerTest {
@@ -140,5 +141,10 @@ public class AddAvailabilityControllerTest {
         assertEquals("availability",mav.getModel().get("section"));
     }
 
+    @Test
+    public void modelReturnsNewAvailabilityAttribute() throws IOException, ServletException {
+        mav = callAddAvailability(TITLE, START_DATE, END_DATE);
+        assertNotNull(mav.getModelMap().get("newAvailability"));
+    }
 
 }
