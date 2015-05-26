@@ -17,8 +17,4 @@
         <property name="userDAO" ref="userDAO"/>
 	</bean>    	
 	<bean id="sessionAttributes" class="uk.co.socialcalendar.authentication.SessionAttributes" />
-	<bean id="availabilityFacade" class="uk.co.socialcalendar.availability.useCases.AvailabilityFacadeImpl">
-		<property name="availabilityDAO" ref="availabilityDAO"/>
-	</bean>
-
 </beans>

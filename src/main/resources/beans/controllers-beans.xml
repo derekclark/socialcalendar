@@ -28,15 +28,4 @@
                 <property name="sessionAttributes" ref="sessionAttributes"/>
     </bean>
 
-    <bean id="availabilityController" class="uk.co.socialcalendar.availability.controllers.AvailabilityController">
-                <property name="friendModelFacade" ref="friendModelFacade"/>
-                <property name="sessionAttributes" ref="sessionAttributes"/>
-    </bean>
-
-    <bean id="addAvailabilityController" class="uk.co.socialcalendar.availability.controllers.AddAvailabilityController">
-                <property name="availabilityFacade" ref="availabilityFacade"/>
-                <property name="sessionAttributes" ref="sessionAttributes"/>
-                <property name="userFacade" ref="userFacade"/>
-    </bean>
-
 </beans>

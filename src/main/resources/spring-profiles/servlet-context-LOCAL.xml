@@ -17,4 +17,5 @@
     <import resource="beans/database-hibernate-beans.xml"/>
     <import resource="beans/authentication-beans.xml"/>
     <import resource="beans/MailNotification-fake-beans.xml"/>
+    <import resource="beans/availability-beans.xml"/>
 </beans>
