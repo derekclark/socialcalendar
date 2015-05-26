@@ -70,8 +70,9 @@ public class AddAvailabilityController {
     }
 
     public ModelAndView buildModel(){
-        ModelAndView mav = new ModelAndView("availability");
+        ModelAndView mav = new ModelAndView("availabilityCreate");
         mav.addObject("message","You have just created a new availability");
+        mav.addObject("section","availability");
         return mav;
     }
 }

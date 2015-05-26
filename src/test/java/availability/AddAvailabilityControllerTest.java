@@ -76,7 +76,7 @@ public class AddAvailabilityControllerTest {
     @Test
     public void addAvailabilityRendersAvailabilityView() throws IOException, ServletException {
         mav = callAddAvailability(TITLE, START_DATE, END_DATE);
-        assertEquals("availability",mav.getViewName());
+        assertEquals("availabilityCreate",mav.getViewName());
     }
 
     public ModelAndView callAddAvailability(String title, String startDate, String endDate) throws IOException, ServletException {
@@ -133,4 +133,12 @@ public class AddAvailabilityControllerTest {
         mav = callAddAvailability(TITLE, START_DATE, END_DATE);
         assertEquals(TITLE, fakeAvailabilityFacade.getAvailability().getTitle());
     }
+
+    @Test
+    public void setsSectionAsAvailability() throws IOException, ServletException {
+        mav = callAddAvailability(TITLE, START_DATE, END_DATE);
+        assertEquals("availability",mav.getModel().get("section"));
+    }
+
+
 }
