@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
 import uk.co.socialcalendar.authentication.SessionAttributes;
 import uk.co.socialcalendar.availability.controllers.AddAvailabilityController;
+import uk.co.socialcalendar.friend.controllers.FriendModel;
+import uk.co.socialcalendar.friend.controllers.FriendModelFacade;
 import uk.co.socialcalendar.user.entities.User;
 import uk.co.socialcalendar.user.useCases.UserFacade;
 
@@ -39,6 +41,7 @@ public class AddAvailabilityControllerTest {
     FakeAvailabilityFacadeImpl fakeAvailabilityFacade;
     UserFacade mockUserFacade;
     User user;
+    FriendModelFacade mockFriendModelFacade;
 
     SessionAttributes mockSessionAttributes;
 
@@ -51,11 +54,13 @@ public class AddAvailabilityControllerTest {
         setMocks();
         controller.setAvailabilityFacade(fakeAvailabilityFacade);
         controller.setUserFacade(mockUserFacade);
+        controller.setFriendModelFacade(mockFriendModelFacade);
     }
 
     public void setMocks(){
         setupMockUserFacade();
         setupMockSessionAttributes();
+        mockFriendModelFacade = mock(FriendModelFacade.class);
     }
 
     public void setupMockUserFacade(){
@@ -146,5 +151,21 @@ public class AddAvailabilityControllerTest {
         mav = callAddAvailability(TITLE, START_DATE, END_DATE);
         assertNotNull(mav.getModelMap().get("newAvailability"));
     }
+
+    @Test
+    public void modelReturnsFriendList() throws IOException, ServletException {
+        FriendModel friendModel1 = new FriendModel(new User("friendEmail1","friendName1","facebookId1"));
+        FriendModel friendModel2 = new FriendModel(new User("friendEmail2","friendName2","facebookId2"));
+
+        List<FriendModel> expectedFriendList = new ArrayList<FriendModel>();
+        expectedFriendList.add(friendModel1);
+        expectedFriendList.add(friendModel2);
+
+        when(mockFriendModelFacade.getFriendModelList(ME)).thenReturn(expectedFriendList);
+
+        mav = callAddAvailability(TITLE, START_DATE, END_DATE);
+        assertNotNull(mav.getModelMap().get("friendList"));
+    }
+
 
 }

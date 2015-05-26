@@ -11,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import uk.co.socialcalendar.authentication.SessionAttributes;
 import uk.co.socialcalendar.availability.entities.Availability;
 import uk.co.socialcalendar.availability.useCases.AvailabilityFacade;
+import uk.co.socialcalendar.friend.controllers.FriendModelFacade;
 import uk.co.socialcalendar.user.useCases.UserFacade;
 
 import javax.servlet.ServletException;
@@ -25,6 +26,13 @@ public class AddAvailabilityController {
     AvailabilityFacade availabilityFacade;
     SessionAttributes sessionAttributes;
     UserFacade userFacade;
+    FriendModelFacade friendModelFacade;
+
+    String me;
+
+    public void setFriendModelFacade(FriendModelFacade friendModelFacade) {
+        this.friendModelFacade = friendModelFacade;
+    }
 
     public void setUserFacade(UserFacade userFacade) {
         this.userFacade = userFacade;
@@ -50,7 +58,7 @@ public class AddAvailabilityController {
             HttpServletRequest request,
             HttpServletResponse response) throws IOException, ServletException {
 
-        String me = sessionAttributes.getLoggedInUserId(request);
+        me = sessionAttributes.getLoggedInUserId(request);
         String myName = userFacade.getUser(me).getName();
 
         LocalDateTime startDateFormatted = convertToLocalDateTime(startDate);
@@ -74,6 +82,7 @@ public class AddAvailabilityController {
         mav.addObject("message","You have just created a new availability");
         mav.addObject("section","availability");
         mav.addObject("newAvailability",new Availability());
+        mav.addObject("friendList", friendModelFacade.getFriendModelList(me));
         return mav;
     }
 }
