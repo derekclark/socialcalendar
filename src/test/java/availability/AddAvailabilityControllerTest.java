@@ -10,6 +10,8 @@ import org.springframework.web.servlet.ModelAndView;
 import uk.co.socialcalendar.authentication.SessionAttributes;
 import uk.co.socialcalendar.availability.controllers.AddAvailabilityController;
 import uk.co.socialcalendar.availability.entities.Availability;
+import uk.co.socialcalendar.user.entities.User;
+import uk.co.socialcalendar.user.useCases.UserFacade;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -36,6 +38,8 @@ public class AddAvailabilityControllerTest {
     HttpServletResponse mockHttpServletResponse;
     HttpSession mockSession;
     FakeAvailabilityFacadeImpl fakeAvailabilityFacade;
+    UserFacade mockUserFacade;
+    User user;
 
     SessionAttributes mockSessionAttributes;
 
@@ -43,13 +47,17 @@ public class AddAvailabilityControllerTest {
     public void setup(){
         controller = new AddAvailabilityController();
 
+        user = new User(USER_ID, "myName", "facebookId");
         fakeAvailabilityFacade = new FakeAvailabilityFacadeImpl();
         setMocks();
         setupHttpSessions();
     }
 
     public void setMocks(){
+        mockUserFacade = mock(UserFacade.class);
         controller.setAvailabilityFacade(fakeAvailabilityFacade);
+        controller.setUserFacade(mockUserFacade);
+        when(mockUserFacade.getUser(USER_ID)).thenReturn(user);
     }
 
     public void setupHttpSessions(){
@@ -100,6 +108,12 @@ public class AddAvailabilityControllerTest {
     public void setsAvailabilityWithOwnerEmail() throws IOException, ServletException {
         mav = callAddAvailability(TITLE, START_DATE, END_DATE);
         assertEquals(USER_ID, fakeAvailabilityFacade.getAvailability().getOwnerEmail());
+    }
+
+    @Test
+    public void setsAvailabilityWithOwnerName() throws IOException, ServletException {
+        mav = callAddAvailability(TITLE, START_DATE, END_DATE);
+        assertEquals("myName", fakeAvailabilityFacade.getAvailability().getOwnerName());
     }
 
 }

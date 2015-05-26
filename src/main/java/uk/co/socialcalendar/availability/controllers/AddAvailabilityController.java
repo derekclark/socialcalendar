@@ -11,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import uk.co.socialcalendar.authentication.SessionAttributes;
 import uk.co.socialcalendar.availability.entities.Availability;
 import uk.co.socialcalendar.availability.useCases.AvailabilityFacade;
+import uk.co.socialcalendar.user.useCases.UserFacade;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +24,11 @@ public class AddAvailabilityController {
 
     AvailabilityFacade availabilityFacade;
     SessionAttributes sessionAttributes;
+    UserFacade userFacade;
+
+    public void setUserFacade(UserFacade userFacade) {
+        this.userFacade = userFacade;
+    }
 
     public void setSessionAttributes(SessionAttributes sessionAttributes) {
         this.sessionAttributes = sessionAttributes;
@@ -44,13 +50,14 @@ public class AddAvailabilityController {
             HttpServletRequest request,
             HttpServletResponse response) throws IOException, ServletException {
 
-        String loggedInUser = sessionAttributes.getLoggedInUserId(request);
+        String me = sessionAttributes.getLoggedInUserId(request);
 
-        System.out.println(loggedInUser);
+        String myName = userFacade.getUser(me).getName();
+        System.out.println(me);
         String pattern = "yyyy-MM-dd HH:mm";
         LocalDateTime startDateFormatted = LocalDateTime.parse(startDate, DateTimeFormat.forPattern(pattern));
         LocalDateTime endDateFormatted = LocalDateTime.parse(endDate, DateTimeFormat.forPattern(pattern));
-        Availability availability = new Availability(loggedInUser,"ownerName",title,
+        Availability availability = new Availability(me,myName,title,
                 startDateFormatted, endDateFormatted, "status");
 
         availabilityFacade.create(availability);
