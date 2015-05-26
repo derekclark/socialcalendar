@@ -51,20 +51,27 @@ public class AddAvailabilityController {
             HttpServletResponse response) throws IOException, ServletException {
 
         String me = sessionAttributes.getLoggedInUserId(request);
-
         String myName = userFacade.getUser(me).getName();
-        System.out.println(me);
-        String pattern = "yyyy-MM-dd HH:mm";
-        LocalDateTime startDateFormatted = LocalDateTime.parse(startDate, DateTimeFormat.forPattern(pattern));
-        LocalDateTime endDateFormatted = LocalDateTime.parse(endDate, DateTimeFormat.forPattern(pattern));
+
+        LocalDateTime startDateFormatted = convertToLocalDateTime(startDate);
+        LocalDateTime endDateFormatted = convertToLocalDateTime(endDate);
+
         Availability availability = new Availability(me,myName,title,
                 startDateFormatted, endDateFormatted, "status");
 
         availabilityFacade.create(availability);
+
+        return buildModel();
+    }
+
+    public LocalDateTime convertToLocalDateTime(String date){
+        String pattern = "yyyy-MM-dd HH:mm";
+        return LocalDateTime.parse(date, DateTimeFormat.forPattern(pattern));
+    }
+
+    public ModelAndView buildModel(){
         ModelAndView mav = new ModelAndView("availability");
         mav.addObject("message","You have just created a new availability");
-        mav.addObject("isAuthenticated","true");
         return mav;
-
     }
 }
