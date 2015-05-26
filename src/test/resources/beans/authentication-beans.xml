@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<bean id="oauth" class="uk.co.socialcalendar.authentication.ScribeAdapter">
+		<constructor-arg name="apiKey" value="${facebookApiKey}"/>
+	    <constructor-arg name="apiSecret" value="${facebookApiSecret}"/>
+	    <constructor-arg name="callback" value="${facebookCallback}"/>
+	</bean>
+	<bean id="loginController" class="uk.co.socialcalendar.authentication.controllers.LoginController" />
+    <bean name="facebook" class="uk.co.socialcalendar.authentication.facebookAuth.FacebookOauth">
+	    <constructor-arg name="apiKey" value="${facebookApiKey}"/>
+	    <constructor-arg name="apiSecret" value="${facebookApiSecret}"/>
+	    <constructor-arg name="callback" value="${facebookCallback}"/>
+	    <property name="oauth" ref="oauth" />
+    </bean>
+
+	<bean id="facebookResource" class="uk.co.socialcalendar.authentication.facebookAuth.Resource" scope="prototype" />
+
+	<bean id="factory" class="uk.co.socialcalendar.authentication.facebookAuth.AbstractFactory" >
+		<lookup-method name="getOauthRequestResource" bean="facebookResource"/>
+	</bean>
+
+	<bean id="sessionAttributes" class="uk.co.socialcalendar.authentication.SessionAttributes" />
+
+</beans>
