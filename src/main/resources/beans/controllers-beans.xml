@@ -35,6 +35,8 @@
 
     <bean id="addAvailabilityController" class="uk.co.socialcalendar.availability.controllers.AddAvailabilityController">
                 <property name="availabilityFacade" ref="availabilityFacade"/>
+                <property name="sessionAttributes" ref="sessionAttributes"/>
+                <property name="userFacade" ref="userFacade"/>
     </bean>
 
 </beans>
