@@ -28,8 +28,5 @@
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
 
-    <bean id="userDAO" class="uk.co.socialcalendar.user.persistence.UserDAOHibernateImpl">
-        <property name="sessionFactory" ref="sessionFactory" />
-    </bean>
 
 </beans>

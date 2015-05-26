@@ -10,8 +10,5 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
 
-	<bean id="userFacade" class="uk.co.socialcalendar.user.useCases.UserFacadeImpl">
-        <property name="userDAO" ref="userDAO"/>
-	</bean>    	
 	<bean id="sessionAttributes" class="uk.co.socialcalendar.authentication.SessionAttributes" />
 </beans>
