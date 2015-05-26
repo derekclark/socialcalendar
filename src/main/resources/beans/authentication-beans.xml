@@ -28,4 +28,6 @@
 		<lookup-method name="getOauthRequestResource" bean="facebookResource"/>
 	</bean>
 
+	<bean id="sessionAttributes" class="uk.co.socialcalendar.authentication.SessionAttributes" />
+
 </beans>
