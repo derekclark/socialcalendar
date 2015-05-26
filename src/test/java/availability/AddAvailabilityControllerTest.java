@@ -29,8 +29,9 @@ public class AddAvailabilityControllerTest {
     public static final String END_DATE = "2012-01-27 14:15";
     public static final String START_DATE = "2012-01-25 11:12";
     public static final String TITLE = "title";
-    public static final String DATE_FORMAT_PATTERN = "yyyy-MM-dd HH:mm";
-    public static final String USER_ID = "me";
+    public static final String DATE_PATTERN = "yyyy-MM-dd HH:mm";
+    public static final String ME = "me";
+    public static final String MY_NAME = "myName";
     AddAvailabilityController controller;
     ModelAndView mav;
     Model model;
@@ -47,7 +48,7 @@ public class AddAvailabilityControllerTest {
     public void setup(){
         controller = new AddAvailabilityController();
 
-        user = new User(USER_ID, "myName", "facebookId");
+        user = new User(ME, MY_NAME, "facebookId");
         fakeAvailabilityFacade = new FakeAvailabilityFacadeImpl();
         setMocks();
         setupHttpSessions();
@@ -57,7 +58,7 @@ public class AddAvailabilityControllerTest {
         mockUserFacade = mock(UserFacade.class);
         controller.setAvailabilityFacade(fakeAvailabilityFacade);
         controller.setUserFacade(mockUserFacade);
-        when(mockUserFacade.getUser(USER_ID)).thenReturn(user);
+        when(mockUserFacade.getUser(ME)).thenReturn(user);
     }
 
     public void setupHttpSessions(){
@@ -65,7 +66,7 @@ public class AddAvailabilityControllerTest {
         mockSessionAttributes = mock(SessionAttributes.class);
         mockSession = mock(HttpSession.class);
         controller.setSessionAttributes(mockSessionAttributes);
-        when(mockSessionAttributes.getLoggedInUserId((HttpServletRequest) anyObject())).thenReturn(USER_ID);
+        when(mockSessionAttributes.getLoggedInUserId((HttpServletRequest) anyObject())).thenReturn(ME);
     }
 
     @Test
@@ -98,22 +99,38 @@ public class AddAvailabilityControllerTest {
     }
 
     public Availability createExpectedAvailability(){
-        LocalDateTime startDateFormatted = LocalDateTime.parse(START_DATE, DateTimeFormat.forPattern(DATE_FORMAT_PATTERN));
-        LocalDateTime endDateFormatted = LocalDateTime.parse(END_DATE, DateTimeFormat.forPattern(DATE_FORMAT_PATTERN));
-        return new Availability(USER_ID,"ownerName", TITLE,
+        LocalDateTime startDateFormatted = LocalDateTime.parse(START_DATE, DateTimeFormat.forPattern(DATE_PATTERN));
+        LocalDateTime endDateFormatted = LocalDateTime.parse(END_DATE, DateTimeFormat.forPattern(DATE_PATTERN));
+        return new Availability(ME,MY_NAME, TITLE,
                 startDateFormatted, endDateFormatted, "status");
     }
 
     @Test
     public void setsAvailabilityWithOwnerEmail() throws IOException, ServletException {
         mav = callAddAvailability(TITLE, START_DATE, END_DATE);
-        assertEquals(USER_ID, fakeAvailabilityFacade.getAvailability().getOwnerEmail());
+        assertEquals(ME, fakeAvailabilityFacade.getAvailability().getOwnerEmail());
     }
 
     @Test
     public void setsAvailabilityWithOwnerName() throws IOException, ServletException {
         mav = callAddAvailability(TITLE, START_DATE, END_DATE);
-        assertEquals("myName", fakeAvailabilityFacade.getAvailability().getOwnerName());
+        assertEquals(MY_NAME, fakeAvailabilityFacade.getAvailability().getOwnerName());
+    }
+
+    @Test
+    public void setsAvailabilityWithStartDate() throws IOException, ServletException {
+        mav = callAddAvailability(TITLE, START_DATE, END_DATE);
+        LocalDateTime expectedDate = LocalDateTime.parse(START_DATE, DateTimeFormat.forPattern(DATE_PATTERN));
+
+        assertEquals(expectedDate, fakeAvailabilityFacade.getAvailability().getStartDate());
+    }
+
+    @Test
+    public void setsAvailabilityWithEndDate() throws IOException, ServletException {
+        mav = callAddAvailability(TITLE, START_DATE, END_DATE);
+        LocalDateTime expectedDate = LocalDateTime.parse(END_DATE, DateTimeFormat.forPattern(DATE_PATTERN));
+
+        assertEquals(expectedDate, fakeAvailabilityFacade.getAvailability().getEndDate());
     }
 
 }
