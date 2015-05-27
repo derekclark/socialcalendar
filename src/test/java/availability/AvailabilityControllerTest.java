@@ -64,8 +64,8 @@ public class AvailabilityControllerTest {
         controller.setUserFacade(mockUserFacade);
         User user = new User(ME, MY_NAME,"facebookId");
         when(mockUserFacade.getUser(ME)).thenReturn(user);
-
     }
+
     public void mockHttp(){
         mockHttpServletRequest = mock(HttpServletRequest.class);
         mockHttpServletResponse = mock(HttpServletResponse.class);

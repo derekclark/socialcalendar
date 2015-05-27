@@ -60,7 +60,15 @@ public class AddAvailabilityControllerTest {
     public void setMocks(){
         setupMockUserFacade();
         setupMockSessionAttributes();
+        setupUserMock();
         mockFriendModelFacade = mock(FriendModelFacade.class);
+    }
+
+    public void setupUserMock(){
+        mockUserFacade = mock(UserFacade.class);
+        controller.setUserFacade(mockUserFacade);
+        User user = new User(ME, MY_NAME,"facebookId");
+        when(mockUserFacade.getUser(ME)).thenReturn(user);
     }
 
     public void setupMockUserFacade(){
@@ -165,6 +173,12 @@ public class AddAvailabilityControllerTest {
 
         mav = callAddAvailability(TITLE, START_DATE, END_DATE);
         assertNotNull(mav.getModelMap().get("friendList"));
+    }
+
+    @Test
+    public void userNameIsSetInModel() throws IOException, ServletException {
+        mav = callAddAvailability(TITLE, START_DATE, END_DATE);
+        assertEquals(MY_NAME,mav.getModelMap().get("userName"));
     }
 
 
