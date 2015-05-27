@@ -90,4 +90,8 @@ public class AvailabilityControllerTest {
         assertNotNull(mav.getModelMap().get("friendList"));
     }
 
+    @Test
+    public void userNameIsSet(){
+        assertEquals("myName",mav.getModelMap().get("userName"));
+    }
 }
