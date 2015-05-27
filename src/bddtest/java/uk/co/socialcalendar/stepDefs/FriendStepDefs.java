@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @WebAppConfiguration
-@ContextConfiguration(locations = {"file:src/test/resources/test-servlet-context.xml"})
+@ContextConfiguration(locations = {"file:src/main/resources/servlet-context.xml"})
 public class FriendStepDefs {
     public static final String MY_EMAIL = "me";
     @Autowired

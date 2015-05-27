@@ -4,15 +4,13 @@ buildscript {
         mavenLocal()
     }
     dependencies {
-//          classpath("org.springframework.boot:spring-boot-gradle-plugin:1.0.2.RELEASE")
-          classpath 'org.gradle.api.plugins:gradle-tomcat-plugin:0.9.8'
+        classpath 'org.gradle.api.plugins:gradle-tomcat-plugin:0.9.8'
     }
 }
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
-//apply plugin: 'spring-boot'
 apply plugin: 'war'
 apply plugin: 'tomcat'
 apply plugin: 'idea'
@@ -20,6 +18,7 @@ apply plugin: 'idea'
 jar {
     baseName = 'socialcalendar'
     version =  '0.1.0'
+    jvmArgs = [ "-Dspring.profiles.active=production" ]
 }
 
 project.ext {
@@ -47,7 +46,6 @@ configurations {
   testCompile.extendsFrom bddtestUsageCompile
   testRuntime.extendsFrom bddtestUsageRuntime
 }
-
 
 sourceSets {
   main {
@@ -99,7 +97,6 @@ dependencies {
    compile "org.slf4j:slf4j-api:$project.slf4jVersion"
    compile "log4j:log4j:1.2.17"
 
-//   compile 'org.slf4j:slf4j-log4j12:1.7.6'
    compile 'javax.servlet.jsp:javax.servlet.jsp-api:2.3.1'
    compile 'javax.validation:validation-api:1.1.0.Final'
    compile 'javax.mail:mail:1.4'
@@ -116,9 +113,7 @@ dependencies {
   compile 'org.hibernate:hibernate-entitymanager:4.3.5.Final'
   compile 'org.hibernate:hibernate-c3p0:4.3.5.Final'
 
-//   compile 'org.springframework:spring-test:3.2.3.RELEASE'
    compile 'org.springframework:spring-webmvc:3.2.8.RELEASE'
-//   compile("org.springframework.boot:spring-boot-starter-security")
    compile 'org.springframework:spring-orm:4.0.3.RELEASE'
    compile 'org.springframework.security:spring-security-web:3.2.3.RELEASE'
    compile 'org.springframework.security:spring-security-config:3.2.3.RELEASE'
@@ -126,8 +121,6 @@ dependencies {
 
   compile 'org.apache.tomcat:tomcat-jdbc:7.0.19'
   compile 'org.apache.tomcat:juli:6.0.26'
-//   compile 'org.mockito:mockito-all:1.9.5'
-  //compile 'org.mockito:mockito-core:1.9.5'
 
   testCompile 'junit:junit-dep:4.11'
   testCompile "org.mockito:mockito-all:${mockitoVersion}"
@@ -136,18 +129,12 @@ dependencies {
   bddtestCompile 'info.cukes:cucumber-junit:1.2.0'
   bddtestCompile 'info.cukes:cucumber-spring:1.2.0'
   bddtestCompile 'junit:junit:4.11'
-//  bddtestCompile "org.springframework:spring-core:${springVersion}"
   bddtestCompile "org.springframework:spring-context:${springVersion}"
   bddtestCompile "org.mockito:mockito-core:${mockitoVersion}"
   bddtestCompile 'org.springframework:spring-test:4.1.2.RELEASE'
-//  bddtestCompile 'org.springframework:spring-test-mvc:1.0.0.M2'
   bddtestCompile 'org.hamcrest:hamcrest-library:1.3'
   compile 'joda-time:joda-time:2.3'
-//  compile 'joda-time:joda-time-hibernate:1.3'
   compile 'org.jadira.usertype:usertype.extended:3.2.0.GA'
-
-//  compile 'javax.transaction:jta:1.0.1B'
-
 }
 
 task wrapper(type: Wrapper) {
@@ -199,6 +186,7 @@ task runLocalMocked (type: GradleBuild){
 
 task runLocal (type: GradleBuild){
   tasks=['copyLocalPropertyFile','copyLocalSpringFile','tomcatrunwar']
+
 }
 
 task createRHWar (type: GradleBuild){
@@ -209,6 +197,7 @@ task cucumber(type: JavaExec) {
     main = "cucumber.api.cli.Main"
     classpath = configurations.bddtestRuntime + sourceSets.main.output + sourceSets.bddtest.output
     args = ['--plugin',  'pretty', '--glue', 'uk.co.socialcalendar', 'src/bddtest/resources' ]
+    jvmArgs = [ "-Dspring.profiles.active=bdd" ]
 
 }
 

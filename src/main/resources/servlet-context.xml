@@ -16,4 +16,6 @@
     <import resource="beans/user-beans.xml"/>
     <import resource="beans/friend-beans.xml"/>
     <import resource="beans/availability-beans.xml"/>
+    <import resource="beans/bdd-database-hibernate-beans.xml"/>        
+    <import resource="beans/bdd-test-beans.xml"/>    
 </beans>
