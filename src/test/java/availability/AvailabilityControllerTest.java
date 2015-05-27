@@ -7,14 +7,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
 import uk.co.socialcalendar.authentication.SessionAttributes;
 import uk.co.socialcalendar.availability.controllers.AvailabilityController;
-import uk.co.socialcalendar.friend.controllers.FriendCommonModel;
 import uk.co.socialcalendar.friend.controllers.FriendModel;
 import uk.co.socialcalendar.friend.controllers.FriendModelFacade;
 import uk.co.socialcalendar.user.entities.User;
+import uk.co.socialcalendar.user.useCases.UserFacade;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,36 +23,52 @@ import static org.mockito.Mockito.when;
 
 public class AvailabilityControllerTest {
     public static final String ME = "me";
+    public static final String MY_NAME = "myName";
     AvailabilityController controller;
-    SessionAttributes sessionAttributes;
-    FriendCommonModel mockFriendCommonModel;
-
+    SessionAttributes mockSessionAttributes;
     FriendModelFacade mockFriendModelFacade;
-
+    UserFacade mockUserFacade;
     Model model;
     HttpServletRequest mockHttpServletRequest;
     HttpServletResponse mockHttpServletResponse;
-    HttpSession mockSession;
     ModelAndView mav;
 
     @Before
     public void setup(){
         controller = new AvailabilityController();
-        sessionAttributes = new SessionAttributes();
-        mockFriendModelFacade = mock(FriendModelFacade.class);
-        controller.setFriendModelFacade(mockFriendModelFacade);
-        controller.setSessionAttributes(sessionAttributes);
-        mockHttp();
+        model = new ExtendedModelMap();
+        setupMocks();
         mav = controller.addAvailability(model, mockHttpServletRequest, mockHttpServletResponse);
-
     }
 
+    public void setupMocks(){
+        setupFriendModelFacadeMock();
+        mockHttp();
+        setupSessionAttributeMock();
+        setupUserMock();
+    }
+
+    public void setupFriendModelFacadeMock(){
+        mockFriendModelFacade = mock(FriendModelFacade.class);
+        controller.setFriendModelFacade(mockFriendModelFacade);
+    }
+
+    public void setupSessionAttributeMock(){
+        mockSessionAttributes = mock(SessionAttributes.class);
+        controller.setSessionAttributes(mockSessionAttributes);
+        when(mockSessionAttributes.getLoggedInUserId(mockHttpServletRequest)).thenReturn(ME);
+    }
+
+    public void setupUserMock(){
+        mockUserFacade = mock(UserFacade.class);
+        controller.setUserFacade(mockUserFacade);
+        User user = new User(ME, MY_NAME,"facebookId");
+        when(mockUserFacade.getUser(ME)).thenReturn(user);
+
+    }
     public void mockHttp(){
-        model = new ExtendedModelMap();
         mockHttpServletRequest = mock(HttpServletRequest.class);
         mockHttpServletResponse = mock(HttpServletResponse.class);
-        mockSession = mock(HttpSession.class);
-        when(mockHttpServletRequest.getSession()).thenReturn(mockSession);
     }
 
     @Test
@@ -78,6 +93,17 @@ public class AvailabilityControllerTest {
 
     @Test
     public void modelReturnsFriendList(){
+        List<FriendModel> expectedFriendList = setExpectedFriendList();
+        when(mockFriendModelFacade.getFriendModelList(ME)).thenReturn(expectedFriendList);
+        assertNotNull(mav.getModelMap().get("friendList"));
+    }
+
+    @Test
+    public void userNameIsSetInModel(){
+        assertEquals(MY_NAME,mav.getModelMap().get("userName"));
+    }
+
+    public List<FriendModel> setExpectedFriendList(){
         FriendModel friendModel1 = new FriendModel(new User("friendEmail1","friendName1","facebookId1"));
         FriendModel friendModel2 = new FriendModel(new User("friendEmail2","friendName2","facebookId2"));
 
@@ -85,13 +111,6 @@ public class AvailabilityControllerTest {
         expectedFriendList.add(friendModel1);
         expectedFriendList.add(friendModel2);
 
-        when(mockFriendModelFacade.getFriendModelList(ME)).thenReturn(expectedFriendList);
-
-        assertNotNull(mav.getModelMap().get("friendList"));
-    }
-
-    @Test
-    public void userNameIsSet(){
-        assertEquals("myName",mav.getModelMap().get("userName"));
+        return expectedFriendList;
     }
 }

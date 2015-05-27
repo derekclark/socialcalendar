@@ -8,6 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 import uk.co.socialcalendar.authentication.SessionAttributes;
 import uk.co.socialcalendar.availability.entities.Availability;
 import uk.co.socialcalendar.friend.controllers.FriendModelFacade;
+import uk.co.socialcalendar.user.useCases.UserFacade;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +17,11 @@ import javax.servlet.http.HttpServletResponse;
 public class AvailabilityController {
     FriendModelFacade friendModelFacade;
     SessionAttributes sessionAttributes;
+    UserFacade userFacade;
+
+    public void setUserFacade(UserFacade userFacade) {
+        this.userFacade = userFacade;
+    }
 
     public void setSessionAttributes(SessionAttributes sessionAttributes) {
         this.sessionAttributes = sessionAttributes;
@@ -32,7 +38,7 @@ public class AvailabilityController {
         mav.addObject("section","availability");
         mav.addObject("newAvailability",new Availability());
         mav.addObject("friendList", friendModelFacade.getFriendModelList(me));
-        mav.addObject("userName","myName");
+        mav.addObject("userName",userFacade.getUser(me).getName());
         return mav;
     }
 }
