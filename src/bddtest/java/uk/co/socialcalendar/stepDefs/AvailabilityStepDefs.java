@@ -56,7 +56,7 @@ public class AvailabilityStepDefs {
         springHolder.setResultActions(results);
     }
 
-    @When("^I make a create an availability for \"(.*?)\" and \"(.*?)\"$")
+    @When("^I create an availability for \"(.*?)\" and \"(.*?)\"$")
     public void i_make_a_create_an_availability_for_and(String arg1, String arg2) throws Throwable {
         MockMvc mockMvc = springHolder.getMockMVC();
 
