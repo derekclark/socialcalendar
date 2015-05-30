@@ -27,6 +27,11 @@ public class TestDatabaseActions {
 
         query.executeUpdate();
 
+        query = sessionFactory.getCurrentSession().createQuery
+                ("DELETE FROM AvailabilityHibernateModel");
+
+        query.executeUpdate();
+
     }
 
 }
