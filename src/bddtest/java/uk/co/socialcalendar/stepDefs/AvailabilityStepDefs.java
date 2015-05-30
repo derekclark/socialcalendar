@@ -1,7 +1,6 @@
 package uk.co.socialcalendar.stepDefs;
 
 import cucumber.api.java.Before;
-import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,19 +14,13 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.web.context.WebApplicationContext;
 import uk.co.socialcalendar.availability.controllers.AddAvailabilityDTO;
-import uk.co.socialcalendar.friend.entities.Friend;
-import uk.co.socialcalendar.friend.entities.FriendStatus;
-import uk.co.socialcalendar.user.entities.User;
+import uk.co.socialcalendar.availability.persistence.AvailabilityHibernateModel;
 import uk.co.socialcalendar.testPersistence.TestDatabaseActions;
-import uk.co.socialcalendar.friend.controllers.FriendModel;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
-import static org.hamcrest.collection.IsIn.isIn;
-import static org.junit.Assert.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @WebAppConfiguration
@@ -41,7 +34,7 @@ public class AvailabilityStepDefs {
     @Autowired
     TestDatabaseActions databaseActions;
     @Autowired
-    PopulateDatabase populateDatabase;
+    uk.co.socialcalendar.stepDefs.PopulateDatabase populateDatabase;
 
     HttpSession session;
     ResultActions results;
@@ -77,6 +70,12 @@ public class AvailabilityStepDefs {
         results = mockMvc.perform(postAvailability)
                 .andDo(MockMvcResultHandlers.print());
         springHolder.setResultActions(results);
+    }
+
+    @Then("^a new availability record is written to the database$")
+    public void a_new_availability_record_is_written_to_the_database() throws Throwable {
+        List<AvailabilityHibernateModel> availabilityHibernateModelList = databaseActions.readAvailabilityHibernateModel("me");
+        assertEquals(1,availabilityHibernateModelList.size());
     }
 
     public void clearDatabase() throws Throwable {

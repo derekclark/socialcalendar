@@ -28,4 +28,5 @@ Feature: Availability Page
     And I have Lisa as a "ACCEPTED" friend
     When I make a create an availability for "Ron" and "Lisa"
     Then a message is shown "You have just created a new availability"
+    Then a new availability record is written to the database
 
