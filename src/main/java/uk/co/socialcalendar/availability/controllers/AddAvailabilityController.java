@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Controller
+@org.springframework.web.bind.annotation.SessionAttributes("newAvailability")
 public class AddAvailabilityController {
 
     AvailabilityFacade availabilityFacade;
@@ -52,6 +53,7 @@ public class AddAvailabilityController {
             @RequestParam(value="startDate", required=false,defaultValue="") String startDate,
             @RequestParam(value="endDate", required=false,defaultValue="") String endDate,
             @RequestParam(value="selectedFriends", required=false, defaultValue="")
+//                    @ModelAttribute("newAvailability") AddAvailabilityDTO dto,
                 List<String> friendNotifyList,
 //            @Valid Availability availabilities,
             Model m,
@@ -61,6 +63,7 @@ public class AddAvailabilityController {
         me = sessionAttributes.getLoggedInUserId(request);
         String myName = userFacade.getUser(me).getName();
 
+        System.out.println("startdate=" + startDate);
         LocalDateTime startDateFormatted = convertToLocalDateTime(startDate);
         LocalDateTime endDateFormatted = convertToLocalDateTime(endDate);
 
@@ -79,7 +82,7 @@ public class AddAvailabilityController {
 
     public ModelAndView buildModel(){
         ModelAndView mav = new ModelAndView("availabilityCreate");
-        mav.addObject("alertMessage","You have just created a new availability");
+        mav.addObject("message","You have just created a new availability");
         mav.addObject("section","availability");
         mav.addObject("newAvailability",new Availability());
         mav.addObject("friendList", friendModelFacade.getFriendModelList(me));

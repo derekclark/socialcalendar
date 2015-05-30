@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.web.context.WebApplicationContext;
+import uk.co.socialcalendar.availability.controllers.AddAvailabilityDTO;
 import uk.co.socialcalendar.friend.entities.Friend;
 import uk.co.socialcalendar.friend.entities.FriendStatus;
 import uk.co.socialcalendar.user.entities.User;
@@ -58,6 +59,22 @@ public class AvailabilityStepDefs {
         RequestBuilder getFriend = MockMvcRequestBuilders.get("/availability")
                 .session((MockHttpSession) springHolder.getSession());
         results = mockMvc.perform(getFriend)
+                .andDo(MockMvcResultHandlers.print());
+        springHolder.setResultActions(results);
+    }
+
+    @When("^I make a create an availability for \"(.*?)\" and \"(.*?)\"$")
+    public void i_make_a_create_an_availability_for_and(String arg1, String arg2) throws Throwable {
+        MockMvc mockMvc = springHolder.getMockMVC();
+
+        RequestBuilder postAvailability = MockMvcRequestBuilders.post("/addAvailability")
+//                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("title", "title")
+                .param("startDate","2015-01-01 11:30")
+                .param("endDate","2015-01-01 17:45")
+                .sessionAttr("newAvailability",new AddAvailabilityDTO())
+                .session((MockHttpSession) springHolder.getSession());
+        results = mockMvc.perform(postAvailability)
                 .andDo(MockMvcResultHandlers.print());
         springHolder.setResultActions(results);
     }

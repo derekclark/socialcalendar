@@ -83,9 +83,9 @@
 
   <div class="grid_8 middle-pane">
     <c:choose>
-        <c:when test="${not empty alertMessage}">
+        <c:when test="${not empty message}">
           <div class="alert alert-success" role="alert">
-            ${alertMessage}
+            ${message}
           </div>
         </c:when>
     </c:choose>
