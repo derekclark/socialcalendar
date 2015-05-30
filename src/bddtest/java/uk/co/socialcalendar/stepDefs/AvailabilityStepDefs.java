@@ -49,7 +49,7 @@ public class AvailabilityStepDefs {
     @Before
     public void setup() throws Throwable {
         mockMvc = webAppContextSetup(wac).build();
-//        clearDatabase();
+        clearDatabase();
     }
 
     @When("^I select the availability page$")
@@ -61,4 +61,9 @@ public class AvailabilityStepDefs {
                 .andDo(MockMvcResultHandlers.print());
         springHolder.setResultActions(results);
     }
+
+    public void clearDatabase() throws Throwable {
+        databaseActions.clear();
+    }
+
 }
