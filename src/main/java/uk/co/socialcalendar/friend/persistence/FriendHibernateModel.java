@@ -60,6 +60,27 @@ public class FriendHibernateModel {
         this.status = status;
     }
 
+    public boolean equals(Object obj){
+        if (this == obj){
+            return true;
+        }
+        if ((obj == null) || (obj.getClass() != this.getClass())){
+            return false;
+        }
+        FriendHibernateModel friendHibernateModel = (FriendHibernateModel) obj;
+
+        if (! this.requesterEmail.equals(friendHibernateModel.getRequesterEmail())) return false;
+        if (! this.beFriendedEmail.equals(friendHibernateModel.getBeFriendedEmail())) return false;
+        if (! this.status.equals(friendHibernateModel.getStatus())) return false;
+
+        return friendId == friendHibernateModel.getFriendId();
+    }
+
+    public int hashcode(){
+        int hash = 7;
+        hash = 31 * hash + friendId + requesterEmail.hashCode() + beFriendedEmail.hashCode() + status.hashCode();
+        return hash;
+    }
 
     public String toString(){
         return "friendId=" + this.friendId

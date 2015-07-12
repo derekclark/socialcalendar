@@ -112,6 +112,7 @@ dependencies {
   compile 'org.hibernate:hibernate-validator:5.0.1.Final'
   compile 'org.hibernate:hibernate-entitymanager:4.3.5.Final'
   compile 'org.hibernate:hibernate-c3p0:4.3.5.Final'
+  compile 'org.hsqldb:hsqldb:2.2.9'
 
    compile 'org.springframework:spring-webmvc:3.2.8.RELEASE'
    compile 'org.springframework:spring-orm:4.0.3.RELEASE'
