@@ -109,4 +109,9 @@ public class Availability {
         return hash;
     }
 
+    public String toString(){
+        return this.getId() + " " + this.getOwnerName() + " " + this.getOwnerEmail() + " " + this.getTitle() + " "
+                + this.getStartDate() + " " + this.getEndDate() + " " + this.getStatus();
+    }
+
 }

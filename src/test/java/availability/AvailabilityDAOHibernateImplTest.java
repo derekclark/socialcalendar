@@ -12,9 +12,13 @@ import uk.co.socialcalendar.availability.entities.Availability;
 import uk.co.socialcalendar.availability.persistence.AvailabilityDAOHibernateImpl;
 import uk.co.socialcalendar.availability.persistence.AvailabilityHibernateModel;
 
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertNull;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -25,6 +29,7 @@ public class AvailabilityDAOHibernateImplTest {
     Availability availability;
     Session testSession;
     SessionFactory mockSessionFactory;
+    public static final int NON_EXISTENT_ID = 9999999;
 
     @Before
     public void setup(){
@@ -38,11 +43,6 @@ public class AvailabilityDAOHibernateImplTest {
         Transaction t = testSession.getTransaction();
         t.rollback();
     }
-
-//    @AfterClass
-//    public static void classTearDown(){
-//        HibernateUtil.shutdown();
-//    }
 
     public void setupTestDatabase(){
         getHibernateTestInstance();
@@ -117,5 +117,42 @@ public class AvailabilityDAOHibernateImplTest {
         assertThat(availabilityDAOImpl.save(availability), is(FAILED_TO_INSERT_RECORD));
     }
 
+    @Test
+    public void canReadOneAvailability(){
+        availability.setId(availabilityDAOImpl.save(availability));
+        System.out.println(availability.getId());
+        Availability actualAvailability = availabilityDAOImpl.read(availability.getId());
+        assertEquals(availability, actualAvailability);
+    }
 
+    @Test
+    public void CanSaveTwoAvailabilities(){
+        Availability availability1 = new Availability("ownerEmail", "ownerName", "title", new LocalDateTime(), new LocalDateTime(), "status");
+        Availability availability2 = new Availability("ownerEmail", "ownerName", "title", new LocalDateTime(), new LocalDateTime(), "status");
+        availability1.setId(availabilityDAOImpl.save(availability1));
+        availability2.setId(availabilityDAOImpl.save(availability2));
+
+        assertEquals(availability1,availabilityDAOImpl.read(availability1.getId()));
+        assertEquals(availability2,availabilityDAOImpl.read(availability2.getId()));
+    }
+
+    @Test
+    public void canUpdateAvailability(){
+        availability.setId(availabilityDAOImpl.save(availability));
+        availability.setTitle("changedTitle");
+        assertTrue(availabilityDAOImpl.update(availability));
+        Availability actualAvailability = availabilityDAOImpl.read(availability.getId());
+        assertEquals("changedTitle", actualAvailability.getTitle());
+    }
+
+    @Test
+    public void doesNotUpdateIfRecordDoesNotExist(){
+        availability.setId(NON_EXISTENT_ID);
+        assertFalse(availabilityDAOImpl.update(availability));
+    }
+
+    @Test
+    public void returnsNullIfIdDoesNotExist(){
+        assertNull(availabilityDAOImpl.read(NON_EXISTENT_ID));
+    }
 }

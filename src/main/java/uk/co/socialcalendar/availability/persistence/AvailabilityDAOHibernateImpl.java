@@ -27,13 +27,33 @@ public class AvailabilityDAOHibernateImpl implements AvailabilityDAO {
     @Override
     @Transactional
     public Availability read(int id) {
-        return null;
+        AvailabilityHibernateModel availabilityHibernateModel =
+                (AvailabilityHibernateModel) sessionFactory.getCurrentSession().get(AvailabilityHibernateModel.class, id);
+
+        if (availabilityHibernateModel == null){
+            return null;
+        }
+        return convertToAvailability(availabilityHibernateModel);
     }
 
     @Override
     @Transactional
     public boolean update(Availability availability) {
-        return false;
+        AvailabilityHibernateModel availabilityHibernateModel =
+                (AvailabilityHibernateModel) sessionFactory.getCurrentSession().get(AvailabilityHibernateModel.class, availability.getId());
+
+        if (availabilityHibernateModel != null) {
+            availabilityHibernateModel.setStatus(availability.getStatus());
+            availabilityHibernateModel.setOwnerName(availability.getOwnerName());
+            availabilityHibernateModel.setEndDate(availability.getEndDate());
+            availabilityHibernateModel.setStartDate(availability.getEndDate());
+            availabilityHibernateModel.setOwnerEmail(availability.getOwnerEmail());
+            availabilityHibernateModel.setTitle(availability.getTitle());
+        } else{
+            return false;
+        }
+        sessionFactory.getCurrentSession().update(availabilityHibernateModel);
+        return true;
     }
 
     public boolean canUpdate(Availability availability){
@@ -50,6 +70,7 @@ public class AvailabilityDAOHibernateImpl implements AvailabilityDAO {
 
     public AvailabilityHibernateModel convertToHibernateModel(Availability availability){
         AvailabilityHibernateModel availabilityHibernateModel = new AvailabilityHibernateModel();
+        availabilityHibernateModel.setId(availability.getId());
         availabilityHibernateModel.setOwnerEmail(availability.getOwnerEmail());
         availabilityHibernateModel.setTitle(availability.getTitle());
         availabilityHibernateModel.setEndDate(availability.getEndDate());
@@ -57,6 +78,13 @@ public class AvailabilityDAOHibernateImpl implements AvailabilityDAO {
         availabilityHibernateModel.setOwnerName(availability.getOwnerName());
         availabilityHibernateModel.setStatus(availability.getStatus());
         return availabilityHibernateModel;
+    }
+
+    public Availability convertToAvailability(AvailabilityHibernateModel model){
+        Availability availability = new Availability(model.getOwnerEmail(), model.getOwnerName(),
+                model.getTitle(), model.getStartDate(), model.getEndDate(), model.getStatus());
+        availability.setId(model.getId());
+        return availability;
     }
 
 }
