@@ -1,15 +1,17 @@
 package availability;
 
+import friend.persistence.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.joda.time.LocalDateTime;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import uk.co.socialcalendar.availability.entities.Availability;
 import uk.co.socialcalendar.availability.persistence.AvailabilityDAOHibernateImpl;
 import uk.co.socialcalendar.availability.persistence.AvailabilityHibernateModel;
 
-import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.core.Is.is;
@@ -18,26 +20,40 @@ import static org.mockito.Mockito.when;
 
 public class AvailabilityDAOHibernateImplTest {
 
-    public static final int FAILED_TO_CREATE = -1;
+    public static final int FAILED_TO_INSERT_RECORD = -1;
     AvailabilityDAOHibernateImpl availabilityDAOImpl;
     Availability availability;
-    Session mockSession;
+    Session testSession;
     SessionFactory mockSessionFactory;
 
     @Before
     public void setup(){
         availabilityDAOImpl = new AvailabilityDAOHibernateImpl();
         availability = new Availability("ownerEmail", "ownerName", "title", new LocalDateTime(), new LocalDateTime(), "status");
-        setupMocks();
+        setupTestDatabase();
     }
 
-    public void setupMocks(){
-        mockSession = mock(Session.class);
+    @After
+    public void teardown(){
+        Transaction t = testSession.getTransaction();
+        t.rollback();
+    }
+
+//    @AfterClass
+//    public static void classTearDown(){
+//        HibernateUtil.shutdown();
+//    }
+
+    public void setupTestDatabase(){
+        getHibernateTestInstance();
         mockSessionFactory = mock(SessionFactory.class);
         availabilityDAOImpl.setSessionFactory(mockSessionFactory);
-        when(mockSessionFactory.getCurrentSession()).thenReturn(mockSession);
-        AvailabilityHibernateModel availabilityHibernateModel = convertToHibernateModel(availability);
-        when(mockSession.save(availabilityHibernateModel)).thenReturn(1);
+        when (mockSessionFactory.getCurrentSession()).thenReturn(testSession);
+    }
+
+    public void getHibernateTestInstance(){
+        testSession = HibernateUtil.getSessionFactory().openSession();
+        testSession.beginTransaction();
     }
 
     public AvailabilityHibernateModel convertToHibernateModel(Availability availability){
@@ -52,11 +68,6 @@ public class AvailabilityDAOHibernateImplTest {
     }
 
     @Test
-    public void canCreateInstance(){
-        assertTrue(availabilityDAOImpl instanceof AvailabilityDAOHibernateImpl);
-    }
-
-    @Test
     public void canConvertAvailabilityToHibernateModel(){
         AvailabilityHibernateModel expectedModel = convertToHibernateModel(availability);
         AvailabilityHibernateModel actualModel = availabilityDAOImpl.convertToHibernateModel(availability);
@@ -65,46 +76,45 @@ public class AvailabilityDAOHibernateImplTest {
 
     @Test
     public void canSaveAvailability(){
-        assertThat(availabilityDAOImpl.save(availability), is(1));
+        assertThat(availabilityDAOImpl.save(availability), greaterThan(0));
     }
 
 
     @Test
     public void doesNotSaveAvailabilityWithEmptyOwnerEmail(){
         availability = new Availability("", "ownerName", "title", new LocalDateTime(), new LocalDateTime(), "status");
-        assertThat(availabilityDAOImpl.save(availability), is(FAILED_TO_CREATE));
+        assertThat(availabilityDAOImpl.save(availability), is(FAILED_TO_INSERT_RECORD));
     }
 
     @Test
     public void doesNotSaveAvailabilityWithEmptyOwnerName(){
         availability = new Availability("ownerEmail", "", "title", new LocalDateTime(), new LocalDateTime(), "status");
-        assertThat(availabilityDAOImpl.save(availability), is(FAILED_TO_CREATE));
+        assertThat(availabilityDAOImpl.save(availability), is(FAILED_TO_INSERT_RECORD));
     }
 
     @Test
     public void doesSaveAvailabilityWithEmptyTitle(){
         availability = new Availability("ownerEmail", "ownerName", "", new LocalDateTime(), new LocalDateTime(), "status");
         AvailabilityHibernateModel availabilityHibernateModel = convertToHibernateModel(availability);
-        when(mockSession.save(availabilityHibernateModel)).thenReturn(1);
-        assertThat(availabilityDAOImpl.save(availability), greaterThan(FAILED_TO_CREATE));
+        assertThat(availabilityDAOImpl.save(availability), greaterThan(0));
     }
 
     @Test
     public void doesNotSaveAvailabilityWithEmptyStatus(){
         availability = new Availability("ownerEmail", "ownerName", "title", new LocalDateTime(), new LocalDateTime(), "");
-        assertThat(availabilityDAOImpl.save(availability), is(FAILED_TO_CREATE));
+        assertThat(availabilityDAOImpl.save(availability), is(FAILED_TO_INSERT_RECORD));
     }
 
     @Test
     public void doesNotSaveAvailabilityWithEmptyStartDate(){
         availability = new Availability("ownerEmail", "ownerName", "title", null, new LocalDateTime(), "status");
-        assertThat(availabilityDAOImpl.save(availability), is(FAILED_TO_CREATE));
+        assertThat(availabilityDAOImpl.save(availability), is(FAILED_TO_INSERT_RECORD));
     }
 
     @Test
     public void doesNotSaveAvailabilityWithEmptyEndDate(){
         availability = new Availability("ownerEmail", "ownerName", "title", new LocalDateTime(), null, "status");
-        assertThat(availabilityDAOImpl.save(availability), is(FAILED_TO_CREATE));
+        assertThat(availabilityDAOImpl.save(availability), is(FAILED_TO_INSERT_RECORD));
     }
 
 

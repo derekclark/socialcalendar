@@ -5,7 +5,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import uk.co.socialcalendar.user.entities.User;
@@ -40,10 +39,10 @@ public class UserDAOHibernateImplTests {
         t.rollback();
     }
 
-    @AfterClass
-    public static void classTearDown(){
-        HibernateUtil.shutdown();
-    }
+//    @AfterClass
+//    public static void classTearDown(){
+//        HibernateUtil.shutdown();
+//    }
 
     public void setupTestDatabase(){
         getHibernateTestInstance();
