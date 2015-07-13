@@ -6,6 +6,7 @@ import org.hibernate.Transaction;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import testSupport.InMemoryHibernateDB;
 import uk.co.socialcalendar.friend.entities.Friend;
 import uk.co.socialcalendar.friend.entities.FriendValidator;
 import uk.co.socialcalendar.friend.persistence.FriendDAOHibernateImpl;
@@ -63,7 +64,7 @@ public class FriendDAOHibernateImplTest {
     }
 
     public void getHibernateTestInstance(){
-        testSession = HibernateUtil.getSessionFactory().openSession();
+        testSession = InMemoryHibernateDB.getSessionFactory().openSession();
         testSession.beginTransaction();
     }
 

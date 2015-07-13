@@ -1,6 +1,6 @@
 package availability;
 
-import friend.persistence.HibernateUtil;
+import testSupport.InMemoryHibernateDB;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -52,7 +52,7 @@ public class AvailabilityDAOHibernateImplTest {
     }
 
     public void getHibernateTestInstance(){
-        testSession = HibernateUtil.getSessionFactory().openSession();
+        testSession = InMemoryHibernateDB.getSessionFactory().openSession();
         testSession.beginTransaction();
     }
 

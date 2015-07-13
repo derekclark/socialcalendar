@@ -1,4 +1,4 @@
-package friend.persistence;
+package testSupport;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -7,7 +7,7 @@ import org.hibernate.service.ServiceRegistry;
 
 import java.net.URL;
 
-public class HibernateUtil
+public class InMemoryHibernateDB
 {
     private static SessionFactory sessionFactory = buildSessionFactory();
 
@@ -17,7 +17,7 @@ public class HibernateUtil
         {
             if (sessionFactory == null)
             {
-                URL resource = HibernateUtil.class.getResource("/test-hibernate.cfg.xml");
+                URL resource = InMemoryHibernateDB.class.getResource("/test-hibernate.cfg.xml");
                 Configuration configuration = new Configuration().configure(resource);
                 StandardServiceRegistryBuilder serviceRegistryBuilder = new StandardServiceRegistryBuilder();
                 serviceRegistryBuilder.applySettings(configuration.getProperties());
