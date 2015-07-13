@@ -1,8 +1,11 @@
 package user.persistence;
 
-import org.hibernate.Query;
+import friend.persistence.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import uk.co.socialcalendar.user.entities.User;
@@ -10,49 +13,48 @@ import uk.co.socialcalendar.user.persistence.UserDAOHibernateImpl;
 import uk.co.socialcalendar.user.persistence.UserHibernateModel;
 
 import static junit.framework.TestCase.assertNull;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.*;
-import static org.mockito.internal.matchers.Equality.areEqual;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class UserDAOHibernateImplTests {
     UserDAOHibernateImpl userDAOImpl;
     User user;
     SessionFactory mockSessionFactory;
-    Session mockSession;
-    Query mockQuery;
+    Session testSession;
     public static final String NAME = "name";
     public static final String FACEBOOK_ID = "facebookId";
-    private final static String EMAIL = "email";
+    private final static String ME = "email";
 
     @Before
     public void setup(){
         userDAOImpl = new UserDAOHibernateImpl();
-        user = new User(EMAIL, NAME, FACEBOOK_ID);
-        setupMocks();
+        user = new User(ME, NAME, FACEBOOK_ID);
+        setupTestDatabase();
     }
 
-    public void setupMocks(){
+    @After
+    public void teardown(){
+        Transaction t = testSession.getTransaction();
+        t.rollback();
+    }
+
+    @AfterClass
+    public static void classTearDown(){
+        HibernateUtil.shutdown();
+    }
+
+    public void setupTestDatabase(){
+        getHibernateTestInstance();
         mockSessionFactory = mock(SessionFactory.class);
-        mockSession = mock(Session.class);
-        mockQuery = mock(Query.class);
         userDAOImpl.setSessionFactory(mockSessionFactory);
-        when(mockSessionFactory.getCurrentSession()).thenReturn(mockSession);
+        when (mockSessionFactory.getCurrentSession()).thenReturn(testSession);
     }
 
-    @Test
-    public void canGetUser(){
-        UserHibernateModel userHibernateModel = new UserHibernateModel(user);
-        when(mockSession.get(UserHibernateModel.class, EMAIL)).thenReturn(userHibernateModel);
-        User actualUser = userDAOImpl.read(EMAIL);
-        areEqual(user, actualUser);
-    }
-
-    @Test
-    public void returnsNullWhenUserNotFound(){
-        UserHibernateModel userHibernateModel = new UserHibernateModel(user);
-        when(mockSession.get(UserHibernateModel.class, EMAIL)).thenReturn(null);
-        User actualUser = userDAOImpl.read(EMAIL);
-        assertNull(actualUser);
+    public void getHibernateTestInstance(){
+        testSession = HibernateUtil.getSessionFactory().openSession();
+        testSession.beginTransaction();
     }
 
     @Test
@@ -61,23 +63,33 @@ public class UserDAOHibernateImplTests {
     }
 
     @Test
-    public void saveCallsSessionSave(){
+    public void canGetUser(){
+        UserHibernateModel userHibernateModel = new UserHibernateModel(user);
         userDAOImpl.save(user);
-        verify(mockSession).save(anyObject());
+        User actualUser = userDAOImpl.read(ME);
+        assertEquals(user, actualUser);
     }
+
+    @Test
+    public void returnsNullWhenUserNotFound(){
+        UserHibernateModel userHibernateModel = new UserHibernateModel(user);
+        User actualUser = userDAOImpl.read(ME);
+        assertNull(actualUser);
+    }
+
 
     @Test
     public void convertUserHibernateModelToUser(){
         UserHibernateModel userHibernateModel = new UserHibernateModel(user);
-        User expectedUser = new User(EMAIL, NAME, FACEBOOK_ID);
+        User expectedUser = new User(ME, NAME, FACEBOOK_ID);
         User actualUser = userDAOImpl.convertToUser(userHibernateModel);
-        areEqual(expectedUser, actualUser);
+        assertEquals(expectedUser,actualUser);
     }
 
     @Test
     public void convertUserToUserHibernateModel(){
         UserHibernateModel expectedUserHibernateModel = new UserHibernateModel(user);
         UserHibernateModel actualUserHibernateModel = userDAOImpl.convertToUserHibernateModel(user);
-        areEqual(expectedUserHibernateModel, actualUserHibernateModel);
+        assertEquals(expectedUserHibernateModel, actualUserHibernateModel);
     }
 }

@@ -52,4 +52,26 @@ public class UserHibernateModel {
         this.facebookId = facebookId;
     }
 
+    public boolean equals(Object obj){
+        if (this == obj){
+            return true;
+        }
+        if ((obj == null) || (obj.getClass() != this.getClass())){
+            return false;
+        }
+        UserHibernateModel user = (UserHibernateModel) obj;
+
+        if (! this.email.equals(user.getEmail())) return false;
+        if (! this.name.equals(user.getName())) return false;
+        if (! this.facebookId.equals(user.getFacebookId())) return false;
+
+        return true;
+    }
+
+    public int hashcode(){
+        int hash = 7;
+        hash = 31 * hash + email.hashCode() + name.hashCode() + facebookId.hashCode();
+        return hash;
+    }
+
 }
