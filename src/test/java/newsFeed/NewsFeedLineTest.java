@@ -2,7 +2,7 @@ package newsFeed;
 
 import org.joda.time.LocalDateTime;
 import org.junit.Test;
-import uk.co.socialcalendar.NewsFeedLine;
+import uk.co.socialcalendar.newsFeed.NewsFeedLine;
 
 import static org.junit.Assert.assertEquals;
 

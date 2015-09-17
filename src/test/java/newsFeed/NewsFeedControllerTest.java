@@ -5,9 +5,12 @@ import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
 import testSupport.HttpMocks;
 import uk.co.socialcalendar.newsFeed.NewsFeedController;
+import uk.co.socialcalendar.newsFeed.NewsFeedLine;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -22,6 +25,8 @@ public class NewsFeedControllerTest {
     NewsFeedController controller = new NewsFeedController();
     HttpMocks httpMocks;
     ModelAndView mav;
+
+    NewsFeedLine newsFeedLine;
 
     @Before
     public void setup(){
@@ -39,5 +44,14 @@ public class NewsFeedControllerTest {
         mav = controller.showNewsFeed(httpMocks.getModel(),
                 httpMocks.getMockHttpServletRequest(), httpMocks.getMockHttpServletResponse());
         assertEquals("newsFeed",mav.getViewName());
+    }
+
+    @Test
+    public void returnsEmptyNewsFeedIfNoAvailabilities() throws IOException, ServletException {
+        List<NewsFeedLine> emptyNewsFeed = new ArrayList<NewsFeedLine>();
+        mav = controller.showNewsFeed(httpMocks.getModel(),
+                httpMocks.getMockHttpServletRequest(), httpMocks.getMockHttpServletResponse());
+        assertEquals(emptyNewsFeed,mav.getModelMap().get("newsFeedLines"));
+
     }
 }

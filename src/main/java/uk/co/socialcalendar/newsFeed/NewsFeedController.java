@@ -10,6 +10,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class NewsFeedController {
     SessionAttributes sessionAttributes;
@@ -29,7 +31,9 @@ public class NewsFeedController {
             HttpServletRequest request,
             HttpServletResponse response) throws IOException, ServletException {
 
+        List<NewsFeedLine> newsFeedLines = new ArrayList<NewsFeedLine>();
         ModelAndView mav = new ModelAndView("newsFeed");
+        mav.addObject("newsFeedLines",newsFeedLines);
         return mav;
     }
 
