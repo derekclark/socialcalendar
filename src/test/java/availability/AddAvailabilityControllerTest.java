@@ -4,10 +4,8 @@ import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.ui.ExtendedModelMap;
-import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
-import uk.co.socialcalendar.authentication.SessionAttributes;
+import testSupport.HttpMocks;
 import uk.co.socialcalendar.availability.controllers.AddAvailabilityController;
 import uk.co.socialcalendar.friend.controllers.FriendModel;
 import uk.co.socialcalendar.friend.controllers.FriendModelFacade;
@@ -15,76 +13,65 @@ import uk.co.socialcalendar.user.entities.User;
 import uk.co.socialcalendar.user.useCases.UserFacade;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class AddAvailabilityControllerTest {
-    public static final String END_DATE = "2012-01-27 14:15";
-    public static final String START_DATE = "2012-01-25 11:12";
-    public static final String TITLE = "title";
-    public static final String DATE_PATTERN = "yyyy-MM-dd HH:mm";
-    public static final String ME = "me";
-    public static final String MY_NAME = "myName";
+    private static final String END_DATE = "2012-01-27 14:15";
+    private static final String START_DATE = "2012-01-25 11:12";
+    private static final String TITLE = "title";
+    private static final String DATE_PATTERN = "yyyy-MM-dd HH:mm";
+    private static final String ME = "me";
+    private static final String MY_NAME = "myName";
+    private static final String MY_FACEBOOK_ID = "facebookId";
     AddAvailabilityController controller;
     ModelAndView mav;
-    Model model;
-    HttpServletRequest mockHttpServletRequest;
-    HttpServletResponse mockHttpServletResponse;
     FakeAvailabilityFacadeImpl fakeAvailabilityFacade;
     UserFacade mockUserFacade;
     User user;
     FriendModelFacade mockFriendModelFacade;
-
-    SessionAttributes mockSessionAttributes;
+    HttpMocks httpMocks;
 
     @Before
     public void setup(){
         controller = new AddAvailabilityController();
-        model = new ExtendedModelMap();
-        user = new User(ME, MY_NAME, "facebookId");
+        user = new User(ME, MY_NAME, MY_FACEBOOK_ID);
         fakeAvailabilityFacade = new FakeAvailabilityFacadeImpl();
-        setMocks();
+        setupMocks();
+    }
+
+    public void setupMocks(){
+        setupMockUserFacade();
+        setupUserMock();
+        mockFriendModelFacade = mock(FriendModelFacade.class);
+        setupHttpMocks();
         controller.setAvailabilityFacade(fakeAvailabilityFacade);
         controller.setUserFacade(mockUserFacade);
         controller.setFriendModelFacade(mockFriendModelFacade);
     }
 
-    public void setMocks(){
-        setupMockUserFacade();
-        setupMockSessionAttributes();
-        setupUserMock();
-        mockFriendModelFacade = mock(FriendModelFacade.class);
+    public void setupHttpMocks(){
+        httpMocks = new HttpMocks();
+        controller.setSessionAttributes(httpMocks.getMockSessionAttributes());
     }
 
     public void setupUserMock(){
         mockUserFacade = mock(UserFacade.class);
         controller.setUserFacade(mockUserFacade);
-        User user = new User(ME, MY_NAME,"facebookId");
+        User user = new User(ME, MY_NAME, MY_FACEBOOK_ID);
         when(mockUserFacade.getUser(ME)).thenReturn(user);
     }
 
     public void setupMockUserFacade(){
         mockUserFacade = mock(UserFacade.class);
         when(mockUserFacade.getUser(ME)).thenReturn(user);
-
-    }
-    public void setupMockSessionAttributes(){
-        mockSessionAttributes = mock(SessionAttributes.class);
-        controller.setSessionAttributes(mockSessionAttributes);
-        when(mockSessionAttributes.getLoggedInUserId((HttpServletRequest) anyObject())).thenReturn(ME);
-    }
-
-    @Test
-    public void canCreateInstance(){
-        assertTrue(controller instanceof AddAvailabilityController);
     }
 
     @Test
@@ -95,7 +82,8 @@ public class AddAvailabilityControllerTest {
 
     public ModelAndView callAddAvailability(String title, String startDate, String endDate) throws IOException, ServletException {
         List<String> selectedFriends = new ArrayList<String>();
-        return controller.addAvailability(title, startDate, endDate, selectedFriends, model, mockHttpServletRequest, mockHttpServletResponse);
+        return controller.addAvailability(title, startDate, endDate, selectedFriends, httpMocks.getModel(),
+                httpMocks.getMockHttpServletRequest(), httpMocks.getMockHttpServletResponse());
     }
 
     @Test
@@ -180,6 +168,5 @@ public class AddAvailabilityControllerTest {
         mav = callAddAvailability(TITLE, START_DATE, END_DATE);
         assertEquals(MY_NAME,mav.getModelMap().get("userName"));
     }
-
 
 }

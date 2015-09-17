@@ -1,4 +1,4 @@
-package uk.co.socialcalendar;
+package uk.co.socialcalendar.newsFeed;
 
 import org.joda.time.LocalDateTime;
 import uk.co.socialcalendar.user.entities.User;
