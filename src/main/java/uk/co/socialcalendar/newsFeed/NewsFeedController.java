@@ -15,6 +15,15 @@ import java.util.List;
 
 public class NewsFeedController {
     SessionAttributes sessionAttributes;
+    NewsFeedFacade newsFeedFacade;
+
+    public NewsFeedFacade getNewsFeedFacade() {
+        return newsFeedFacade;
+    }
+
+    public void setNewsFeedFacade(NewsFeedFacade newsFeedFacade) {
+        this.newsFeedFacade = newsFeedFacade;
+    }
 
     public SessionAttributes getSessionAttributes() {
         return sessionAttributes;
@@ -33,7 +42,7 @@ public class NewsFeedController {
 
         List<NewsFeedLine> newsFeedLines = new ArrayList<NewsFeedLine>();
         ModelAndView mav = new ModelAndView("newsFeed");
-        mav.addObject("newsFeedLines",newsFeedLines);
+        mav.addObject("newsFeedLines",newsFeedFacade.getNewsFeed("me"));
         return mav;
     }
 

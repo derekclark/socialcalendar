@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
 import testSupport.HttpMocks;
 import uk.co.socialcalendar.newsFeed.NewsFeedController;
+import uk.co.socialcalendar.newsFeed.NewsFeedFacade;
 import uk.co.socialcalendar.newsFeed.NewsFeedLine;
 
 import javax.servlet.ServletException;
@@ -13,6 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class NewsFeedControllerTest {
     private static final String END_DATE = "2012-01-27 14:15";
@@ -27,11 +31,14 @@ public class NewsFeedControllerTest {
     ModelAndView mav;
 
     NewsFeedLine newsFeedLine;
+    NewsFeedFacade mockNewsFeedFacade;
 
     @Before
     public void setup(){
         controller = new NewsFeedController();
         setupHttpMocks();
+        mockNewsFeedFacade = mock(NewsFeedFacade.class);
+        controller.setNewsFeedFacade(mockNewsFeedFacade);
     }
 
     public void setupHttpMocks(){
@@ -52,6 +59,17 @@ public class NewsFeedControllerTest {
         mav = controller.showNewsFeed(httpMocks.getModel(),
                 httpMocks.getMockHttpServletRequest(), httpMocks.getMockHttpServletResponse());
         assertEquals(emptyNewsFeed,mav.getModelMap().get("newsFeedLines"));
+    }
+
+    @Test
+    public void returnsNewsFeedLine() throws IOException, ServletException {
+        List<NewsFeedLine> newsFeedLineList = new ArrayList<NewsFeedLine>();
+        NewsFeedLine newsFeedLine = new NewsFeedLine();
+        newsFeedLineList.add(newsFeedLine);
+        when(mockNewsFeedFacade.getNewsFeed(anyString())).thenReturn(newsFeedLineList);
+        mav = controller.showNewsFeed(httpMocks.getModel(),
+                httpMocks.getMockHttpServletRequest(), httpMocks.getMockHttpServletResponse());
+        assertEquals(newsFeedLineList, mav.getModelMap().get("newsFeedLines"));
 
     }
 }
