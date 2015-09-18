@@ -7,6 +7,7 @@ import testSupport.HttpMocks;
 import uk.co.socialcalendar.newsFeed.NewsFeedController;
 import uk.co.socialcalendar.newsFeed.NewsFeedFacade;
 import uk.co.socialcalendar.newsFeed.NewsFeedLine;
+import uk.co.socialcalendar.user.useCases.UserFacade;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
@@ -29,9 +30,9 @@ public class NewsFeedControllerTest {
     NewsFeedController controller = new NewsFeedController();
     HttpMocks httpMocks;
     ModelAndView mav;
-
     NewsFeedLine newsFeedLine;
     NewsFeedFacade mockNewsFeedFacade;
+    UserFacade mockUserFacade;
 
     @Before
     public void setup(){
@@ -44,6 +45,8 @@ public class NewsFeedControllerTest {
     public void setupHttpMocks(){
         httpMocks = new HttpMocks();
         controller.setSessionAttributes(httpMocks.getMockSessionAttributes());
+        controller.setUserFacade(httpMocks.getMockUserFacade());
+
     }
 
     @Test
@@ -51,6 +54,14 @@ public class NewsFeedControllerTest {
         mav = controller.showNewsFeed(httpMocks.getModel(),
                 httpMocks.getMockHttpServletRequest(), httpMocks.getMockHttpServletResponse());
         assertEquals("newsFeed",mav.getViewName());
+    }
+
+    @Test
+    public void returnsMyUserName() throws IOException, ServletException {
+        mav = controller.showNewsFeed(httpMocks.getModel(),
+                httpMocks.getMockHttpServletRequest(), httpMocks.getMockHttpServletResponse());
+        assertEquals(MY_NAME,mav.getModelMap().get("userName"));
+
     }
 
     @Test
@@ -67,6 +78,7 @@ public class NewsFeedControllerTest {
         NewsFeedLine newsFeedLine = new NewsFeedLine();
         newsFeedLineList.add(newsFeedLine);
         when(mockNewsFeedFacade.getNewsFeed(anyString())).thenReturn(newsFeedLineList);
+
         mav = controller.showNewsFeed(httpMocks.getModel(),
                 httpMocks.getMockHttpServletRequest(), httpMocks.getMockHttpServletResponse());
         assertEquals(newsFeedLineList, mav.getModelMap().get("newsFeedLines"));

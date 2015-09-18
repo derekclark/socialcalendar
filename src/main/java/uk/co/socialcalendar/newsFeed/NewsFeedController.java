@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import uk.co.socialcalendar.authentication.SessionAttributes;
+import uk.co.socialcalendar.user.useCases.UserFacade;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,8 @@ import java.util.List;
 public class NewsFeedController {
     SessionAttributes sessionAttributes;
     NewsFeedFacade newsFeedFacade;
+    UserFacade userFacade;
+    String me;
 
     public NewsFeedFacade getNewsFeedFacade() {
         return newsFeedFacade;
@@ -33,6 +36,13 @@ public class NewsFeedController {
         this.sessionAttributes = sessionAttributes;
     }
 
+    public UserFacade getUserFacade() {
+        return userFacade;
+    }
+
+    public void setUserFacade(UserFacade userFacade) {
+        this.userFacade = userFacade;
+    }
 
     @RequestMapping(value = "newsFeed", method = RequestMethod.GET)
     public ModelAndView showNewsFeed(
@@ -40,9 +50,12 @@ public class NewsFeedController {
             HttpServletRequest request,
             HttpServletResponse response) throws IOException, ServletException {
 
+        me = sessionAttributes.getLoggedInUserId(request);
+
         List<NewsFeedLine> newsFeedLines = new ArrayList<NewsFeedLine>();
         ModelAndView mav = new ModelAndView("newsFeed");
         mav.addObject("newsFeedLines",newsFeedFacade.getNewsFeed("me"));
+        mav.addObject("userName",userFacade.getUser(me).getName());
         return mav;
     }
 
