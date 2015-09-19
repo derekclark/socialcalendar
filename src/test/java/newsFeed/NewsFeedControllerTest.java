@@ -55,25 +55,6 @@ public class NewsFeedControllerTest {
     }
 
     @Test
-    public void returnsMyUserName() throws IOException, ServletException {
-        mav = callNewsFeed();
-        assertEquals(MY_NAME,mav.getModelMap().get("userName"));
-
-    }
-
-    @Test
-    public void returnsIsAuthenticatedInModel() throws IOException, ServletException {
-        mav = callNewsFeed();
-        assertEquals(true, mav.getModelMap().get("isAuthenticated"));
-    }
-
-//    @Test
-//    public void returnsNotAuthenticatedWhenNotLoggedIn() throws IOException, ServletException {
-//        mav = callNewsFeed();
-//        assertEquals(false, mav.getModelMap().get("isAuthenticated"));
-//    }
-
-    @Test
     public void returnsEmptyNewsFeedIfNoAvailabilities() throws IOException, ServletException {
         List<NewsFeedLine> emptyNewsFeed = new ArrayList<NewsFeedLine>();
         mav = callNewsFeed();
