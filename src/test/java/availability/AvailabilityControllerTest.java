@@ -98,11 +98,6 @@ public class AvailabilityControllerTest {
         assertNotNull(mav.getModelMap().get("friendList"));
     }
 
-    @Test
-    public void userNameIsSetInModel(){
-        assertEquals(MY_NAME,mav.getModelMap().get("userName"));
-    }
-
     public List<FriendModel> setExpectedFriendList(){
         FriendModel friendModel1 = new FriendModel(new User("friendEmail1","friendName1","facebookId1"));
         FriendModel friendModel2 = new FriendModel(new User("friendEmail2","friendName2","facebookId2"));

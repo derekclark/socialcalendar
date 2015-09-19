@@ -68,6 +68,12 @@ public class NewsFeedControllerTest {
     }
 
     @Test
+    public void returnsNotAuthenticatedWhenNotLoggedIn() throws IOException, ServletException {
+        mav = callNewsFeed();
+        assertEquals(false, mav.getModelMap().get("isAuthenticated"));
+    }
+
+    @Test
     public void returnsEmptyNewsFeedIfNoAvailabilities() throws IOException, ServletException {
         List<NewsFeedLine> emptyNewsFeed = new ArrayList<NewsFeedLine>();
         mav = callNewsFeed();

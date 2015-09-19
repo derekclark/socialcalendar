@@ -86,7 +86,6 @@ public class AddAvailabilityController {
         mav.addObject("section","availability");
         mav.addObject("newAvailability",new Availability());
         mav.addObject("friendList", friendModelFacade.getFriendModelList(me));
-        mav.addObject("userName",userFacade.getUser(me).getName());
         return mav;
     }
 }

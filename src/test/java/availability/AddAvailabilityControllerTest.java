@@ -163,10 +163,4 @@ public class AddAvailabilityControllerTest {
         assertNotNull(mav.getModelMap().get("friendList"));
     }
 
-    @Test
-    public void userNameIsSetInModel() throws IOException, ServletException {
-        mav = callAddAvailability(TITLE, START_DATE, END_DATE);
-        assertEquals(MY_NAME,mav.getModelMap().get("userName"));
-    }
-
 }

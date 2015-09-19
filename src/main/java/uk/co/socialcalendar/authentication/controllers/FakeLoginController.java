@@ -62,6 +62,7 @@ public class FakeLoginController {
             session.setAttribute("IS_AUTHENTICATED", true);
             session.setAttribute("OAUTH_TOKEN", "token");
             session.setAttribute("MY_FACEBOOK_ID", FACEBOOK_ID1);
+            session.setAttribute("USER_NAME", "My name");
 
             String loggedInUser = (String) session.getAttribute("USER_ID");
             System.out.println("fake login id = " + loggedInUser);
@@ -72,7 +73,7 @@ public class FakeLoginController {
         };
 
         ModelAndView mav = new ModelAndView("homePage");
-        mav.addObject("username", NAME1);
+//        mav.addObject("username", NAME1);
 //        mav.addObject("USER_ID", fakeUserCredentials.getUserId());
         return mav;
     }

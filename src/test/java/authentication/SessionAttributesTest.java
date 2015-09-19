@@ -17,6 +17,7 @@ import static org.mockito.Mockito.when;
 
 public class SessionAttributesTest {
     private static final String USER_ID = "userId";
+    private static final String USER_NAME = "user name";
     SessionAttributes sessionAttributes;
     Model model;
 
@@ -63,5 +64,10 @@ public class SessionAttributesTest {
         assertEquals("facebookId", sessionAttributes.getFacebookId(mockHttpServletRequest));
     }
 
+    @Test
+    public void getUserName(){
+        when(mockSession.getAttribute("USER_NAME")).thenReturn(USER_NAME);
+        assertEquals(USER_NAME, sessionAttributes.getUserName(mockHttpServletRequest));
+    }
 
 }

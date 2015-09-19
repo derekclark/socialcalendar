@@ -20,4 +20,10 @@ public class SessionAttributes {
         HttpSession session = request.getSession();
         return (String) session.getAttribute("FACEBOOK_ID");
     }
+
+    public String getUserName(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        return (String) session.getAttribute("USER_NAME");
+
+    }
 }

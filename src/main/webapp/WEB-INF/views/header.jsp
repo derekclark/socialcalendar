@@ -6,6 +6,7 @@
     Boolean isAuthenticated = (Boolean) session.getAttribute("IS_AUTHENTICATED");
     String token = (String) session.getAttribute("OAUTH_TOKEN");
     String facebookId = (String) session.getAttribute("FACEBOOK_ID");
+    String userName = (String) session.getAttribute("USER_NAME");
 %>
 
 <head>
@@ -34,8 +35,6 @@
     <body>
 
       <% if(isAuthenticated != null && isAuthenticated) { %>
-        <c:choose>
-            <c:when test="${not empty userName}">
               <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
                  <div>
                     <table class="table-header">
@@ -45,7 +44,7 @@
                                 social eggbox
                               </a>
                             </td>
-                            <td ><div class="welcome"> Welcome <b>${userName}!</b></div>
+                            <td ><div class="welcome"> Welcome <b><%=userName%>!</b></div>
                                 <fmt:bundle basename="propertyPlaceholder">
                                   <a class="logout" href="https://www.facebook.com/logout.php?access_token=<%=token%>&next=<fmt:message key="facebookLogoutUrl"/>"> Logout</a>
                                 </fmt:bundle>
@@ -57,8 +56,6 @@
                     </table>
                  </div>
               </nav>        
-            </c:when>
-        </c:choose>
 
     <% }else {%>
        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
