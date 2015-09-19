@@ -34,6 +34,7 @@ public class NewsFeedFacadeImpl implements NewsFeedFacade{
         newsFeedLine.setEndDateTime(availability.getEndDate());
         newsFeedLine.setOwnerEmail(availability.getOwnerEmail());
         newsFeedLine.setOwnerName(availability.getOwnerName());
+        newsFeedLine.setUrl("amendAvailability?availabilityId=" + availability.getId());
         return newsFeedLine;
     }
 }

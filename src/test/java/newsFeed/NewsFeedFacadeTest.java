@@ -43,13 +43,21 @@ public class NewsFeedFacadeTest {
         assertEquals(expectedNewsFeedLineList, newsFeedFacade.getNewsFeed(ME));
     }
 
+    @Test
+    public void setsLineUrl(){
+        List<Availability> expectedAvailabilities = setMyAvailabilities();
+        when(mockAvailabilityDAO.readAllOwnersOpenAvailabilities(ME)).thenReturn(expectedAvailabilities);
+        assertEquals("amendAvailability?availabilityId=1", newsFeedFacade.getNewsFeed(ME).get(0).getUrl());
+        assertEquals("amendAvailability?availabilityId=2", newsFeedFacade.getNewsFeed(ME).get(1).getUrl());
+    }
+
     public List<Availability> setMyAvailabilities(){
         List<Availability> expectedAvailabilities = new ArrayList<Availability>();
         Availability availability1 = new Availability(ME, "myName","title",START_DATE, END_DATE,"status");
         availability1.setId(1);
 
         Availability availability2 = new Availability(ME, "myName2","title2",START_DATE, END_DATE,"status");
-        availability1.setId(2);
+        availability2.setId(2);
 
         expectedAvailabilities.add(availability1);
         expectedAvailabilities.add(availability2);
