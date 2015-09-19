@@ -3,6 +3,8 @@ package availability;
 import uk.co.socialcalendar.availability.entities.Availability;
 import uk.co.socialcalendar.availability.useCases.AvailabilityFacade;
 
+import java.util.List;
+
 public class FakeAvailabilityFacadeImpl implements AvailabilityFacade{
     Availability availability;
     boolean createMethodCalled;
@@ -34,6 +36,11 @@ public class FakeAvailabilityFacadeImpl implements AvailabilityFacade{
     @Override
     public boolean update(Availability availability) {
         return false;
+    }
+
+    @Override
+    public List<Availability> getOwnersOpenAvailabilities(String owner) {
+        return null;
     }
 
 }
