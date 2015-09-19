@@ -12,7 +12,7 @@
 		   <div>
 			  <ul id="nav" class="nav navbar-nav navbar-custom">
 				 <li <c:if test="${section=='Social Feed'}"> class="active" </c:if> >
-					<a href="viewNewsFeed">Social Feed</a></li>
+					<a href="newsFeed">Social Feed</a></li>
 				 <li <c:if test="${section=='Calendar'}"> class="active" </c:if> >
 					<a href="calendar">Calendar</a></li>
 				 <li <c:if test="${section=='Friends'}"> class="active" </c:if> >

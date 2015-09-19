@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="resources/css/newsfeed.css" type="text/css" media="screen">
 
 	<div class="section-text black-link">
-	        <c:forEach var="newsFeedItem" items="${newsFeedList}">
+	        <c:forEach var="newsFeedItem" items="${newsFeedLines}">
 	        	<a href="<c:out value="${newsFeedItem.url}"/>">
 
 	        	<c:if test="${newsFeedItem.hasResponded}">
@@ -77,9 +77,9 @@
 							<td class="unresponded-availability">
 						        	<c:out value="${newsFeedItem.ownerName}"/> 
 						        	is available <br>
-						        	<c:out value="${newsFeedItem.startDate}"/> 
+						        	<c:out value="${newsFeedItem.startDateTime}"/>
 						        	to <br>
-						        	<c:out value="${newsFeedItem.endDate}"/> 
+						        	<c:out value="${newsFeedItem.endDateTime}"/>
 							</td>
 
 						</tr>

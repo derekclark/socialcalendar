@@ -60,8 +60,10 @@ public class AvailabilityDAOHibernateImpl implements AvailabilityDAO {
     }
 
     @Override
+    @Transactional
     public List<Availability> readAllOwnersOpenAvailabilities(String owner) {
 
+        System.out.println("getting avail for owner=" + owner);
         Query query = sessionFactory.getCurrentSession().createQuery
                 ("from AvailabilityHibernateModel where OWNER_EMAIL = :owner");
         query.setParameter("owner", owner);
@@ -71,6 +73,7 @@ public class AvailabilityDAOHibernateImpl implements AvailabilityDAO {
         List<Availability> availabilityList = new ArrayList<Availability>();
 
         for (AvailabilityHibernateModel avail:returnSQLList){
+            System.out.println("found avail=" + avail.getId());
             availabilityList.add(convertToAvailability(avail));
         }
 

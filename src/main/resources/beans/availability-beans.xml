@@ -13,10 +13,15 @@
     <bean id="availability" class="uk.co.socialcalendar.availability.entities.Availability" />
 
     <!--CONTROLLERS-->
+    <bean id="availabilityCommonModel" class="uk.co.socialcalendar.availability.controllers.AvailabilityCommonModel">
+        <property name="friendModelFacade" ref="friendModelFacade"/>
+    </bean>
+
     <bean id="availabilityController" class="uk.co.socialcalendar.availability.controllers.AvailabilityController">
                 <property name="friendModelFacade" ref="friendModelFacade"/>
                 <property name="sessionAttributes" ref="sessionAttributes"/>
                 <property name="userFacade" ref="userFacade"/>                
+                <property name="availabilityCommonModel" ref="availabilityCommonModel"/>
     </bean>
 
     <bean id="addAvailabilityController" class="uk.co.socialcalendar.availability.controllers.AddAvailabilityController">
@@ -24,6 +29,7 @@
                 <property name="sessionAttributes" ref="sessionAttributes"/>
                 <property name="userFacade" ref="userFacade"/>
                 <property name="friendModelFacade" ref="friendModelFacade"/>                
+                <property name="availabilityCommonModel" ref="availabilityCommonModel"/>
     </bean>
 
     <!--DAO-->
