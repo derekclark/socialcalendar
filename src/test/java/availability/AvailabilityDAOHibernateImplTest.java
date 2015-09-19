@@ -47,29 +47,6 @@ public class AvailabilityDAOHibernateImplTest {
         t.rollback();
     }
 
-    public void setupTestDatabase(){
-        getHibernateTestInstance();
-        mockSessionFactory = mock(SessionFactory.class);
-        availabilityDAOImpl.setSessionFactory(mockSessionFactory);
-        when (mockSessionFactory.getCurrentSession()).thenReturn(testSession);
-    }
-
-    public void getHibernateTestInstance(){
-        testSession = InMemoryHibernateDB.getSessionFactory().openSession();
-        testSession.beginTransaction();
-    }
-
-    public AvailabilityHibernateModel convertToHibernateModel(Availability availability){
-        AvailabilityHibernateModel availabilityHibernateModel = new AvailabilityHibernateModel();
-        availabilityHibernateModel.setOwnerEmail(availability.getOwnerEmail());
-        availabilityHibernateModel.setTitle(availability.getTitle());
-        availabilityHibernateModel.setEndDate(availability.getEndDate());
-        availabilityHibernateModel.setStartDate(availability.getStartDate());
-        availabilityHibernateModel.setOwnerName(availability.getOwnerName());
-        availabilityHibernateModel.setStatus(availability.getStatus());
-        return availabilityHibernateModel;
-    }
-
     @Test
     public void canConvertAvailabilityToHibernateModel(){
         AvailabilityHibernateModel expectedModel = convertToHibernateModel(availability);
@@ -195,6 +172,29 @@ public class AvailabilityDAOHibernateImplTest {
         expectedAvailabilities.add(availability1);
         expectedAvailabilities.add(availability2);
         return expectedAvailabilities;
+    }
+
+    public void setupTestDatabase(){
+        getHibernateTestInstance();
+        mockSessionFactory = mock(SessionFactory.class);
+        availabilityDAOImpl.setSessionFactory(mockSessionFactory);
+        when (mockSessionFactory.getCurrentSession()).thenReturn(testSession);
+    }
+
+    public void getHibernateTestInstance(){
+        testSession = InMemoryHibernateDB.getSessionFactory().openSession();
+        testSession.beginTransaction();
+    }
+
+    public AvailabilityHibernateModel convertToHibernateModel(Availability availability){
+        AvailabilityHibernateModel availabilityHibernateModel = new AvailabilityHibernateModel();
+        availabilityHibernateModel.setOwnerEmail(availability.getOwnerEmail());
+        availabilityHibernateModel.setTitle(availability.getTitle());
+        availabilityHibernateModel.setEndDate(availability.getEndDate());
+        availabilityHibernateModel.setStartDate(availability.getStartDate());
+        availabilityHibernateModel.setOwnerName(availability.getOwnerName());
+        availabilityHibernateModel.setStatus(availability.getStatus());
+        return availabilityHibernateModel;
     }
 
 }
