@@ -56,6 +56,7 @@ public class NewsFeedController {
         ModelAndView mav = new ModelAndView("newsFeed");
         mav.addObject("newsFeedLines",newsFeedFacade.getNewsFeed("me"));
         mav.addObject("userName",userFacade.getUser(me).getName());
+        mav.addObject("isAuthenticated",true);
         return mav;
     }
 

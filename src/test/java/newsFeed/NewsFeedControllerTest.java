@@ -46,29 +46,31 @@ public class NewsFeedControllerTest {
         httpMocks = new HttpMocks();
         controller.setSessionAttributes(httpMocks.getMockSessionAttributes());
         controller.setUserFacade(httpMocks.getMockUserFacade());
-
     }
 
     @Test
     public void rendersNewsFeedView() throws IOException, ServletException {
-        mav = controller.showNewsFeed(httpMocks.getModel(),
-                httpMocks.getMockHttpServletRequest(), httpMocks.getMockHttpServletResponse());
+        mav = callNewsFeed();
         assertEquals("newsFeed",mav.getViewName());
     }
 
     @Test
     public void returnsMyUserName() throws IOException, ServletException {
-        mav = controller.showNewsFeed(httpMocks.getModel(),
-                httpMocks.getMockHttpServletRequest(), httpMocks.getMockHttpServletResponse());
+        mav = callNewsFeed();
         assertEquals(MY_NAME,mav.getModelMap().get("userName"));
 
     }
 
     @Test
+    public void returnsIsAuthenticatedInModel() throws IOException, ServletException {
+        mav = callNewsFeed();
+        assertEquals(true, mav.getModelMap().get("isAuthenticated"));
+    }
+
+    @Test
     public void returnsEmptyNewsFeedIfNoAvailabilities() throws IOException, ServletException {
         List<NewsFeedLine> emptyNewsFeed = new ArrayList<NewsFeedLine>();
-        mav = controller.showNewsFeed(httpMocks.getModel(),
-                httpMocks.getMockHttpServletRequest(), httpMocks.getMockHttpServletResponse());
+        mav = callNewsFeed();
         assertEquals(emptyNewsFeed,mav.getModelMap().get("newsFeedLines"));
     }
 
@@ -79,9 +81,13 @@ public class NewsFeedControllerTest {
         newsFeedLineList.add(newsFeedLine);
         when(mockNewsFeedFacade.getNewsFeed(anyString())).thenReturn(newsFeedLineList);
 
-        mav = controller.showNewsFeed(httpMocks.getModel(),
-                httpMocks.getMockHttpServletRequest(), httpMocks.getMockHttpServletResponse());
+        mav = callNewsFeed();
         assertEquals(newsFeedLineList, mav.getModelMap().get("newsFeedLines"));
+    }
+
+    public ModelAndView callNewsFeed() throws IOException, ServletException {
+        return controller.showNewsFeed(httpMocks.getModel(),
+                httpMocks.getMockHttpServletRequest(), httpMocks.getMockHttpServletResponse());
 
     }
 }
