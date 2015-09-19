@@ -40,6 +40,12 @@ public class AmendAvailabilityControllerTest {
         assertEquals("availability",mav.getModelMap().get("section"));
     }
 
+    @Test
+    public void rendersCorrectView() throws IOException, ServletException {
+        mav=callAmendAvailability(1);
+        assertEquals("amendAvailability",mav.getViewName());
+    }
+    
     public void setupMocks(){
         setupUserMock();
         setupHttpMocks();
