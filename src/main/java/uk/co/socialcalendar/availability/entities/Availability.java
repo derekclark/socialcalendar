@@ -92,6 +92,7 @@ public class Availability {
         }
         Availability availability = (Availability) obj;
 
+        if (allNull(this) && allNull(availability)) return true;
         if (! this.ownerEmail.equals(availability.getOwnerEmail())) return false;
         if (! this.ownerName.equals(availability.getOwnerName())) return false;
         if (! this.title.equals(availability.getTitle())) return false;
@@ -100,6 +101,22 @@ public class Availability {
         if (! this.status.equals(availability.getStatus())) return false;
 
         return id == availability.getId();
+    }
+
+    private boolean allNull(Availability availability){
+        if (isNull (availability.getOwnerEmail())
+        && (isNull (availability.getEndDate()))
+        && (availability.getId() == 0)
+        && (isNull(availability.getOwnerName()))
+        && (isNull (availability.getStartDate()))
+        && (isNull (availability.getStatus()))
+        && (isNull(availability.getTitle())))
+            return true;
+        return false;
+    }
+
+    private boolean isNull(Object object){
+        return (object == null);
     }
 
     public int hashcode(){

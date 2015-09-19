@@ -123,6 +123,18 @@ public class AvailabilityTest {
         Availability availability2 = new Availability(OWNER_EMAIL, OWNER_NAME, TITLE,START_DATE, differentDateTime, STATUS);
         assertNotEquals(availability1, availability2);
     }
+
+    @Test
+    public void isEqualIfAllNull(){
+        assertEquals(new Availability(), new Availability());
+    }
+
+//    @Test
+//    public void isNotEqualIfOneAttributeIsNull(){
+//        assertNotEquals(new Availability(OWNER_EMAIL, null, TITLE,START_DATE, END_DATE, STATUS),
+//                        new Availability(OWNER_EMAIL, null, TITLE,START_DATE, END_DATE, STATUS));
+//    }
+
     @Test
     public void testNotEqualsStatus(){
         Availability availability1 = new Availability(OWNER_EMAIL, OWNER_NAME, TITLE,START_DATE, END_DATE, STATUS);
