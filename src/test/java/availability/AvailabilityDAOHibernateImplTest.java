@@ -169,6 +169,7 @@ public class AvailabilityDAOHibernateImplTest {
     public void returnsMyAvailabilitiesWhichIOwn(){
         List<Availability> expectedAvailabilities = create2AvailabilitiesIOwn();
         persistAvailabilities(expectedAvailabilities);
+        persistAvailabilities(create2AvailabilitiesIDontOwn());
         assertEquals(expectedAvailabilities, availabilityDAOImpl.readAllOwnersOpenAvailabilities("me"));
     }
 
@@ -186,4 +187,14 @@ public class AvailabilityDAOHibernateImplTest {
         expectedAvailabilities.add(availability2);
         return expectedAvailabilities;
     }
+
+    public List<Availability> create2AvailabilitiesIDontOwn(){
+        Availability availability1 = new Availability("another", "myName","title1",new LocalDateTime(), new LocalDateTime(),"status");
+        Availability availability2 = new Availability("another", "myName","title2",new LocalDateTime(), new LocalDateTime(),"status");
+        List<Availability> expectedAvailabilities = new ArrayList<Availability>();
+        expectedAvailabilities.add(availability1);
+        expectedAvailabilities.add(availability2);
+        return expectedAvailabilities;
+    }
+
 }
