@@ -2,22 +2,25 @@ package availability;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.ui.ExtendedModelMap;
-import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
+import testSupport.HttpMocks;
 import uk.co.socialcalendar.authentication.SessionAttributes;
+import uk.co.socialcalendar.availability.controllers.AvailabilityCommonModel;
 import uk.co.socialcalendar.availability.controllers.AvailabilityController;
+import uk.co.socialcalendar.availability.entities.Availability;
 import uk.co.socialcalendar.friend.controllers.FriendModel;
 import uk.co.socialcalendar.friend.controllers.FriendModelFacade;
 import uk.co.socialcalendar.user.entities.User;
 import uk.co.socialcalendar.user.useCases.UserFacade;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -28,74 +31,57 @@ public class AvailabilityControllerTest {
     SessionAttributes mockSessionAttributes;
     FriendModelFacade mockFriendModelFacade;
     UserFacade mockUserFacade;
-    Model model;
-    HttpServletRequest mockHttpServletRequest;
-    HttpServletResponse mockHttpServletResponse;
     ModelAndView mav;
+    AvailabilityCommonModel mockAvailabilityCommonModel;
+    HttpMocks httpMocks;
 
     @Before
     public void setup(){
         controller = new AvailabilityController();
-        model = new ExtendedModelMap();
         setupMocks();
-        mav = controller.addAvailability(model, mockHttpServletRequest, mockHttpServletResponse);
-    }
 
-    public void setupMocks(){
-        setupFriendModelFacadeMock();
-        mockHttp();
-        setupSessionAttributeMock();
-        setupUserMock();
-    }
-
-    public void setupFriendModelFacadeMock(){
-        mockFriendModelFacade = mock(FriendModelFacade.class);
-        controller.setFriendModelFacade(mockFriendModelFacade);
-    }
-
-    public void setupSessionAttributeMock(){
-        mockSessionAttributes = mock(SessionAttributes.class);
-        controller.setSessionAttributes(mockSessionAttributes);
-        when(mockSessionAttributes.getLoggedInUserId(mockHttpServletRequest)).thenReturn(ME);
-    }
-
-    public void setupUserMock(){
-        mockUserFacade = mock(UserFacade.class);
-        controller.setUserFacade(mockUserFacade);
-        User user = new User(ME, MY_NAME,"facebookId");
-        when(mockUserFacade.getUser(ME)).thenReturn(user);
-    }
-
-    public void mockHttp(){
-        mockHttpServletRequest = mock(HttpServletRequest.class);
-        mockHttpServletResponse = mock(HttpServletResponse.class);
-    }
-
-    @Test
-    public void canCreateInstance(){
-        assertTrue(controller instanceof AvailabilityController);
     }
 
     @Test
     public void rendersAvailabilityView(){
+        mav = callAddAvailability();
         assertEquals("availabilityCreate",mav.getViewName());
     }
 
     @Test
     public void sectionIsAvailability(){
-        assertEquals("availability",mav.getModelMap().get("section"));
+        mockExpectedModel();
+        mav = callAddAvailability();
+        assertEquals("availability", mav.getModelMap().get("section"));
     }
 
     @Test
     public void modelReturnsNewAvailabilityAttribute() {
+        mockExpectedModel();
+        mav = callAddAvailability();
         assertNotNull(mav.getModelMap().get("newAvailability"));
     }
 
     @Test
     public void modelReturnsFriendList(){
+        mockExpectedModel();
+        mav = callAddAvailability();
         List<FriendModel> expectedFriendList = setExpectedFriendList();
         when(mockFriendModelFacade.getFriendModelList(ME)).thenReturn(expectedFriendList);
         assertNotNull(mav.getModelMap().get("friendList"));
+    }
+
+    private Map<String, Object> mockExpectedModel() {
+        Map<String, Object> expectedMap = new HashMap<String, Object>();
+        expectedMap.put("section", "availability");
+        expectedMap.put("newAvailability", new Availability());
+
+        List<FriendModel> expectedFriendList = setExpectedFriendList();
+        expectedMap.put("friendList", expectedFriendList);
+
+
+        when(mockAvailabilityCommonModel.getAttributes(anyString())).thenReturn(expectedMap);
+        return expectedMap;
     }
 
     public List<FriendModel> setExpectedFriendList(){
@@ -107,5 +93,47 @@ public class AvailabilityControllerTest {
         expectedFriendList.add(friendModel2);
 
         return expectedFriendList;
+    }
+
+    public ModelAndView callAddAvailability(){
+        return controller.addAvailability(httpMocks.getModel(),
+                httpMocks.getMockHttpServletRequest(), httpMocks.getMockHttpServletResponse());
+    }
+
+    private void setupAvailabilityCommonModelMock() {
+        mockAvailabilityCommonModel = mock(AvailabilityCommonModel.class);
+        controller.setAvailabilityCommonModel(mockAvailabilityCommonModel);
+    }
+
+    public void setupMocks(){
+        setupFriendModelFacadeMock();
+        setupHttpMocks();
+        setupSessionAttributeMock();
+        setupUserMock();
+        setupAvailabilityCommonModelMock();
+    }
+
+    public void setupFriendModelFacadeMock(){
+        mockFriendModelFacade = mock(FriendModelFacade.class);
+        controller.setFriendModelFacade(mockFriendModelFacade);
+    }
+
+    public void setupSessionAttributeMock(){
+        mockSessionAttributes = mock(SessionAttributes.class);
+        controller.setSessionAttributes(mockSessionAttributes);
+        when(mockSessionAttributes.getLoggedInUserId(httpMocks.getMockHttpServletRequest())).thenReturn(ME);
+    }
+
+    public void setupUserMock(){
+        mockUserFacade = mock(UserFacade.class);
+        controller.setUserFacade(mockUserFacade);
+        User user = new User(ME, MY_NAME,"facebookId");
+        when(mockUserFacade.getUser(ME)).thenReturn(user);
+    }
+
+    public void setupHttpMocks(){
+        httpMocks = new HttpMocks();
+        controller.setSessionAttributes(httpMocks.getMockSessionAttributes());
+        controller.setUserFacade(httpMocks.getMockUserFacade());
     }
 }

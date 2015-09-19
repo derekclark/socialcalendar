@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import uk.co.socialcalendar.authentication.SessionAttributes;
-import uk.co.socialcalendar.availability.entities.Availability;
 import uk.co.socialcalendar.friend.controllers.FriendModelFacade;
 import uk.co.socialcalendar.user.useCases.UserFacade;
 
@@ -18,6 +17,11 @@ public class AvailabilityController {
     FriendModelFacade friendModelFacade;
     SessionAttributes sessionAttributes;
     UserFacade userFacade;
+    AvailabilityCommonModel availabilityCommonModel;
+
+    public void setAvailabilityCommonModel(AvailabilityCommonModel availabilityCommonModel) {
+        this.availabilityCommonModel = availabilityCommonModel;
+    }
 
     public void setUserFacade(UserFacade userFacade) {
         this.userFacade = userFacade;
@@ -35,9 +39,7 @@ public class AvailabilityController {
     public ModelAndView addAvailability(Model m, HttpServletRequest request, HttpServletResponse response) {
         String me = sessionAttributes.getLoggedInUserId(request);
         ModelAndView mav = new ModelAndView("availabilityCreate");
-        mav.addObject("section","availability");
-        mav.addObject("newAvailability",new Availability());
-        mav.addObject("friendList", friendModelFacade.getFriendModelList(me));
+        mav.addAllObjects(availabilityCommonModel.getAttributes(me));
         return mav;
     }
 }
