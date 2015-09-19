@@ -30,4 +30,13 @@ public class AvailabilityCommonModel {
         modelMap.put("friendList",friendModelFacade.getFriendModelList(me));
         return modelMap;
     }
+
+    public Map<String, Object> getAttributes(String me) {
+        Map<String, Object> mav = new HashMap<String, Object>();
+        mav.putAll(getSection());
+        mav.putAll(getNewAvailability());
+        mav.putAll(getFriendList(me));
+
+        return mav;
+    }
 }

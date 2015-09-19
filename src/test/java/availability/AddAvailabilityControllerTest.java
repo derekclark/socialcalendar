@@ -7,6 +7,8 @@ import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
 import testSupport.HttpMocks;
 import uk.co.socialcalendar.availability.controllers.AddAvailabilityController;
+import uk.co.socialcalendar.availability.controllers.AvailabilityCommonModel;
+import uk.co.socialcalendar.availability.entities.Availability;
 import uk.co.socialcalendar.friend.controllers.FriendModel;
 import uk.co.socialcalendar.friend.controllers.FriendModelFacade;
 import uk.co.socialcalendar.user.entities.User;
@@ -15,11 +17,14 @@ import uk.co.socialcalendar.user.useCases.UserFacade;
 import javax.servlet.ServletException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -38,6 +43,7 @@ public class AddAvailabilityControllerTest {
     User user;
     FriendModelFacade mockFriendModelFacade;
     HttpMocks httpMocks;
+    AvailabilityCommonModel mockAvailabilityCommonModel;
 
     @Before
     public void setup(){
@@ -48,13 +54,17 @@ public class AddAvailabilityControllerTest {
     }
 
     public void setupMocks(){
-        setupMockUserFacade();
         setupUserMock();
         mockFriendModelFacade = mock(FriendModelFacade.class);
         setupHttpMocks();
+        setMockAvailabilityCommonModel();
         controller.setAvailabilityFacade(fakeAvailabilityFacade);
-        controller.setUserFacade(mockUserFacade);
         controller.setFriendModelFacade(mockFriendModelFacade);
+    }
+
+    public void setMockAvailabilityCommonModel(){
+        mockAvailabilityCommonModel = mock(AvailabilityCommonModel.class);
+        controller.setAvailabilityCommonModel(mockAvailabilityCommonModel);
     }
 
     public void setupHttpMocks(){
@@ -66,11 +76,6 @@ public class AddAvailabilityControllerTest {
         mockUserFacade = mock(UserFacade.class);
         controller.setUserFacade(mockUserFacade);
         User user = new User(ME, MY_NAME, MY_FACEBOOK_ID);
-        when(mockUserFacade.getUser(ME)).thenReturn(user);
-    }
-
-    public void setupMockUserFacade(){
-        mockUserFacade = mock(UserFacade.class);
         when(mockUserFacade.getUser(ME)).thenReturn(user);
     }
 
@@ -137,19 +142,40 @@ public class AddAvailabilityControllerTest {
     }
 
     @Test
-    public void setsSectionAsAvailability() throws IOException, ServletException {
+    public void modelReturnsSection() throws IOException, ServletException {
+        mockExpectedModel();
         mav = callAddAvailability(TITLE, START_DATE, END_DATE);
         assertEquals("availability",mav.getModel().get("section"));
     }
 
     @Test
-    public void modelReturnsNewAvailabilityAttribute() throws IOException, ServletException {
+    public void modelReturnsNewAvailability() throws IOException, ServletException {
+        mockExpectedModel();
         mav = callAddAvailability(TITLE, START_DATE, END_DATE);
         assertNotNull(mav.getModelMap().get("newAvailability"));
     }
 
     @Test
     public void modelReturnsFriendList() throws IOException, ServletException {
+        mockExpectedModel();
+        mav = callAddAvailability(TITLE, START_DATE, END_DATE);
+        assertNotNull(mav.getModelMap().get("friendList"));
+    }
+
+    private Map<String, Object> mockExpectedModel() {
+        Map<String, Object> expectedMap = new HashMap<String, Object>();
+        expectedMap.put("section", "availability");
+        expectedMap.put("newAvailability", new Availability());
+
+        List<FriendModel> expectedFriendList = setExpectedFriendList();
+        expectedMap.put("friendList", expectedFriendList);
+
+        when(mockFriendModelFacade.getFriendModelList(ME)).thenReturn(expectedFriendList);
+        when(mockAvailabilityCommonModel.getAttributes(anyString())).thenReturn(expectedMap);
+        return expectedMap;
+    }
+
+    public List<FriendModel> setExpectedFriendList(){
         FriendModel friendModel1 = new FriendModel(new User("friendEmail1","friendName1","facebookId1"));
         FriendModel friendModel2 = new FriendModel(new User("friendEmail2","friendName2","facebookId2"));
 
@@ -157,10 +183,7 @@ public class AddAvailabilityControllerTest {
         expectedFriendList.add(friendModel1);
         expectedFriendList.add(friendModel2);
 
-        when(mockFriendModelFacade.getFriendModelList(ME)).thenReturn(expectedFriendList);
-
-        mav = callAddAvailability(TITLE, START_DATE, END_DATE);
-        assertNotNull(mav.getModelMap().get("friendList"));
+        return expectedFriendList;
     }
 
 }

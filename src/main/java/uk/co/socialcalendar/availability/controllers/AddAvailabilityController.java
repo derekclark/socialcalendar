@@ -28,6 +28,7 @@ public class AddAvailabilityController {
     SessionAttributes sessionAttributes;
     UserFacade userFacade;
     FriendModelFacade friendModelFacade;
+    AvailabilityCommonModel availabilityCommonModel;
 
     String me;
 
@@ -45,6 +46,10 @@ public class AddAvailabilityController {
 
     public void setAvailabilityFacade(AvailabilityFacade availabilityFacade) {
         this.availabilityFacade = availabilityFacade;
+    }
+
+    public void setAvailabilityCommonModel(AvailabilityCommonModel availabilityCommonModel) {
+        this.availabilityCommonModel = availabilityCommonModel;
     }
 
     @RequestMapping(value="addAvailability", method= RequestMethod.POST)
@@ -83,9 +88,10 @@ public class AddAvailabilityController {
     public ModelAndView buildModel(){
         ModelAndView mav = new ModelAndView("availabilityCreate");
         mav.addObject("message","You have just created a new availability");
-        mav.addObject("section","availability");
-        mav.addObject("newAvailability",new Availability());
-        mav.addObject("friendList", friendModelFacade.getFriendModelList(me));
+        mav.addAllObjects(availabilityCommonModel.getAttributes(me));
+//        mav.addObject("section","availability");
+//        mav.addObject("newAvailability",new Availability());
+//        mav.addObject("friendList", friendModelFacade.getFriendModelList(me));
         return mav;
     }
 }

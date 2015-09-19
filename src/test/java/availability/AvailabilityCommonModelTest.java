@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -59,6 +60,14 @@ public class AvailabilityCommonModelTest {
         expectedFriendList.add(friendModel2);
 
         return expectedFriendList;
+    }
+
+    @Test
+    public void returnsAllAttributes(){
+        Map<String, Object> actualModelMap = availabilityCommonModel.getAttributes("me");
+        assertNotNull("section",actualModelMap.get("section"));
+        assertNotNull("newAvailability",actualModelMap.get("newAvailability"));
+        assertNotNull("friendList",actualModelMap.get("friendList"));
     }
 
 }
