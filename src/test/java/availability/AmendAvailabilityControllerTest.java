@@ -6,16 +6,23 @@ import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
 import testSupport.HttpMocks;
 import uk.co.socialcalendar.availability.controllers.AmendAvailabilityController;
+import uk.co.socialcalendar.availability.controllers.AvailabilityCommonModel;
 import uk.co.socialcalendar.availability.entities.Availability;
 import uk.co.socialcalendar.availability.useCases.AvailabilityFacade;
+import uk.co.socialcalendar.friend.controllers.FriendModel;
 import uk.co.socialcalendar.user.entities.User;
 import uk.co.socialcalendar.user.useCases.UserFacade;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
+import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -25,6 +32,7 @@ public class AmendAvailabilityControllerTest {
     UserFacade mockUserFacade;
     ModelAndView mav;
     AvailabilityFacade mockAvailabilityFacade;
+    AvailabilityCommonModel mockAvailabilityCommonModel;
     String me;
     public static final String ME = "me";
     public static final String MY_NAME = "my name";
@@ -36,12 +44,6 @@ public class AmendAvailabilityControllerTest {
     public void setup(){
         controller = new AmendAvailabilityController();
         setupMocks();
-    }
-
-    @Test
-    public void returnsSectionInModel() throws IOException, ServletException {
-        mav=callAmendAvailability(1);
-        assertEquals("availability",mav.getModelMap().get("section"));
     }
 
     @Test
@@ -59,10 +61,20 @@ public class AmendAvailabilityControllerTest {
         assertEquals(expectedAvailability,mav.getModelMap().get("amendAvailability"));
     }
 
+    @Test
+    public void modelReturnsCommonAttributes() throws IOException, ServletException {
+        mockExpectedModel();
+        mav=callAmendAvailability(1);
+        assertEquals("availability",mav.getModelMap().get("section"));
+        assertEquals(new Availability(),mav.getModelMap().get("newAvailability"));
+        assertNotNull(mav.getModelMap().get("friendList"));
+    }
+
     public void setupMocks(){
         setupUserMock();
         setupHttpMocks();
         setupAvailabilityMocks();
+        setupAvailabilityCommonModelMock();
     }
 
     public void setupHttpMocks(){
@@ -80,6 +92,20 @@ public class AmendAvailabilityControllerTest {
     public void setupAvailabilityMocks(){
         mockAvailabilityFacade = mock(AvailabilityFacade.class);
         controller.setAvailabilityFacade(mockAvailabilityFacade);
+    }
+
+    private void setupAvailabilityCommonModelMock() {
+        mockAvailabilityCommonModel = mock(AvailabilityCommonModel.class);
+        controller.setAvailabilityCommonModel(mockAvailabilityCommonModel);
+    }
+
+    private Map<String, Object> mockExpectedModel() {
+        Map<String, Object> expectedMap = new HashMap<String, Object>();
+        expectedMap.put("section", "availability");
+        expectedMap.put("newAvailability", new Availability());
+        expectedMap.put("friendList", new ArrayList<FriendModel>());
+        when(mockAvailabilityCommonModel.getAttributes(anyString())).thenReturn(expectedMap);
+        return expectedMap;
     }
 
     public ModelAndView callAmendAvailability(int id) throws IOException, ServletException {

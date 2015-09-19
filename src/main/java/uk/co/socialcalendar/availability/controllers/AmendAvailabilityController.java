@@ -14,6 +14,11 @@ public class AmendAvailabilityController {
     SessionAttributes sessionAttributes;
     AvailabilityFacade availabilityFacade;
     UserFacade userFacade;
+    AvailabilityCommonModel availabilityCommonModel;
+
+    public void setAvailabilityCommonModel(AvailabilityCommonModel availabilityCommonModel) {
+        this.availabilityCommonModel = availabilityCommonModel;
+    }
 
     public void setUserFacade(UserFacade userFacade) {
         this.userFacade = userFacade;
@@ -27,11 +32,12 @@ public class AmendAvailabilityController {
         this.sessionAttributes = sessionAttributes;
     }
 
-    public ModelAndView AmendAvailability(int id, Model model, HttpServletRequest mockHttpServletRequest,
-                                          HttpServletResponse mockHttpServletResponse) {
+    public ModelAndView AmendAvailability(int id, Model model, HttpServletRequest request,
+                                          HttpServletResponse response) {
+        String me = sessionAttributes.getLoggedInUserId(request);
         ModelAndView mav = new ModelAndView("amendAvailability");
-        mav.addObject("section","availability");
         mav.addObject("amendAvailability",availabilityFacade.get(id));
+        mav.addAllObjects(availabilityCommonModel.getAttributes(me));
         return mav;
     }
 }
