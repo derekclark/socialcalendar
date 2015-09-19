@@ -3,8 +3,6 @@ package uk.co.socialcalendar.availability.useCases;
 import uk.co.socialcalendar.availability.entities.Availability;
 import uk.co.socialcalendar.availability.persistence.AvailabilityDAO;
 
-import java.util.List;
-
 public class AvailabilityFacadeImpl implements AvailabilityFacade{
     AvailabilityDAO availabilityDAO;
 
@@ -25,10 +23,5 @@ public class AvailabilityFacadeImpl implements AvailabilityFacade{
     @Override
     public boolean update(Availability availability) {
         return availabilityDAO.update(availability);
-    }
-
-    @Override
-    public List<Availability> getOwnersOpenAvailabilities(String owner) {
-        return null;
     }
 }

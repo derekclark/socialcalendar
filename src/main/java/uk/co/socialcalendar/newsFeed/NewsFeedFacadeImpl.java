@@ -1,23 +1,39 @@
 package uk.co.socialcalendar.newsFeed;
 
 import uk.co.socialcalendar.availability.entities.Availability;
-import uk.co.socialcalendar.availability.useCases.AvailabilityFacade;
-
+import uk.co.socialcalendar.availability.persistence.AvailabilityDAO;
+import java.util.ArrayList;
 import java.util.List;
 
 public class NewsFeedFacadeImpl implements NewsFeedFacade{
-    AvailabilityFacade availabilityFacade;
+    AvailabilityDAO availabilityDAO;
 
-    public void setAvailabilityFacade(AvailabilityFacade availabilityFacade) {
-        this.availabilityFacade = availabilityFacade;
+    public void setAvailabilityDAO(AvailabilityDAO availabilityDAO) {
+        this.availabilityDAO = availabilityDAO;
     }
 
     @Override
     public List<NewsFeedLine> getNewsFeed(String me) {
-        return null;
+        List <Availability> availabilitiesIOwn = getMyAvailabilities(me);
+        List<NewsFeedLine> newsFeedLines = new ArrayList<NewsFeedLine>();
+        for (Availability avail:availabilitiesIOwn){
+            newsFeedLines.add(convertAvailabilityToNewsFeedLine(avail));
+        }
+        return newsFeedLines;
     }
 
     public List<Availability> getMyAvailabilities(String me) {
-        return availabilityFacade.getOwnersOpenAvailabilities(me);
+        return availabilityDAO.readAllOwnersOpenAvailabilities(me);
+    }
+
+    public NewsFeedLine convertAvailabilityToNewsFeedLine(Availability availability){
+        NewsFeedLine newsFeedLine = new NewsFeedLine();
+        newsFeedLine.setAvailabilityId(availability.getId());
+        newsFeedLine.setTitle(availability.getTitle());
+        newsFeedLine.setStartDateTime(availability.getStartDate());
+        newsFeedLine.setEndDateTime(availability.getEndDate());
+        newsFeedLine.setOwnerEmail(availability.getOwnerEmail());
+        newsFeedLine.setOwnerName(availability.getOwnerName());
+        return newsFeedLine;
     }
 }

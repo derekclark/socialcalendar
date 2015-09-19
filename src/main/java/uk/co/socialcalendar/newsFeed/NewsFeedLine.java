@@ -28,6 +28,34 @@ public class NewsFeedLine {
     /*private Message latestMessage;*/
     private boolean hasResponded;
 
+    public NewsFeedLine(){}
+
+    public NewsFeedLine(int availabilityId, String title, LocalDateTime startDateTime, LocalDateTime endDateTime,
+                        String dateLine, String allDay, String ownerName, String ownerEmail, String ownerFacebookId,
+                        String textLine, String myAcceptanceStatus, String myAvailabilityText, Set<User> acceptedUsers,
+                        Set<User> declinedUsers, Set<User> tentativeUsers, Set<User> sharedUsers,
+                        String url, String key, boolean hasResponded){
+        this.setAvailabilityId(availabilityId);
+        this.setTitle(title);
+        this.setStartDateTime(startDateTime);
+        this.setEndDateTime(endDateTime);
+        this.setDateLine(dateLine);
+        this.setAllDay(allDay);
+        this.setOwnerName(ownerName);
+        this.setOwnerEmail(ownerEmail);
+        this.setOwnerFacebookId(ownerFacebookId);
+        this.setTextLine(textLine);
+        this.setMyAcceptanceStatus(myAcceptanceStatus);
+        this.setMyAvailabilityText(myAvailabilityText);
+        this.setAcceptedUsers(acceptedUsers);
+        this.setDeclinedUsers(declinedUsers);
+        this.setTentativeUsers(tentativeUsers);
+        this.setSharedUsers(sharedUsers);
+        this.setUrl(url);
+        this.setKey(key);
+        this.setHasResponded(hasResponded);
+    }
+
     public String getTitle() {
         return title;
     }
@@ -178,5 +206,53 @@ public class NewsFeedLine {
 
     public void setStartDateTime(LocalDateTime startDateTime) {
         this.startDateTime = startDateTime;
+    }
+
+    public boolean equals(Object obj){
+        if (this == obj){
+            return true;
+        }
+        if ((obj == null) || (obj.getClass() != this.getClass())){
+            return false;
+        }
+        NewsFeedLine newsFeedLine = (NewsFeedLine) obj;
+
+        if (! this.ownerEmail.equals(newsFeedLine.getOwnerEmail())) return false;
+        if (! this.ownerName.equals(newsFeedLine.getOwnerName())) return false;
+        if (! this.title.equals(newsFeedLine.getTitle())) return false;
+        if (! this.startDateTime.equals(newsFeedLine.getStartDateTime())) return false;
+        if (! this.endDateTime.equals(newsFeedLine.getEndDateTime())) return false;
+
+
+        return availabilityId == this.getAvailabilityId();
+    }
+
+    public int hashcode(){
+        int hash = 7;
+        hash = 31 * hash + availabilityId + ownerEmail.hashCode() + ownerName.hashCode()
+                + title.hashCode() + startDateTime.hashCode() + endDateTime.hashCode();
+        return hash;
+    }
+
+
+    public String toString(){
+        return this.getAvailabilityId() + " "
+                + this.getOwnerEmail() + " "
+                + this.getTitle() + " "
+                + this.getOwnerName() + " "
+                + this.getAcceptedUsers() + " "
+                + this.getAllDay() + " "
+                + this.getDateLine() + " "
+                + this.getDeclinedUsers() + " "
+                + this.getEndDateTime() + " "
+                + this.getKey() + " "
+                + this.getMyAcceptanceStatus() + " "
+                + this.getMyAvailabilityText() + " "
+                + this.getOwnerFacebookId() + " "
+                + this.getSharedUsers() + " "
+                + this.getStartDateTime() + " "
+                + this.getTentativeUsers() + " "
+                + this.getTextLine() + " "
+                + this.getUrl();
     }
 }

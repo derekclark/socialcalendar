@@ -61,4 +61,9 @@ public class AvailabilityFacadeTest {
         Availability actualAvailability = availabilityFacade.get(availability1.getId());
         assertEquals(availability1, actualAvailability);
     }
+
+    @Test
+    public void getsOwnersOpenAvailabilities(){
+
+    }
 }
