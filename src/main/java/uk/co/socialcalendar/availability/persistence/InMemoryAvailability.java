@@ -49,4 +49,9 @@ public class InMemoryAvailability implements AvailabilityDAO {
         }
         return false;
     }
+
+    @Override
+    public List<Availability> readAllOwnersOpenAvailabilities(String owner) {
+        return null;
+    }
 }

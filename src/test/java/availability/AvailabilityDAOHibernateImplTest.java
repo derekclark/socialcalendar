@@ -1,6 +1,5 @@
 package availability;
 
-import testSupport.InMemoryHibernateDB;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -8,9 +7,13 @@ import org.joda.time.LocalDateTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import testSupport.InMemoryHibernateDB;
 import uk.co.socialcalendar.availability.entities.Availability;
 import uk.co.socialcalendar.availability.persistence.AvailabilityDAOHibernateImpl;
 import uk.co.socialcalendar.availability.persistence.AvailabilityHibernateModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertNull;
@@ -154,5 +157,33 @@ public class AvailabilityDAOHibernateImplTest {
     @Test
     public void returnsNullIfIdDoesNotExist(){
         assertNull(availabilityDAOImpl.read(NON_EXISTENT_ID));
+    }
+
+    @Test
+    public void returnsNoAvailabilitiesIfOwnerHasNone(){
+        List<Availability> emptyList = new ArrayList<Availability>();
+        assertEquals(emptyList, availabilityDAOImpl.readAllOwnersOpenAvailabilities("me"));
+    }
+
+    @Test
+    public void returnsMyAvailabilitiesWhichIOwn(){
+        List<Availability> expectedAvailabilities = create2AvailabilitiesIOwn();
+        persistAvailabilities(expectedAvailabilities);
+        assertEquals(expectedAvailabilities, availabilityDAOImpl.readAllOwnersOpenAvailabilities("me"));
+    }
+
+    public void persistAvailabilities(List<Availability> availabilityList){
+        for (Availability avail:availabilityList){
+            avail.setId(availabilityDAOImpl.save(avail));
+        }
+    }
+
+    public List<Availability> create2AvailabilitiesIOwn(){
+        Availability availability1 = new Availability("me", "myName","title1",new LocalDateTime(), new LocalDateTime(),"status");
+        Availability availability2 = new Availability("me", "myName","title2",new LocalDateTime(), new LocalDateTime(),"status");
+        List<Availability> expectedAvailabilities = new ArrayList<Availability>();
+        expectedAvailabilities.add(availability1);
+        expectedAvailabilities.add(availability2);
+        return expectedAvailabilities;
     }
 }

@@ -1,10 +1,13 @@
 package uk.co.socialcalendar.availability.persistence;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import uk.co.socialcalendar.availability.entities.Availability;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AvailabilityDAOHibernateImpl implements AvailabilityDAO {
     SessionFactory sessionFactory;
@@ -54,6 +57,24 @@ public class AvailabilityDAOHibernateImpl implements AvailabilityDAO {
         }
         sessionFactory.getCurrentSession().update(availabilityHibernateModel);
         return true;
+    }
+
+    @Override
+    public List<Availability> readAllOwnersOpenAvailabilities(String owner) {
+
+        Query query = sessionFactory.getCurrentSession().createQuery
+                ("from AvailabilityHibernateModel where OWNER_EMAIL = :owner");
+        query.setParameter("owner", owner);
+
+        List<AvailabilityHibernateModel> returnSQLList = query.list();
+
+        List<Availability> availabilityList = new ArrayList<Availability>();
+
+        for (AvailabilityHibernateModel avail:returnSQLList){
+            availabilityList.add(convertToAvailability(avail));
+        }
+
+        return availabilityList;
     }
 
     public boolean canUpdate(Availability availability){
