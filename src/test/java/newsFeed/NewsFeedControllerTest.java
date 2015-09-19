@@ -55,6 +55,13 @@ public class NewsFeedControllerTest {
     }
 
     @Test
+    public void returnsSection() throws IOException, ServletException {
+        mav = callNewsFeed();
+        assertEquals("newsFeed",mav.getModelMap().get("section"));
+
+    }
+
+    @Test
     public void returnsEmptyNewsFeedIfNoAvailabilities() throws IOException, ServletException {
         List<NewsFeedLine> emptyNewsFeed = new ArrayList<NewsFeedLine>();
         mav = callNewsFeed();

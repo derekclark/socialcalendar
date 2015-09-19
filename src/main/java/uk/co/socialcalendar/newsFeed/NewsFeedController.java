@@ -54,6 +54,7 @@ public class NewsFeedController {
 
         List<NewsFeedLine> newsFeedLines = new ArrayList<NewsFeedLine>();
         ModelAndView mav = new ModelAndView("newsFeed");
+        mav.addObject("section","newsFeed");
         mav.addObject("newsFeedLines",newsFeedFacade.getNewsFeed("me"));
         return mav;
     }
