@@ -1,6 +1,5 @@
 package uk.co.socialcalendar.newsFeed;
 
-import org.joda.time.LocalDateTime;
 import uk.co.socialcalendar.user.entities.User;
 
 import java.util.Set;
@@ -8,8 +7,8 @@ import java.util.Set;
 public class NewsFeedLine {
     private int availabilityId;
     private String title;
-    private LocalDateTime startDateTime;
-    private LocalDateTime endDateTime;
+    private String startDateTime;
+    private String endDateTime;
     private String dateLine;
     private String allDay;
     private String ownerName;
@@ -30,7 +29,7 @@ public class NewsFeedLine {
 
     public NewsFeedLine(){}
 
-    public NewsFeedLine(int availabilityId, String title, LocalDateTime startDateTime, LocalDateTime endDateTime,
+    public NewsFeedLine(int availabilityId, String title, String startDateTime, String endDateTime,
                         String dateLine, String allDay, String ownerName, String ownerEmail, String ownerFacebookId,
                         String textLine, String myAcceptanceStatus, String myAvailabilityText, Set<User> acceptedUsers,
                         Set<User> declinedUsers, Set<User> tentativeUsers, Set<User> sharedUsers,
@@ -64,11 +63,11 @@ public class NewsFeedLine {
         this.title = title;
     }
 
-    public LocalDateTime getEndDateTime() {
+    public String getEndDateTime() {
         return endDateTime;
     }
 
-    public void setEndDateTime(LocalDateTime endDateTime) {
+    public void setEndDateTime(String endDateTime) {
         this.endDateTime = endDateTime;
     }
 
@@ -200,11 +199,11 @@ public class NewsFeedLine {
         this.availabilityId = availabilityId;
     }
 
-    public LocalDateTime getStartDateTime() {
+    public String getStartDateTime() {
         return startDateTime;
     }
 
-    public void setStartDateTime(LocalDateTime startDateTime) {
+    public void setStartDateTime(String startDateTime) {
         this.startDateTime = startDateTime;
     }
 

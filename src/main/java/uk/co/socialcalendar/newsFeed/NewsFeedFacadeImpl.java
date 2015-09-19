@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NewsFeedFacadeImpl implements NewsFeedFacade{
+    public static final String PRETTY_DATE_FORMAT = "YYYY-MM-dd HH:mm";
     AvailabilityDAO availabilityDAO;
 
     public void setAvailabilityDAO(AvailabilityDAO availabilityDAO) {
@@ -30,11 +31,11 @@ public class NewsFeedFacadeImpl implements NewsFeedFacade{
         NewsFeedLine newsFeedLine = new NewsFeedLine();
         newsFeedLine.setAvailabilityId(availability.getId());
         newsFeedLine.setTitle(availability.getTitle());
-        newsFeedLine.setStartDateTime(availability.getStartDate());
-        newsFeedLine.setEndDateTime(availability.getEndDate());
+        newsFeedLine.setStartDateTime(availability.getStartDate().toString(PRETTY_DATE_FORMAT));
+        newsFeedLine.setEndDateTime(availability.getEndDate().toString(PRETTY_DATE_FORMAT));
         newsFeedLine.setOwnerEmail(availability.getOwnerEmail());
         newsFeedLine.setOwnerName(availability.getOwnerName());
-        newsFeedLine.setUrl("amendAvailability?availabilityId=" + availability.getId());
+        newsFeedLine.setUrl("amendAvailability?id=" + availability.getId());
         return newsFeedLine;
     }
 }

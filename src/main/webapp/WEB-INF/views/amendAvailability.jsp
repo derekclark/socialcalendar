@@ -107,13 +107,13 @@ function validateForm() {
         <c:out value="${amendAvailability.ownerName}"/> is available
 
           <c:set var="dateTimeReversed" value="${amendAvailability.startDate}" />
-          <fmt:parseDate value="${dateTimeReversed}" var="dateTimePretty" pattern="yyyy-MM-dd HH:mm" />
+          <fmt:parseDate value="${dateTimeReversed}" var="dateTimePretty" pattern="yyyy-MM-dd'T'HH:mm:ss.S" />
           <fmt:formatDate pattern="EEE dd MMM yyyy HH:mm" value="${dateTimePretty}" />
 
         <br> to 
 
           <c:set var="dateTimeReversed" value="${amendAvailability.endDate}" />
-          <fmt:parseDate value="${dateTimeReversed}" var="dateTimePretty" pattern="yyyy-MM-dd HH:mm" />
+          <fmt:parseDate value="${dateTimeReversed}" var="dateTimePretty" pattern="yyyy-MM-dd'T'HH:mm:ss.S" />
           <fmt:formatDate pattern="EEE dd MMM yyyy HH:mm" value="${dateTimePretty}" />
 
       </div>
@@ -122,15 +122,15 @@ function validateForm() {
       <hr>
 
       <div id="acceptAvailability">
-        <form:form modelAttribute="amendAvailability" action="/joinAvailability?availabilityId=${amendAvailability.availabilityId}">
+        <form:form modelAttribute="amendAvailability" action="/joinAvailability?id=${amendAvailability.id}">
           <input type="submit" class="btn-accept btn btn-large btn-block" value="Accept Availability" />
         </form:form>
 
-        <form:form modelAttribute="amendAvailability" action="/declineAvailability?availabilityId=${amendAvailability.availabilityId}">
+        <form:form modelAttribute="amendAvailability" action="/declineAvailability?id=${amendAvailability.id}">
           <input type="submit" class="btn-decline btn btn-large btn-block" value="Decline Availability" />
         </form:form>
 
-        <form:form modelAttribute="amendAvailability" action="/tentativeAvailability?availabilityId=${amendAvailability.availabilityId}">
+        <form:form modelAttribute="amendAvailability" action="/tentativeAvailability?id=${amendAvailability.id}">
           <input type="submit" class="btn-tentative btn btn-large btn-block" value="Tentative Availability" />
         </form:form>
       </div>
@@ -193,10 +193,16 @@ function validateForm() {
 
       </table>
     </div>
-    <form:form modelAttribute="newMessage" action="/addMessage?availabilityId=${amendAvailability.availabilityId}">
+
+    <!-- MESSAGES - PUT THIS BACK IN LATER!!!! -->
+    <%/*
+    <form:form modelAttribute="newMessage" action="/addMessage?id=${amendAvailability.id}">
       <form:input path="text" id="text" class="input-block-level" style="height:60px;width:100%;" placeholder="add your message here"/>
       <input type="submit" class="btn-accept btn btn-large btn-block" value="Add Message" />
     </form:form>
+
+    */
+    %>
 
     <c:if test="${isThisMyAvailability}">
     <!--AMEND AVAILABILITY - OWNER ONLY-->
@@ -204,7 +210,7 @@ function validateForm() {
         <img id="edit-image" src="${context}/resources/img/edit.png">    
         <hr>
 
-        <form:form modelAttribute="amendAvailability" action="/amendAvailability?availabilityId=${amendAvailability.availabilityId}" onsubmit="return validateForm()">
+        <form:form modelAttribute="amendAvailability" action="/amendAvailability?id=${amendAvailability.id}" onsubmit="return validateForm()">
         <table border="0" cellpadding="10" width="100%">
           <tr>
             <td align="top">
@@ -286,7 +292,7 @@ function validateForm() {
 
           
         </form:form>
-        <form:form modelAttribute="amendAvailability" action="/deleteAvailability?availabilityId=${amendAvailability.availabilityId}">
+        <form:form modelAttribute="amendAvailability" action="/deleteAvailability?id=${amendAvailability.id}">
 
           <input type="submit" class="btn-decline btn btn-large btn-block" value="Delete Availability" />
         </form:form>

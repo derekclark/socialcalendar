@@ -34,9 +34,9 @@ public class AmendAvailabilityControllerTest {
     AvailabilityFacade mockAvailabilityFacade;
     AvailabilityCommonModel mockAvailabilityCommonModel;
     String me;
-    public static final String ME = "me";
-    public static final String MY_NAME = "my name";
-    public static final String MY_FACEBOOK_ID = "facebookid";
+    private static final String ME = "me";
+    private static final String MY_NAME = "my name";
+    private static final String MY_FACEBOOK_ID = "facebookid";
     private static final LocalDateTime START_DATE = new LocalDateTime(2015, 1, 2, 0, 0, 0);
     private static final LocalDateTime END_DATE = new LocalDateTime(2015, 1, 2, 0, 0, 30);
 
@@ -109,7 +109,7 @@ public class AmendAvailabilityControllerTest {
     }
 
     public ModelAndView callAmendAvailability(int id) throws IOException, ServletException {
-        return controller.AmendAvailability(id, httpMocks.getModel(),
+        return controller.amendAvailability(id, httpMocks.getModel(),
                 httpMocks.getMockHttpServletRequest(), httpMocks.getMockHttpServletResponse());
     }
 

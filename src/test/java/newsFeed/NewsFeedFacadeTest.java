@@ -19,8 +19,9 @@ public class NewsFeedFacadeTest {
     public static final String ME = "me";
     NewsFeedFacadeImpl newsFeedFacade;
     AvailabilityDAO mockAvailabilityDAO;
-    private static final LocalDateTime START_DATE = new LocalDateTime(2015, 1, 2, 0, 0, 0);
-    private static final LocalDateTime END_DATE = new LocalDateTime(2015, 1, 2, 0, 0, 30);
+    private static final LocalDateTime START_DATE = new LocalDateTime(2015, 1, 2, 14, 27, 0);
+    private static final LocalDateTime END_DATE = new LocalDateTime(2015, 1, 2, 15, 45, 30);
+    static final String PRETTY_DATE_PATTERN = "YYYY-MM-dd HH:mm";
 
     @Before
     public void setup(){
@@ -47,8 +48,16 @@ public class NewsFeedFacadeTest {
     public void setsLineUrl(){
         List<Availability> expectedAvailabilities = setMyAvailabilities();
         when(mockAvailabilityDAO.readAllOwnersOpenAvailabilities(ME)).thenReturn(expectedAvailabilities);
-        assertEquals("amendAvailability?availabilityId=1", newsFeedFacade.getNewsFeed(ME).get(0).getUrl());
-        assertEquals("amendAvailability?availabilityId=2", newsFeedFacade.getNewsFeed(ME).get(1).getUrl());
+        assertEquals("amendAvailability?id=1", newsFeedFacade.getNewsFeed(ME).get(0).getUrl());
+        assertEquals("amendAvailability?id=2", newsFeedFacade.getNewsFeed(ME).get(1).getUrl());
+    }
+
+    @Test
+    public void convertsDateTimeToPrettyDates(){
+        List<Availability> expectedAvailabilities = setMyAvailabilities();
+        when(mockAvailabilityDAO.readAllOwnersOpenAvailabilities(ME)).thenReturn(expectedAvailabilities);
+        assertEquals("2015-01-02 14:27", newsFeedFacade.getNewsFeed(ME).get(0).getStartDateTime());
+        assertEquals("2015-01-02 15:45", newsFeedFacade.getNewsFeed(ME).get(0).getEndDateTime());
     }
 
     public List<Availability> setMyAvailabilities(){
@@ -63,12 +72,17 @@ public class NewsFeedFacadeTest {
         expectedAvailabilities.add(availability2);
         return expectedAvailabilities;
     }
+
     public List<NewsFeedLine> setExpectedNewsFeedLineList(){
         List<NewsFeedLine> expectedNewsFeedLineList = new ArrayList<NewsFeedLine>();
-        NewsFeedLine newsFeedLine1 = new NewsFeedLine(1, "title", START_DATE, END_DATE, "", "", "myName", ME,
-                "", "", "","",null, null, null, null, "", "", false);
-        NewsFeedLine newsFeedLine2 = new NewsFeedLine(2, "title2", START_DATE, END_DATE, "", "", "myName2", ME,
-                "", "", "","",null, null, null, null, "", "", false);
+        NewsFeedLine newsFeedLine1 = new NewsFeedLine(1, "title",
+                START_DATE.toString(PRETTY_DATE_PATTERN), END_DATE.toString(PRETTY_DATE_PATTERN), "date line", "N",
+                "myName", "me",
+                "facebookid", "text line", "status","available",null, null, null, null, "url", "key", false);
+        NewsFeedLine newsFeedLine2 = new NewsFeedLine(1, "title2",
+                START_DATE.toString(PRETTY_DATE_PATTERN), END_DATE.toString(PRETTY_DATE_PATTERN), "date line", "N",
+                "myName2", "me",
+                "facebookid", "text line", "status","available",null, null, null, null, "url", "key", false);
 
         expectedNewsFeedLineList.add(newsFeedLine1);
         expectedNewsFeedLineList.add(newsFeedLine2);

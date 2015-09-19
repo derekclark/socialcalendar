@@ -32,6 +32,13 @@
                 <property name="availabilityCommonModel" ref="availabilityCommonModel"/>
     </bean>
 
+    <bean id="amendAvailabilityController" class="uk.co.socialcalendar.availability.controllers.AmendAvailabilityController">
+                <property name="sessionAttributes" ref="sessionAttributes"/>
+                <property name="availabilityFacade" ref="availabilityFacade"/>                
+                <property name="userFacade" ref="userFacade"/>                
+                <property name="availabilityCommonModel" ref="availabilityCommonModel"/>
+    </bean>
+
     <!--DAO-->
     <bean id="availabilityDAO" class="uk.co.socialcalendar.availability.persistence.AvailabilityDAOHibernateImpl">
         <property name="sessionFactory" ref="sessionFactory" />
