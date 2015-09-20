@@ -10,6 +10,7 @@ import uk.co.socialcalendar.availability.controllers.AvailabilityCommonModel;
 import uk.co.socialcalendar.availability.entities.Availability;
 import uk.co.socialcalendar.availability.useCases.AvailabilityFacade;
 import uk.co.socialcalendar.friend.controllers.FriendModel;
+import uk.co.socialcalendar.message.Message;
 import uk.co.socialcalendar.user.entities.User;
 import uk.co.socialcalendar.user.useCases.UserFacade;
 
@@ -68,6 +69,13 @@ public class AmendAvailabilityControllerTest {
         assertEquals("availability",mav.getModelMap().get("section"));
         assertEquals(new Availability(),mav.getModelMap().get("newAvailability"));
         assertNotNull(mav.getModelMap().get("friendList"));
+    }
+
+    @Test
+    public void modelReturnsMessageObject() throws IOException, ServletException {
+        mockExpectedModel();
+        mav=callAmendAvailability(1);
+        assertEquals(new Message(), mav.getModelMap().get("newMessage"));
     }
 
     public void setupMocks(){

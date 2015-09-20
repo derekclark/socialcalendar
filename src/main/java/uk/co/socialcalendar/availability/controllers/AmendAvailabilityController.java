@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import uk.co.socialcalendar.authentication.SessionAttributes;
 import uk.co.socialcalendar.availability.useCases.AvailabilityFacade;
+import uk.co.socialcalendar.message.Message;
 import uk.co.socialcalendar.user.useCases.UserFacade;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,6 +44,7 @@ public class AmendAvailabilityController {
         String me = sessionAttributes.getLoggedInUserId(request);
         ModelAndView mav = new ModelAndView("amendAvailability");
         mav.addObject("amendAvailability",availabilityFacade.get(id));
+        mav.addObject("newMessage",new Message());
         mav.addAllObjects(availabilityCommonModel.getAttributes(me));
         return mav;
     }

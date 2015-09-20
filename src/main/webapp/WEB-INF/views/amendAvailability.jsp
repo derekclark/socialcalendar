@@ -194,15 +194,10 @@ function validateForm() {
       </table>
     </div>
 
-    <!-- MESSAGES - PUT THIS BACK IN LATER!!!! -->
-    <%/*
     <form:form modelAttribute="newMessage" action="/addMessage?id=${amendAvailability.id}">
       <form:input path="text" id="text" class="input-block-level" style="height:60px;width:100%;" placeholder="add your message here"/>
       <input type="submit" class="btn-accept btn btn-large btn-block" value="Add Message" />
     </form:form>
-
-    */
-    %>
 
     <c:if test="${isThisMyAvailability}">
     <!--AMEND AVAILABILITY - OWNER ONLY-->
