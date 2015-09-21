@@ -80,6 +80,11 @@ public class FriendDAOHibernateImpl implements FriendDAO {
         returnSQLList.addAll(query.list());
 
         List<Friend> friendList = convertModelListToFriendList(returnSQLList);
+
+        System.out.println("my friend list:");
+        for (Friend f:friendList){
+            System.out.println(f.getFriendId());
+        }
         return friendList;
     }
 

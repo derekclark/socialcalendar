@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import uk.co.socialcalendar.authentication.SessionAttributes;
+import uk.co.socialcalendar.availability.entities.Availability;
 import uk.co.socialcalendar.availability.useCases.AvailabilityFacade;
 import uk.co.socialcalendar.message.Message;
 import uk.co.socialcalendar.user.useCases.UserFacade;
@@ -20,6 +21,7 @@ public class AmendAvailabilityController {
     AvailabilityFacade availabilityFacade;
     UserFacade userFacade;
     AvailabilityCommonModel availabilityCommonModel;
+    String me;
 
     public void setAvailabilityCommonModel(AvailabilityCommonModel availabilityCommonModel) {
         this.availabilityCommonModel = availabilityCommonModel;
@@ -41,11 +43,18 @@ public class AmendAvailabilityController {
     public ModelAndView amendAvailability(@RequestParam(value="id", required=false,defaultValue="") int id,
                         Model model, HttpServletRequest request,
                         HttpServletResponse response) {
-        String me = sessionAttributes.getLoggedInUserId(request);
+        me = sessionAttributes.getLoggedInUserId(request);
         ModelAndView mav = new ModelAndView("amendAvailability");
-        mav.addObject("amendAvailability",availabilityFacade.get(id));
+        Availability availability = availabilityFacade.get(id);
+        mav.addObject("amendAvailability",availability);
         mav.addObject("newMessage",new Message());
+        mav.addObject("isThisMyAvailability",isThisMyAvailability(availability));
+        System.out.println("isthis? " + isThisMyAvailability(availability));
         mav.addAllObjects(availabilityCommonModel.getAttributes(me));
         return mav;
+    }
+
+    private boolean isThisMyAvailability(Availability availability) {
+        return availability.getOwnerEmail().equals(me);
     }
 }

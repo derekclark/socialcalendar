@@ -20,8 +20,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static junit.framework.Assert.assertTrue;
 import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -36,6 +38,7 @@ public class AmendAvailabilityControllerTest {
     AvailabilityCommonModel mockAvailabilityCommonModel;
     String me;
     private static final String ME = "me";
+    private static final String NOT_ME = "not_me";
     private static final String MY_NAME = "my name";
     private static final String MY_FACEBOOK_ID = "facebookid";
     private static final LocalDateTime START_DATE = new LocalDateTime(2015, 1, 2, 0, 0, 0);
@@ -49,6 +52,7 @@ public class AmendAvailabilityControllerTest {
 
     @Test
     public void rendersCorrectView() throws IOException, ServletException {
+        mockAvailability(ME);
         mav=callAmendAvailability(1);
         assertEquals("amendAvailability",mav.getViewName());
     }
@@ -65,6 +69,7 @@ public class AmendAvailabilityControllerTest {
     @Test
     public void modelReturnsCommonAttributes() throws IOException, ServletException {
         mockExpectedModel();
+        mockAvailability(ME);
         mav=callAmendAvailability(1);
         assertEquals("availability",mav.getModelMap().get("section"));
         assertEquals(new Availability(),mav.getModelMap().get("newAvailability"));
@@ -74,8 +79,32 @@ public class AmendAvailabilityControllerTest {
     @Test
     public void modelReturnsMessageObject() throws IOException, ServletException {
         mockExpectedModel();
+        mockAvailability(ME);
         mav=callAmendAvailability(1);
         assertEquals(new Message(), mav.getModelMap().get("newMessage"));
+    }
+
+    @Test
+    public void modelReturnsIsMyAvailabilityAsTrueIfIOwnAvailability() throws IOException, ServletException {
+        mockAvailability(ME);
+        mav=callAmendAvailability(1);
+        assertTrue((boolean) mav.getModelMap().get("isThisMyAvailability"));
+
+    }
+
+    @Test
+    public void modelReturnsIsMyAvailabilityAsFalseIfIDontOwnAvailability() throws IOException, ServletException {
+        mockAvailability(NOT_ME);
+        mav=callAmendAvailability(1);
+        assertFalse((boolean) mav.getModelMap().get("isThisMyAvailability"));
+
+    }
+
+    public Availability mockAvailability(String owner){
+        Availability expectedAvailability = new Availability(owner, MY_NAME, "title", START_DATE, END_DATE, "status");
+        expectedAvailability.setId(1);
+        when(mockAvailabilityFacade.get(anyInt())).thenReturn(expectedAvailability);
+        return expectedAvailability;
     }
 
     public void setupMocks(){
