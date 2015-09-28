@@ -49,7 +49,7 @@ public class AmendAvailabilityController {
         mav.addObject("amendAvailability",availability);
         mav.addObject("newMessage",new Message());
         mav.addObject("isThisMyAvailability",isThisMyAvailability(availability));
-        System.out.println("isthis? " + isThisMyAvailability(availability));
+        mav.addObject("friendsSharedAvailability",availability.getSharedList());
         mav.addAllObjects(availabilityCommonModel.getAttributes(me));
         return mav;
     }

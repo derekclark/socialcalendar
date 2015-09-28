@@ -16,9 +16,7 @@ import uk.co.socialcalendar.user.useCases.UserFacade;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.TestCase.assertNotNull;
@@ -97,7 +95,20 @@ public class AmendAvailabilityControllerTest {
         mockAvailability(NOT_ME);
         mav=callAmendAvailability(1);
         assertFalse((boolean) mav.getModelMap().get("isThisMyAvailability"));
+    }
 
+    @Test
+    public void returnsFriendsWhoHaveHadAvailabilitySharedWith() throws IOException, ServletException {
+        User user1=new User("USER1", "NAME1", "FACEBOOK1");
+        User user2=new User("USER2", "NAME2", "FACEBOOK2");
+        Set<User> userList = new HashSet<User>();
+        userList.add(user1);
+        userList.add(user2);
+        Availability expectedAvailability = new Availability(1, ME, MY_NAME, "title", START_DATE, END_DATE,
+                "status", userList);
+        when(mockAvailabilityFacade.get(anyInt())).thenReturn(expectedAvailability);
+        mav=callAmendAvailability(1);
+        assertEquals(userList, mav.getModelMap().get("friendsSharedAvailability"));
     }
 
     public Availability mockAvailability(String owner){

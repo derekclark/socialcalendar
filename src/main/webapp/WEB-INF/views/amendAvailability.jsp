@@ -240,7 +240,7 @@ function validateForm() {
 
           <b>Choose Friends</b>
           <br>
-          <c:forEach var="friend" items='${friendsJoinedAvailability}'>
+          <c:forEach var="friend" items='${friendsSharedAvailability}'>
             <c:choose>
               <c:when test="${friend.joined}">
                   <input type="checkbox" name="friendSharedList" value="${friend.emailAddress}" checked>
