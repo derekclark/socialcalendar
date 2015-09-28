@@ -85,7 +85,7 @@ public class AmendAvailabilityControllerTest {
     }
 
     @Test
-    public void modelReturnsIsMyAvailabilityAsTrueIfIOwnAvailability() throws IOException, ServletException {
+    public void detectIfIOwnAvailability() throws IOException, ServletException {
         mockAvailability(ME);
         mav=callAmendAvailability(1);
         assertTrue((boolean) mav.getModelMap().get("isThisMyAvailability"));
@@ -93,7 +93,7 @@ public class AmendAvailabilityControllerTest {
     }
 
     @Test
-    public void modelReturnsIsMyAvailabilityAsFalseIfIDontOwnAvailability() throws IOException, ServletException {
+    public void detectIfIDontOwnAvailability() throws IOException, ServletException {
         mockAvailability(NOT_ME);
         mav=callAmendAvailability(1);
         assertFalse((boolean) mav.getModelMap().get("isThisMyAvailability"));
