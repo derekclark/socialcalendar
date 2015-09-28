@@ -9,21 +9,19 @@ import testSupport.HttpMocks;
 import uk.co.socialcalendar.availability.controllers.AddAvailabilityController;
 import uk.co.socialcalendar.availability.controllers.AvailabilityCommonModel;
 import uk.co.socialcalendar.availability.entities.Availability;
+import uk.co.socialcalendar.availability.persistence.InMemoryAvailability;
+import uk.co.socialcalendar.availability.useCases.AvailabilityFacadeImpl;
 import uk.co.socialcalendar.friend.controllers.FriendModel;
 import uk.co.socialcalendar.friend.controllers.FriendModelFacade;
 import uk.co.socialcalendar.user.entities.User;
-import uk.co.socialcalendar.user.useCases.UserFacade;
+import uk.co.socialcalendar.user.persistence.InMemoryUserDAO;
+import uk.co.socialcalendar.user.useCases.UserFacadeImpl;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import static junit.framework.TestCase.assertNotNull;
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -38,130 +36,164 @@ public class AddAvailabilityControllerTest {
     private static final String MY_FACEBOOK_ID = "facebookId";
     AddAvailabilityController controller;
     ModelAndView mav;
-    FakeAvailabilityFacadeImpl fakeAvailabilityFacade;
-    UserFacade mockUserFacade;
-    User user;
-    FriendModelFacade mockFriendModelFacade;
+    AvailabilityFacadeImpl availabilityFacade = new AvailabilityFacadeImpl();
+    InMemoryAvailability inMemoryAvailability = new InMemoryAvailability();
+    InMemoryUserDAO inMemoryUserDAO = new InMemoryUserDAO();
+    Availability savedAvailability;
+    UserFacadeImpl userFacade = new UserFacadeImpl();
+    User user1=new User("USER1","NAME1", "FACEBOOK1");
+    User user2=new User("USER2","NAME2", "FACEBOOK2");
+
+    FriendModelFacade mockFriendModelFacade = mock(FriendModelFacade.class);
     HttpMocks httpMocks;
     AvailabilityCommonModel mockAvailabilityCommonModel;
 
     @Before
     public void setup(){
         controller = new AddAvailabilityController();
-        user = new User(ME, MY_NAME, MY_FACEBOOK_ID);
-        fakeAvailabilityFacade = new FakeAvailabilityFacadeImpl();
         setupMocks();
-    }
-
-    public void setupMocks(){
-        setupUserMock();
-        mockFriendModelFacade = mock(FriendModelFacade.class);
-        setupHttpMocks();
-        setMockAvailabilityCommonModel();
-        controller.setAvailabilityFacade(fakeAvailabilityFacade);
-        controller.setFriendModelFacade(mockFriendModelFacade);
-    }
-
-    public void setMockAvailabilityCommonModel(){
-        mockAvailabilityCommonModel = mock(AvailabilityCommonModel.class);
-        controller.setAvailabilityCommonModel(mockAvailabilityCommonModel);
-    }
-
-    public void setupHttpMocks(){
-        httpMocks = new HttpMocks();
-        controller.setSessionAttributes(httpMocks.getMockSessionAttributes());
-    }
-
-    public void setupUserMock(){
-        mockUserFacade = mock(UserFacade.class);
-        controller.setUserFacade(mockUserFacade);
-        User user = new User(ME, MY_NAME, MY_FACEBOOK_ID);
-        when(mockUserFacade.getUser(ME)).thenReturn(user);
+        injectDependencies();
+        saveMyUser();
     }
 
     @Test
     public void addAvailabilityRendersAvailabilityView() throws IOException, ServletException {
-        mav = callAddAvailability(TITLE, START_DATE, END_DATE);
+        List<String> selectedFriends = setSelectedFriendsToNoUsers();
+        mav = callAddAvailability(TITLE, START_DATE, END_DATE, selectedFriends);
         assertEquals("availabilityCreate",mav.getViewName());
     }
 
-    public ModelAndView callAddAvailability(String title, String startDate, String endDate) throws IOException, ServletException {
-        List<String> selectedFriends = new ArrayList<String>();
+    public ModelAndView callAddAvailability(String title, String startDate, String endDate, List<String> selectedFriends)
+            throws IOException, ServletException {
         return controller.addAvailability(title, startDate, endDate, selectedFriends, httpMocks.getModel(),
                 httpMocks.getMockHttpServletRequest(), httpMocks.getMockHttpServletResponse());
     }
 
     @Test
     public void addAvailabilityReturnsExpectedMessage() throws IOException, ServletException {
-        mav = callAddAvailability(TITLE, START_DATE, END_DATE);
+        List<String> selectedFriends = setSelectedFriendsToNoUsers();
+        mav = callAddAvailability(TITLE, START_DATE, END_DATE, selectedFriends);
         assertEquals("You have just created a new availability",mav.getModelMap().get("message"));
     }
 
     @Test
-    public void addAvailabilityShouldCallCreateAvailability() throws IOException, ServletException {
-        mav = callAddAvailability(TITLE, START_DATE, END_DATE);
-        assertTrue(fakeAvailabilityFacade.isCreateMethodCalled());
-    }
-
-    @Test
     public void setsAvailabilityWithOwnerEmail() throws IOException, ServletException {
-        mav = callAddAvailability(TITLE, START_DATE, END_DATE);
-        assertEquals(ME, fakeAvailabilityFacade.getAvailability().getOwnerEmail());
+        List<String> selectedFriends = setSelectedFriendsToNoUsers();
+        mav = callAddAvailability(TITLE, START_DATE, END_DATE, selectedFriends);
+        assertEquals(ME, inMemoryAvailability.read(1).getOwnerEmail());
     }
 
     @Test
     public void setsAvailabilityWithOwnerName() throws IOException, ServletException {
-        mav = callAddAvailability(TITLE, START_DATE, END_DATE);
-        assertEquals(MY_NAME, fakeAvailabilityFacade.getAvailability().getOwnerName());
+        List<String> selectedFriends = setSelectedFriendsToNoUsers();
+        mav = callAddAvailability(TITLE, START_DATE, END_DATE, selectedFriends);
+        assertEquals(MY_NAME, inMemoryAvailability.read(1).getOwnerName());
     }
 
     @Test
     public void setsAvailabilityWithStartDate() throws IOException, ServletException {
-        mav = callAddAvailability(TITLE, START_DATE, END_DATE);
+        List<String> selectedFriends = setSelectedFriendsToNoUsers();
+        mav = callAddAvailability(TITLE, START_DATE, END_DATE, selectedFriends);
         LocalDateTime expectedDate = LocalDateTime.parse(START_DATE, DateTimeFormat.forPattern(DATE_PATTERN));
-        assertEquals(expectedDate, fakeAvailabilityFacade.getAvailability().getStartDate());
+        assertEquals(expectedDate, inMemoryAvailability.read(1).getStartDate());
     }
 
     @Test
     public void setsAvailabilityWithEndDate() throws IOException, ServletException {
-        mav = callAddAvailability(TITLE, START_DATE, END_DATE);
+        List<String> selectedFriends = setSelectedFriendsToNoUsers();
+        mav = callAddAvailability(TITLE, START_DATE, END_DATE, selectedFriends);
         LocalDateTime expectedDate = LocalDateTime.parse(END_DATE, DateTimeFormat.forPattern(DATE_PATTERN));
-        assertEquals(expectedDate, fakeAvailabilityFacade.getAvailability().getEndDate());
+        assertEquals(expectedDate, inMemoryAvailability.read(1).getEndDate());
     }
 
     @Test
     public void setsAvailabilityWithStatus() throws IOException, ServletException {
-        mav = callAddAvailability(TITLE, START_DATE, END_DATE);
-        assertEquals("status", fakeAvailabilityFacade.getAvailability().getStatus());
+        List<String> selectedFriends = setSelectedFriendsToNoUsers();
+        mav = callAddAvailability(TITLE, START_DATE, END_DATE, selectedFriends);
+        assertEquals("status", inMemoryAvailability.read(1).getStatus());
     }
 
     @Test
     public void setsAvailabilityWithTitle() throws IOException, ServletException {
-        mav = callAddAvailability(TITLE, START_DATE, END_DATE);
-        assertEquals(TITLE, fakeAvailabilityFacade.getAvailability().getTitle());
+        List<String> selectedFriends = setSelectedFriendsToNoUsers();
+        mav = callAddAvailability(TITLE, START_DATE, END_DATE, selectedFriends);
+        assertEquals(TITLE, inMemoryAvailability.read(1).getTitle());
     }
 
     @Test
     public void modelReturnsSection() throws IOException, ServletException {
         mockExpectedModel();
-        mav = callAddAvailability(TITLE, START_DATE, END_DATE);
+        List<String> selectedFriends = setSelectedFriendsToNoUsers();
+        mav = callAddAvailability(TITLE, START_DATE, END_DATE, selectedFriends);
         assertEquals("availability",mav.getModel().get("section"));
     }
 
     @Test
     public void modelReturnsNewAvailability() throws IOException, ServletException {
         mockExpectedModel();
-        mav = callAddAvailability(TITLE, START_DATE, END_DATE);
+        List<String> selectedFriends = setSelectedFriendsToNoUsers();
+        mav = callAddAvailability(TITLE, START_DATE, END_DATE, selectedFriends);
         assertNotNull(mav.getModelMap().get("newAvailability"));
     }
 
     @Test
     public void modelReturnsFriendList() throws IOException, ServletException {
         mockExpectedModel();
-        mav = callAddAvailability(TITLE, START_DATE, END_DATE);
+        List<String> selectedFriends = setSelectedFriendsToNoUsers();
+        mav = callAddAvailability(TITLE, START_DATE, END_DATE, selectedFriends);
         assertNotNull(mav.getModelMap().get("friendList"));
     }
 
+    @Test
+    public void sharesAvailabilityWithSelectedUsers() throws IOException, ServletException {
+        saveUsers();
+        List<String> selectedFriends = setSelectedFriendsTo2Users();
+        mav = callAddAvailability(TITLE, START_DATE, END_DATE, selectedFriends);
+
+        savedAvailability = inMemoryAvailability.read(1);
+        assertEquals(2, savedAvailability.getSharedList().size());
+        assertTrue(findElementInSet(savedAvailability.getSharedList(), user1));
+        assertTrue(findElementInSet(savedAvailability.getSharedList(), user2));
+    }
+
+    @Test
+    public void sharesAvailabilityWhenNoSelectedUsers() throws IOException, ServletException {
+        saveUsers();
+        List<String> selectedFriends = setSelectedFriendsToNoUsers();
+        mav = callAddAvailability(TITLE, START_DATE, END_DATE, selectedFriends);
+
+        savedAvailability = inMemoryAvailability.read(1);
+        assertEquals(0, savedAvailability.getSharedList().size());
+    }
+
+    public List<String> setSelectedFriendsTo2Users(){
+        List<String> selectedFriends = new ArrayList<String>();
+        selectedFriends.add(user1.getEmail());
+        selectedFriends.add(user2.getEmail());
+
+        return selectedFriends;
+    }
+
+    public List<String> setSelectedFriendsToNoUsers(){
+        List<String> selectedFriends = new ArrayList<String>();
+        return selectedFriends;
+    }
+
+    public void saveUsers(){
+        inMemoryUserDAO.save(user1);
+        inMemoryUserDAO.save(user2);
+
+    }
+    public boolean findElementInSet(Set<User> set, User user){
+        Iterator<User> iterator = set.iterator();
+        while(iterator.hasNext()) {
+            User setElement = iterator.next();
+            if(setElement.equals(user)) {
+                return true;
+            }
+        }
+        return false;
+    }
     private Map<String, Object> mockExpectedModel() {
         Map<String, Object> expectedMap = new HashMap<String, Object>();
         expectedMap.put("section", "availability");
@@ -185,5 +217,36 @@ public class AddAvailabilityControllerTest {
 
         return expectedFriendList;
     }
+
+    public void injectDependencies(){
+        controller.setAvailabilityFacade(availabilityFacade);
+        availabilityFacade.setUserDAO(inMemoryUserDAO);
+        availabilityFacade.setAvailabilityDAO(inMemoryAvailability);
+        controller.setUserFacade(userFacade);
+        userFacade.setUserDAO(inMemoryUserDAO);
+    }
+
+    public void setupMocks(){
+        setupHttpMocks();
+        setMockAvailabilityCommonModel();
+        controller.setFriendModelFacade(mockFriendModelFacade);
+    }
+
+    public void setMockAvailabilityCommonModel(){
+        mockAvailabilityCommonModel = mock(AvailabilityCommonModel.class);
+        controller.setAvailabilityCommonModel(mockAvailabilityCommonModel);
+    }
+
+    public void setupHttpMocks(){
+        httpMocks = new HttpMocks();
+        controller.setSessionAttributes(httpMocks.getMockSessionAttributes());
+    }
+
+    public void saveMyUser(){
+        User user=new User(ME, MY_NAME, MY_FACEBOOK_ID);
+        inMemoryUserDAO.save(user);
+    }
+
+
 
 }

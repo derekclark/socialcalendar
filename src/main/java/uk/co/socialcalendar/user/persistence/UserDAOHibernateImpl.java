@@ -51,4 +51,16 @@ public class UserDAOHibernateImpl implements UserDAO {
         session.save(userHibernateModel);
         return true;
     }
+
+    @Override
+    @Transactional
+    public UserHibernateModel getUserModel(String userEmail) {
+        UserHibernateModel userHibernateModel =
+                (UserHibernateModel) sessionFactory.getCurrentSession().get(UserHibernateModel.class, userEmail);
+        if (userHibernateModel != null) {
+            return userHibernateModel;
+        }else {
+            return null;
+        }
+    }
 }

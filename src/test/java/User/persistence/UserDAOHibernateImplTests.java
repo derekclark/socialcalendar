@@ -91,4 +91,14 @@ public class UserDAOHibernateImplTests {
         UserHibernateModel actualUserHibernateModel = userDAOImpl.convertToUserHibernateModel(user);
         assertEquals(expectedUserHibernateModel, actualUserHibernateModel);
     }
+
+    @Test
+    public void returnsUserHibernateModel(){
+        UserHibernateModel expectedModel = new UserHibernateModel(user);
+
+        userDAOImpl.save(user);
+        UserHibernateModel actualModel = userDAOImpl.getUserModel(ME);
+        assertEquals(expectedModel, actualModel);
+    }
+
 }

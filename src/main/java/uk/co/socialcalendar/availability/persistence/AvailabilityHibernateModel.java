@@ -3,8 +3,13 @@ package uk.co.socialcalendar.availability.persistence;
 import org.hibernate.annotations.Type;
 import org.joda.time.LocalDateTime;
 import uk.co.socialcalendar.availability.entities.Availability;
+import uk.co.socialcalendar.user.entities.User;
+import uk.co.socialcalendar.user.persistence.UserHibernateModel;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 @Entity
 public class AvailabilityHibernateModel {
@@ -33,6 +38,13 @@ public class AvailabilityHibernateModel {
     @Column(name="STATUS")
     private String status;
 
+    @ManyToMany(fetch=FetchType.EAGER, cascade = {CascadeType.ALL})
+    @JoinTable(name="AVAILABILITY_SHARED",
+            joinColumns={@JoinColumn(name="ID")},
+            inverseJoinColumns={@JoinColumn(name="EMAIL")})
+    private Set<UserHibernateModel> sharedList = new HashSet<UserHibernateModel>();
+
+
     public AvailabilityHibernateModel(){
 
     }
@@ -45,8 +57,30 @@ public class AvailabilityHibernateModel {
         this.endDate = availability.getEndDate();
         this.status = availability.getStatus();
         this.title = availability.getTitle();
+        Set<UserHibernateModel> userModel = new HashSet<UserHibernateModel>();
+        for (User user:availability.getSharedList()){
+            userModel.add(new UserHibernateModel(user));
+        }
+        this.sharedList = userModel;
+    }
+
+    public AvailabilityHibernateModel(String ownerEmail, String ownerName, String title,
+                                      LocalDateTime startDate, LocalDateTime endDate,
+                                      String status, Set<User> sharedList) {
+        this.ownerEmail = ownerEmail;
+        this.ownerName = ownerName;
+        this.title = title;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.status = status;
+        Set<UserHibernateModel> userModel = new HashSet<UserHibernateModel>();
+        for (User user:sharedList){
+            userModel.add(new UserHibernateModel(user));
+        }
+        this.sharedList = userModel;
 
     }
+
     public int getId() {
         return id;
     }
@@ -103,6 +137,15 @@ public class AvailabilityHibernateModel {
         this.status = status;
     }
 
+    public Set<UserHibernateModel> getSharedList() {
+        return sharedList;
+    }
+
+    public void setSharedList(Set<UserHibernateModel> sharedList) {
+        this.sharedList = sharedList;
+    }
+
+
     public boolean equals(Object obj){
         if (this == obj){
             return true;
@@ -119,14 +162,35 @@ public class AvailabilityHibernateModel {
         if (! this.endDate.equals(availabilityHibernateModel.getEndDate())) return false;
         if (! this.status.equals(availabilityHibernateModel.getStatus())) return false;
 
+        for (UserHibernateModel model:this.sharedList){
+            if (!findElementInSet(availabilityHibernateModel.getSharedList(), model)) return false;
+        }
+        if (this.sharedList.size() != availabilityHibernateModel.getSharedList().size()) return false;
+
         return id == availabilityHibernateModel.getId();
+    }
+
+    public boolean findElementInSet(Set<UserHibernateModel> set, UserHibernateModel userHibernateModel){
+        Iterator<UserHibernateModel> iterator = set.iterator();
+        while(iterator.hasNext()) {
+            UserHibernateModel setElement = iterator.next();
+            if(setElement.equals(userHibernateModel)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public int hashcode(){
         int hash = 7;
         hash = 31 * hash + id + title.hashCode() + ownerEmail.hashCode() + ownerName.hashCode() +
-                startDate.hashCode() + endDate.hashCode() + status.hashCode();
+                startDate.hashCode() + endDate.hashCode() + status.hashCode() + sharedList.hashCode();
         return hash;
+    }
+
+    public String toString(){
+        return title + " " + ownerEmail + " " + ownerName + " " + startDate + " "
+                + endDate + " " + status + " " + sharedList;
     }
 
 }

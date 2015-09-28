@@ -1,6 +1,9 @@
 package uk.co.socialcalendar.availability.entities;
 
 import org.joda.time.LocalDateTime;
+import uk.co.socialcalendar.user.entities.User;
+
+import java.util.Set;
 
 public class Availability {
 
@@ -13,6 +16,8 @@ public class Availability {
     private String ownerName;
     private String status;
 
+    private Set<User> sharedList;
+
     public Availability(String ownerEmail, String ownerName, String title, LocalDateTime startDate, LocalDateTime endDate, String status) {
         this.title = title;
         this.ownerEmail = ownerEmail;
@@ -20,6 +25,31 @@ public class Availability {
         this.startDate = startDate;
         this.endDate = endDate;
         this.status = status;
+    }
+
+    public Availability(String ownerEmail, String ownerName, String title, LocalDateTime startDate, LocalDateTime endDate, String status,
+                        Set<User> selectedFriends) {
+        this.title = title;
+        this.ownerEmail = ownerEmail;
+        this.ownerName = ownerName;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.status = status;
+        this.sharedList = selectedFriends;
+
+    }
+
+    public Availability(int id, String ownerEmail, String ownerName, String title, LocalDateTime startDate, LocalDateTime endDate, String status,
+                        Set<User> selectedFriends) {
+        this.id = id;
+        this.title = title;
+        this.ownerEmail = ownerEmail;
+        this.ownerName = ownerName;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.status = status;
+        this.sharedList = selectedFriends;
+
     }
 
     public int getId() {
@@ -77,6 +107,14 @@ public class Availability {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Set<User> getSharedList() {
+        return sharedList;
+    }
+
+    public void setSharedList(Set<User> sharedList) {
+        this.sharedList = sharedList;
     }
 
     public Availability(){

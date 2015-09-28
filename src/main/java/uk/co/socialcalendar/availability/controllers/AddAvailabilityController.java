@@ -23,13 +23,11 @@ import java.util.List;
 @Controller
 @org.springframework.web.bind.annotation.SessionAttributes("newAvailability")
 public class AddAvailabilityController {
-
     AvailabilityFacade availabilityFacade;
     SessionAttributes sessionAttributes;
     UserFacade userFacade;
     FriendModelFacade friendModelFacade;
     AvailabilityCommonModel availabilityCommonModel;
-
     String me;
 
     public void setFriendModelFacade(FriendModelFacade friendModelFacade) {
@@ -59,7 +57,7 @@ public class AddAvailabilityController {
             @RequestParam(value="endDate", required=false,defaultValue="") String endDate,
             @RequestParam(value="selectedFriends", required=false, defaultValue="")
 //                    @ModelAttribute("newAvailability") AddAvailabilityDTO dto,
-                List<String> friendNotifyList,
+                List<String> selectedFriends,
 //            @Valid Availability availabilities,
             Model m,
             HttpServletRequest request,
@@ -68,13 +66,14 @@ public class AddAvailabilityController {
         me = sessionAttributes.getLoggedInUserId(request);
         String myName = userFacade.getUser(me).getName();
 
-        System.out.println("startdate=" + startDate);
         LocalDateTime startDateFormatted = convertToLocalDateTime(startDate);
         LocalDateTime endDateFormatted = convertToLocalDateTime(endDate);
 
-        Availability availability = new Availability(me,myName,title,
+        Availability availability = new Availability(me, myName, title,
                 startDateFormatted, endDateFormatted, "status");
-
+//        System.out.println("selected friends="+selectedFriends.get(0));
+        availabilityFacade.shareWithUsers(availability, selectedFriends);
+        System.out.println("shared friends="+availability.getSharedList().size());
         availabilityFacade.create(availability);
 
         return buildModel();

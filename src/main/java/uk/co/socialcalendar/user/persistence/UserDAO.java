@@ -6,4 +6,5 @@ public interface UserDAO {
 
     public User read(String userEmail);
     public boolean save(User user);
+    public UserHibernateModel getUserModel(String userEmail);
 }

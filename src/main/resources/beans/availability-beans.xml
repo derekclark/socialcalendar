@@ -42,12 +42,14 @@
     <!--DAO-->
     <bean id="availabilityDAO" class="uk.co.socialcalendar.availability.persistence.AvailabilityDAOHibernateImpl">
         <property name="sessionFactory" ref="sessionFactory" />
+        <property name="userDAO" ref="userDAO" />
     </bean>
 
 
     <!--FACADES-->
     <bean id="availabilityFacade" class="uk.co.socialcalendar.availability.useCases.AvailabilityFacadeImpl">
         <property name="availabilityDAO" ref="availabilityDAO"/>
+        <property name="userDAO" ref="userDAO"/>
     </bean>
 
 

@@ -4,13 +4,23 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import uk.co.socialcalendar.availability.entities.Availability;
+import uk.co.socialcalendar.user.entities.User;
+import uk.co.socialcalendar.user.persistence.UserDAO;
+import uk.co.socialcalendar.user.persistence.UserHibernateModel;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 public class AvailabilityDAOHibernateImpl implements AvailabilityDAO {
     SessionFactory sessionFactory;
+    UserDAO userDAO;
+
+    public void setUserDAO(UserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
 
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
@@ -101,6 +111,14 @@ public class AvailabilityDAOHibernateImpl implements AvailabilityDAO {
         availabilityHibernateModel.setStartDate(availability.getStartDate());
         availabilityHibernateModel.setOwnerName(availability.getOwnerName());
         availabilityHibernateModel.setStatus(availability.getStatus());
+        Set<User> sharedList = availability.getSharedList();
+        Iterator<User> iterator = sharedList.iterator();
+        while(iterator.hasNext()) {
+            User user = iterator.next();
+            UserHibernateModel userHibernateModel = userDAO.getUserModel(user.getEmail());
+            availabilityHibernateModel.getSharedList().add(userHibernateModel);
+        }
+
         return availabilityHibernateModel;
     }
 

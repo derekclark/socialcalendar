@@ -15,7 +15,8 @@ public class InMemoryAvailability implements AvailabilityDAO {
     public int save(Availability availability) {
         int id = getNextId();
         Availability savedAvailability = new Availability(availability.getOwnerEmail(), availability.getOwnerName(),
-                availability.getTitle(), availability.getStartDate(), availability.getEndDate(), availability.getStatus());
+                availability.getTitle(), availability.getStartDate(), availability.getEndDate(), availability.getStatus(),
+                availability.getSharedList());
         savedAvailability.setId(getNextId());
         listOfAvailabilities.add(savedAvailability);
         return id;

@@ -62,4 +62,9 @@ public class User {
         return hash;
     }
 
+    public String toString(){
+        return this.email + " " + this.name + " " + this.facebookId;
+    }
+
+
 }

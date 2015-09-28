@@ -11,9 +11,11 @@ import testSupport.InMemoryHibernateDB;
 import uk.co.socialcalendar.availability.entities.Availability;
 import uk.co.socialcalendar.availability.persistence.AvailabilityDAOHibernateImpl;
 import uk.co.socialcalendar.availability.persistence.AvailabilityHibernateModel;
+import uk.co.socialcalendar.user.entities.User;
+import uk.co.socialcalendar.user.persistence.UserDAOHibernateImpl;
+import uk.co.socialcalendar.user.persistence.UserHibernateModel;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertNull;
@@ -28,16 +30,24 @@ import static org.mockito.Mockito.when;
 public class AvailabilityDAOHibernateImplTest {
 
     public static final int FAILED_TO_INSERT_RECORD = -1;
+    public static final int NON_EXISTENT_ID = 9999999;
     AvailabilityDAOHibernateImpl availabilityDAOImpl;
     Availability availability;
+    UserDAOHibernateImpl userDAOImpl;
     Session testSession;
     SessionFactory mockSessionFactory;
-    public static final int NON_EXISTENT_ID = 9999999;
-
+    User user1 = new User("USER1","NAME1","FACEBOOK1");
+    User user2 = new User("USER2","NAME2","FACEBOOK2");
+    LocalDateTime startDate = new LocalDateTime();
+    LocalDateTime endDate = new LocalDateTime();
     @Before
     public void setup(){
         availabilityDAOImpl = new AvailabilityDAOHibernateImpl();
-        availability = new Availability("ownerEmail", "ownerName", "title", new LocalDateTime(), new LocalDateTime(), "status");
+        userDAOImpl = new UserDAOHibernateImpl();
+        availabilityDAOImpl.setUserDAO(userDAOImpl);
+
+        availability = new Availability("ownerEmail", "ownerName", "title", startDate, endDate, "status",
+                add2SharedUsers());
         setupTestDatabase();
     }
 
@@ -49,7 +59,13 @@ public class AvailabilityDAOHibernateImplTest {
 
     @Test
     public void canConvertAvailabilityToHibernateModel(){
-        AvailabilityHibernateModel expectedModel = convertToHibernateModel(availability);
+        userDAOImpl.save(user1);
+        userDAOImpl.save(user2);
+
+        AvailabilityHibernateModel expectedModel = new AvailabilityHibernateModel("ownerEmail", "ownerName",
+                "title", startDate, endDate, "status",
+                add2SharedUsers());
+
         AvailabilityHibernateModel actualModel = availabilityDAOImpl.convertToHibernateModel(availability);
         assertThat(expectedModel, is(actualModel));
     }
@@ -74,7 +90,8 @@ public class AvailabilityDAOHibernateImplTest {
 
     @Test
     public void doesSaveAvailabilityWithEmptyTitle(){
-        availability = new Availability("ownerEmail", "ownerName", "", new LocalDateTime(), new LocalDateTime(), "status");
+        availability = new Availability("ownerEmail", "ownerName", "", new LocalDateTime(), new LocalDateTime(), "status",
+                add2SharedUsers());
         AvailabilityHibernateModel availabilityHibernateModel = convertToHibernateModel(availability);
         assertThat(availabilityDAOImpl.save(availability), greaterThan(0));
     }
@@ -107,8 +124,10 @@ public class AvailabilityDAOHibernateImplTest {
 
     @Test
     public void CanSaveTwoAvailabilities(){
-        Availability availability1 = new Availability("ownerEmail", "ownerName", "title", new LocalDateTime(), new LocalDateTime(), "status");
-        Availability availability2 = new Availability("ownerEmail", "ownerName", "title", new LocalDateTime(), new LocalDateTime(), "status");
+        Availability availability1 = new Availability("ownerEmail", "ownerName", "title", new LocalDateTime(), new LocalDateTime(), "status",
+                addNoSharedUsers());
+        Availability availability2 = new Availability("ownerEmail", "ownerName", "title", new LocalDateTime(), new LocalDateTime(), "status",
+                addNoSharedUsers());
         availability1.setId(availabilityDAOImpl.save(availability1));
         availability2.setId(availabilityDAOImpl.save(availability2));
 
@@ -144,9 +163,23 @@ public class AvailabilityDAOHibernateImplTest {
 
     @Test
     public void returnsMyAvailabilitiesWhichIOwn(){
-        List<Availability> expectedAvailabilities = create2AvailabilitiesIOwn();
-        persistAvailabilities(expectedAvailabilities);
-        persistAvailabilities(create2AvailabilitiesIDontOwn());
+        userDAOImpl.save(user1);
+        userDAOImpl.save(user2);
+        List<Availability> expectedAvailabilities = new ArrayList<Availability>();
+        Availability availability1 = createAvailabilityWithSharedUsers("me");
+        expectedAvailabilities.add(availability1);
+        Availability availability2 = createAvailabilityWithSharedUsers("me");
+        expectedAvailabilities.add(availability2);
+        Availability availability3 = createAvailabilityWithSharedUsers("another");
+        Availability availability4 = createAvailabilityWithSharedUsers("another");
+
+        List<Availability> availabilityList = new ArrayList<Availability>();
+        availabilityList.add(availability1);
+        availabilityList.add(availability2);
+        availabilityList.add(availability3);
+        availabilityList.add(availability4);
+        persistAvailabilities(availabilityList);
+
         assertEquals(expectedAvailabilities, availabilityDAOImpl.readAllOwnersOpenAvailabilities("me"));
     }
 
@@ -156,29 +189,22 @@ public class AvailabilityDAOHibernateImplTest {
         }
     }
 
-    public List<Availability> create2AvailabilitiesIOwn(){
-        Availability availability1 = new Availability("me", "myName","title1",new LocalDateTime(), new LocalDateTime(),"status");
-        Availability availability2 = new Availability("me", "myName","title2",new LocalDateTime(), new LocalDateTime(),"status");
-        List<Availability> expectedAvailabilities = new ArrayList<Availability>();
-        expectedAvailabilities.add(availability1);
-        expectedAvailabilities.add(availability2);
-        return expectedAvailabilities;
+    public Availability createAvailabilityWithSharedUsers(String owner){
+        return new Availability(owner, "Name","title1",new LocalDateTime(), new LocalDateTime(),"status",
+                add2SharedUsers());
     }
 
-    public List<Availability> create2AvailabilitiesIDontOwn(){
-        Availability availability1 = new Availability("another", "myName","title1",new LocalDateTime(), new LocalDateTime(),"status");
-        Availability availability2 = new Availability("another", "myName","title2",new LocalDateTime(), new LocalDateTime(),"status");
-        List<Availability> expectedAvailabilities = new ArrayList<Availability>();
-        expectedAvailabilities.add(availability1);
-        expectedAvailabilities.add(availability2);
-        return expectedAvailabilities;
+    public Availability createAvailabilityWithNoSharedUsers(String owner){
+        return new Availability(owner, "Name","title1",new LocalDateTime(), new LocalDateTime(),"status",
+                addNoSharedUsers());
     }
 
     public void setupTestDatabase(){
         getHibernateTestInstance();
         mockSessionFactory = mock(SessionFactory.class);
         availabilityDAOImpl.setSessionFactory(mockSessionFactory);
-        when (mockSessionFactory.getCurrentSession()).thenReturn(testSession);
+        userDAOImpl.setSessionFactory(mockSessionFactory);
+        when(mockSessionFactory.getCurrentSession()).thenReturn(testSession);
     }
 
     public void getHibernateTestInstance(){
@@ -194,7 +220,25 @@ public class AvailabilityDAOHibernateImplTest {
         availabilityHibernateModel.setStartDate(availability.getStartDate());
         availabilityHibernateModel.setOwnerName(availability.getOwnerName());
         availabilityHibernateModel.setStatus(availability.getStatus());
+        Set<User> sharedList = availability.getSharedList();
+        Iterator<User> iterator = sharedList.iterator();
+        while(iterator.hasNext()) {
+            User setElement = iterator.next();
+            UserHibernateModel userHibernateModel = new UserHibernateModel(setElement);
+            availabilityHibernateModel.getSharedList().add(userHibernateModel);
+        }
         return availabilityHibernateModel;
     }
 
+    public Set<User> add2SharedUsers(){
+        Set<User> sharedList = new HashSet<User>();
+        sharedList.add(user1);
+        sharedList.add(user2);
+        return sharedList;
+    }
+
+    public Set<User> addNoSharedUsers(){
+        Set<User> sharedList = new HashSet<User>();
+        return sharedList;
+    }
 }

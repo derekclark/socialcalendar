@@ -40,6 +40,11 @@ public class InMemoryUserDAO implements UserDAO {
         return false;
     }
 
+    @Override
+    public UserHibernateModel getUserModel(String userEmail) {
+        return null;
+    }
+
     public void populate(){
         save(new User(MAIL1, NAME1, FACEBOOK_ID1));
         save(new User(MAIL2, NAME2, FACEBOOK_ID2));
