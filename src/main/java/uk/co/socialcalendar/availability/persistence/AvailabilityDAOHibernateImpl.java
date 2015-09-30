@@ -9,10 +9,7 @@ import uk.co.socialcalendar.user.persistence.UserDAO;
 import uk.co.socialcalendar.user.persistence.UserHibernateModel;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class AvailabilityDAOHibernateImpl implements AvailabilityDAO {
     SessionFactory sessionFactory;
@@ -123,8 +120,13 @@ public class AvailabilityDAOHibernateImpl implements AvailabilityDAO {
     }
 
     public Availability convertToAvailability(AvailabilityHibernateModel model){
+        Set<User> sharedUserList = new HashSet<User>();
+        for(UserHibernateModel user:model.getSharedList()){
+            sharedUserList.add(user.convertUserModelToUser());
+        }
         Availability availability = new Availability(model.getOwnerEmail(), model.getOwnerName(),
-                model.getTitle(), model.getStartDate(), model.getEndDate(), model.getStatus());
+                model.getTitle(), model.getStartDate(), model.getEndDate(), model.getStatus(),
+                sharedUserList);
         availability.setId(model.getId());
         return availability;
     }

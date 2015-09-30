@@ -78,4 +78,8 @@ public class UserHibernateModel {
         return this.email + " " + this.name + " " + this.facebookId;
     }
 
+
+    public User convertUserModelToUser() {
+        return new User(this.getEmail(), this.getName(), this.getFacebookId());
+    }
 }

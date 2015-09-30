@@ -98,7 +98,7 @@ public class AmendAvailabilityControllerTest {
     }
 
     @Test
-    public void returnsFriendsWhoHaveHadAvailabilitySharedWith() throws IOException, ServletException {
+    public void returnsSharedFriendsList() throws IOException, ServletException {
         User user1=new User("USER1", "NAME1", "FACEBOOK1");
         User user2=new User("USER2", "NAME2", "FACEBOOK2");
         Set<User> userList = new HashSet<User>();

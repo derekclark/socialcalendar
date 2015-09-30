@@ -116,10 +116,26 @@ public class AvailabilityDAOHibernateImplTest {
 
     @Test
     public void canReadOneAvailability(){
+        Availability availability = new Availability("ownerEmail", "ownerName", "title", startDate, endDate, "status");
+
         availability.setId(availabilityDAOImpl.save(availability));
-        System.out.println(availability.getId());
         Availability actualAvailability = availabilityDAOImpl.read(availability.getId());
         assertEquals(availability, actualAvailability);
+    }
+
+    @Test
+    public void canReadAvailabilityWithSharedUsers(){
+        userDAOImpl.save(user1);
+        userDAOImpl.save(user2);
+        Availability availability = createAvailabilityWithSharedUsers("me");
+
+        availability.setId(availabilityDAOImpl.save(availability));
+        Availability actualAvailability = availabilityDAOImpl.read(availability.getId());
+        assertEquals(availability, actualAvailability);
+        for(User user:availability.getSharedList()){
+            System.out.println(user.getName());
+        }
+
     }
 
     @Test
@@ -137,6 +153,9 @@ public class AvailabilityDAOHibernateImplTest {
 
     @Test
     public void canUpdateAvailability(){
+        userDAOImpl.save(user1);
+        userDAOImpl.save(user2);
+
         availability.setId(availabilityDAOImpl.save(availability));
         availability.setTitle("changedTitle");
         assertTrue(availabilityDAOImpl.update(availability));
