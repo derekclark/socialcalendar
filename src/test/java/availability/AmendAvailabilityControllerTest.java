@@ -35,6 +35,9 @@ public class AmendAvailabilityControllerTest {
     AvailabilityFacade mockAvailabilityFacade;
     AvailabilityCommonModel mockAvailabilityCommonModel;
     String me;
+    User user1=new User("USER1", "NAME1", "FACEBOOK1");
+    User user2=new User("USER2", "NAME2", "FACEBOOK2");
+
     private static final String ME = "me";
     private static final String NOT_ME = "not_me";
     private static final String MY_NAME = "my name";
@@ -99,18 +102,32 @@ public class AmendAvailabilityControllerTest {
 
     @Test
     public void returnsSharedFriendsList() throws IOException, ServletException {
-        User user1=new User("USER1", "NAME1", "FACEBOOK1");
-        User user2=new User("USER2", "NAME2", "FACEBOOK2");
         Set<User> userList = new HashSet<User>();
         userList.add(user1);
         userList.add(user2);
         Availability expectedAvailability = new Availability(1, ME, MY_NAME, "title", START_DATE, END_DATE,
                 "status", userList);
         when(mockAvailabilityFacade.get(anyInt())).thenReturn(expectedAvailability);
+
+        Set<FriendModel> expectedList = setExpectedList();
+
         mav=callAmendAvailability(1);
-        assertEquals(userList, mav.getModelMap().get("friendsSharedAvailability"));
+
+        Set<FriendModel> actualList = (Set<FriendModel>) mav.getModelMap().get("friendsSharedAvailability");
+
+        assertTrue(expectedList.equals(actualList));
+
     }
 
+    public Set<FriendModel> setExpectedList(){
+        FriendModel friendModel1 = new FriendModel(user1);
+        FriendModel friendModel2 = new FriendModel(user2);
+        Set<FriendModel> expectedList = new HashSet<FriendModel>();
+        expectedList.add(friendModel1);
+        expectedList.add(friendModel2);
+
+        return expectedList;
+    }
     public Availability mockAvailability(String owner){
         Availability expectedAvailability = new Availability(owner, MY_NAME, "title", START_DATE, END_DATE, "status");
         expectedAvailability.setId(1);

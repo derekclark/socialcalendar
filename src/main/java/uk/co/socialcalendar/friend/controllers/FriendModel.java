@@ -17,6 +17,8 @@ public class FriendModel {
         this.friendId=0;
         this.email="";
         this.name="";
+        this.joined = false;
+        this.availabilityStatus = "";
     }
 
     public FriendModel(User user){
@@ -24,6 +26,8 @@ public class FriendModel {
         this.name = user.getName();
         this.facebookId = user.getFacebookId();
         this.hasFacebookId=false;
+        this.joined = false;
+        this.availabilityStatus = "";
     }
 
     public String getName() {
@@ -92,16 +96,17 @@ public class FriendModel {
         if ((obj == null) || (obj.getClass() != this.getClass())){
             return false;
         }
-        FriendModel friend = (FriendModel) obj;
-        if (! this.facebookId.equals(friend.getFacebookId())) return false;
-        if (! this.name.equals(friend.getName())) return false;
-        if (! this.email.equals(friend.getEmail())) return false;
+        FriendModel model = (FriendModel) obj;
+        if (! this.facebookId.equals(model.getFacebookId())) return false;
+        if (! this.name.equals(model.getName())) return false;
+        if (! this.email.equals(model.getEmail())) return false;
 
 
-        return friendId == friend.getFriendId();
+        return friendId == model.getFriendId();
     }
 
-    public int hashcode(){
+    @Override
+    public int hashCode(){
         int hash = 7;
         hash = 31 * hash + friendId + name.hashCode() + facebookId.hashCode() + email.hashCode() + name.hashCode();
         return hash;
@@ -109,6 +114,6 @@ public class FriendModel {
 
     @Override
     public String toString(){
-        return "name=" + name + " email=" + email + " facebookId=" + facebookId + " friendId=" + friendId;
+        return "friendId=" + friendId + " name=" + name + " email=" + email + " facebookId=" + facebookId + " friendId=" + friendId;
     }
 }

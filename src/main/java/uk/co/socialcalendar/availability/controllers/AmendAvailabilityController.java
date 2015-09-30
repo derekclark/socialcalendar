@@ -9,11 +9,15 @@ import org.springframework.web.servlet.ModelAndView;
 import uk.co.socialcalendar.authentication.SessionAttributes;
 import uk.co.socialcalendar.availability.entities.Availability;
 import uk.co.socialcalendar.availability.useCases.AvailabilityFacade;
+import uk.co.socialcalendar.friend.controllers.FriendModel;
 import uk.co.socialcalendar.message.Message;
+import uk.co.socialcalendar.user.entities.User;
 import uk.co.socialcalendar.user.useCases.UserFacade;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashSet;
+import java.util.Set;
 
 @Controller
 public class AmendAvailabilityController {
@@ -49,9 +53,19 @@ public class AmendAvailabilityController {
         mav.addObject("amendAvailability",availability);
         mav.addObject("newMessage",new Message());
         mav.addObject("isThisMyAvailability",isThisMyAvailability(availability));
-        mav.addObject("friendsSharedAvailability",availability.getSharedList());
+        mav.addObject("friendsSharedAvailability",getSharedFriends(availability.getSharedList()));
         mav.addAllObjects(availabilityCommonModel.getAttributes(me));
         return mav;
+    }
+
+    private Set<FriendModel> getSharedFriends(Set<User> sharedList) {
+        Set<FriendModel> list = new HashSet<FriendModel>();
+        for (User user:sharedList){
+            FriendModel friendModel = new FriendModel(user);
+            list.add(friendModel);
+        }
+
+        return list;
     }
 
     private boolean isThisMyAvailability(Availability availability) {
