@@ -3,6 +3,8 @@ package uk.co.socialcalendar.availability.entities;
 import org.joda.time.LocalDateTime;
 import uk.co.socialcalendar.user.entities.User;
 
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 public class Availability {
@@ -25,6 +27,7 @@ public class Availability {
         this.startDate = startDate;
         this.endDate = endDate;
         this.status = status;
+        this.sharedList = new HashSet<User>();
     }
 
     public Availability(String ownerEmail, String ownerName, String title, LocalDateTime startDate, LocalDateTime endDate, String status,
@@ -138,7 +141,30 @@ public class Availability {
         if (! this.endDate.equals(availability.getEndDate())) return false;
         if (! this.status.equals(availability.getStatus())) return false;
 
+        if (! isSharedListEqual(this, availability)) return false;
+
+
         return id == availability.getId();
+    }
+
+    public boolean isSharedListEqual(Availability thisOne, Availability thatOne){
+
+        for (User model:thisOne.sharedList){
+            if (!findElementInSet(thatOne.getSharedList(), model)) return false;
+        }
+        if (thisOne.sharedList.size() != thatOne.getSharedList().size()) return false;
+
+        return true;
+    }
+    public boolean findElementInSet(Set<User> set, User user){
+        Iterator<User> iterator = set.iterator();
+        while(iterator.hasNext()) {
+            User setElement = iterator.next();
+            if(setElement.equals(user)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean allNull(Availability availability){
@@ -166,7 +192,7 @@ public class Availability {
 
     public String toString(){
         return this.getId() + " " + this.getOwnerName() + " " + this.getOwnerEmail() + " " + this.getTitle() + " "
-                + this.getStartDate() + " " + this.getEndDate() + " " + this.getStatus();
+                + this.getStartDate() + " " + this.getEndDate() + " " + this.getStatus() + " " + this.getSharedList();
     }
 
 }

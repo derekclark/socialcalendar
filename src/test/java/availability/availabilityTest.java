@@ -4,6 +4,10 @@ import org.joda.time.LocalDateTime;
 import org.junit.Before;
 import org.junit.Test;
 import uk.co.socialcalendar.availability.entities.Availability;
+import uk.co.socialcalendar.user.entities.User;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -122,6 +126,26 @@ public class AvailabilityTest {
         Availability availability1 = new Availability(OWNER_EMAIL, OWNER_NAME, TITLE,START_DATE, END_DATE, STATUS);
         Availability availability2 = new Availability(OWNER_EMAIL, OWNER_NAME, TITLE,START_DATE, differentDateTime, STATUS);
         assertNotEquals(availability1, availability2);
+    }
+
+    @Test
+    public void testNotEqualsSharedUsers(){
+        Availability availability1 = new Availability(OWNER_EMAIL, OWNER_NAME, TITLE, START_DATE, END_DATE, STATUS, add1SharedUser());
+        Availability availability2 = new Availability(OWNER_EMAIL, OWNER_NAME, TITLE, START_DATE, END_DATE, STATUS);
+        assertNotEquals(availability1, availability2);
+    }
+
+    @Test
+    public void testEqualsWithSharedUsers(){
+        Availability availability1 = new Availability(OWNER_EMAIL, OWNER_NAME, TITLE, START_DATE, END_DATE, STATUS, add1SharedUser());
+        Availability availability2 = new Availability(OWNER_EMAIL, OWNER_NAME, TITLE, START_DATE, END_DATE, STATUS, add1SharedUser());
+        assertEquals(availability1, availability2);
+    }
+
+    public Set<User> add1SharedUser(){
+        Set<User> sharedList = new HashSet<User>();
+        sharedList.add(new User("USER1", "NAME1", "FACEBOOK1"));
+        return sharedList;
     }
 
     @Test
