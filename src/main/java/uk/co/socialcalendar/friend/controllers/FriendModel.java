@@ -8,6 +8,9 @@ public class FriendModel {
     private String email;
     private String name;
     private boolean hasFacebookId;
+    private boolean joined;
+    private String availabilityStatus;
+
 
     public FriendModel(){
         this.facebookId="";
@@ -63,6 +66,22 @@ public class FriendModel {
 
     public void setHasFacebookId(boolean hasFacebookId) {
         this.hasFacebookId = hasFacebookId;
+    }
+
+    public String getAvailabilityStatus() {
+        return availabilityStatus;
+    }
+
+    public void setAvailabilityStatus(String availabilityStatus) {
+        this.availabilityStatus = availabilityStatus;
+    }
+
+    public boolean isJoined() {
+        return joined;
+    }
+
+    public void setJoined(boolean joined) {
+        this.joined = joined;
     }
 
     @Override
