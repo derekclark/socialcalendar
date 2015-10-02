@@ -108,13 +108,13 @@ public class FriendModel {
     @Override
     public int hashCode(){
         int hash = 7;
-        System.out.println(this);
-        hash = 31 * hash + friendId + name.hashCode() + facebookId.hashCode() + email.hashCode();
+        hash = 31 * hash + friendId + name.hashCode() + facebookId.hashCode() + email.hashCode() + availabilityStatus.hashCode();
         return hash;
     }
 
     @Override
     public String toString(){
-        return "friendId=" + friendId + " name=" + name + " email=" + email + " facebookId=" + facebookId;
+        return "friendId=" + friendId + " name=" + name + " email=" + email + " facebookId=" + facebookId
+                + "joined=" + joined + "availabilityStatus=" + availabilityStatus;
     }
 }

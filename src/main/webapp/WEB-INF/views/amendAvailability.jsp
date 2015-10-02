@@ -241,7 +241,6 @@ function validateForm() {
           <b>Choose Friends</b>
           <br>
           <c:forEach var="friend" items='${friendsSharedAvailability}'>
-          <%/*
             <c:choose>
               <c:when test="${friend.joined}">
                   <input type="checkbox" name="friendSharedList" value="${friend.email}" checked>
@@ -250,19 +249,17 @@ function validateForm() {
                   <input type="checkbox" name="friendSharedList" value="${friend.email}">
               </c:otherwise>
             </c:choose>
-*/ %>
-              <input type="checkbox" name="friendSharedList" value="${friend.email}">
-              <c:choose>
+            <c:choose>
                 <c:when test="${not empty friend.facebookId}">
                   <img src="https://graph.facebook.com/<c:out value="${friend.facebookId}"/>/picture?type=square">    
                 </c:when>
                 <c:when test="${empty friend.facebookId}">
                   <img src="${context}/resources/img/avatar.jpg">    
                 </c:when>
-              </c:choose>
-              <c:out value="${friend.name}"/>
-     <%/*              (<c:out value="${friend.availabilityStatus}"/>)
-     */ %>
+            </c:choose>
+            <c:out value="${friend.name}"/>
+            (<c:out value="${friend.availabilityStatus}"/>)
+
               <br>
           </c:forEach>
 
