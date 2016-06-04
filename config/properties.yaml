@@ -7,7 +7,7 @@ properties:
     mailSmtpAuth: true
     mailSmtpPort: 465
     mailUsername: derekclark1971@gmail.com
-    mailPassword: dereksgoogle
+    mailPassword: $google_password$
     facebookProtectedResourceUrl: https://graph.facebook.com/me
     facebookOauthUrl: https://www.facebook.com/dialog/oauth
 
@@ -16,35 +16,35 @@ environments:
     <<: *config-global
     databaseUrl: jdbc:mysql://localhost:3306/socialeggbox
     databaseUsername: derekclark14
-    databasePassword: smarti3pants
+    databasePassword: $databasePassword$
 
-    facebookApiKey: 378183975657505
-    facebookApiSecret: 5b2cb16208473f0e7ff9cd91e4924af0
+    facebookApiKey: $facebookApiKey$
+    facebookApiSecret: $facebookApiSecret$
     facebookCallback: http://facebook.derek.com:8080/facebook
     facebookLogoutUrl: http://facebook.derek.com:8080/logout
-    facebookLoginUrl: https://www.facebook.com/dialog/oauth?client_id=378183975657505&redirect_uri=http://facebook.derek.com:8080/facebook&auth_type=rerequest& scope=email
+    facebookLoginUrl: https://www.facebook.com/dialog/oauth?client_id=$facebookApiKey$&redirect_uri=http://facebook.derek.com:8080/facebook&auth_type=rerequest& scope=email
 
   aws: &config-aws
     <<: *config-global
     databaseUrl: jdbc:mysql://aaaalkh51qagdi.cvb1vcfvd6jj.eu-west-1.rds.amazonaws.com
     databaseUsername: socialcalendar
-    databasePassword: socialcalendar
+    databasePassword: $databasePassword$
 
-    facebookApiKey: 316869195141619
-    facebookApiSecret: 12df5af0e5066be3095ab60810a00929
+    facebookApiKey: $facebookApiKey$
+    facebookApiSecret: $facebookApiSecret$
     facebookCallback: http://jbossews-socialcalendar.rhcloud.com/facebook
     facebookLogoutUrl: http://jbossews-socialcalendar.rhcloud.com/logout
-    facebookLoginUrl: https://www.facebook.com/dialog/oauth?client_id=316869195141619&redirect_uri=http://jbossews-socialcalendar.rhcloud.com/facebook&auth_type=rerequest& scope=email
+    facebookLoginUrl: https://www.facebook.com/dialog/oauth?client_id=$facebookApiKey$&redirect_uri=http://jbossews-socialcalendar.rhcloud.com/facebook&auth_type=rerequest& scope=email
 
 
-  redhat: &config-aws
+  redhat: &config-redhat
     <<: *config-global
     databaseUrl: jdbc:mysql://127.2.43.130:3306/jbossews
     databaseUsername: adminGhDicM9
-    databasePassword: Zr-QhzJmlB4m
+    databasePassword: $databasePassword$
 
-    facebookApiKey: 316869195141619
-    facebookApiSecret: 12df5af0e5066be3095ab60810a00929
+    facebookApiKey: $facebookApiKey$
+    facebookApiSecret: $facebookApiSecret$
     facebookCallback: http://jbossews-socialcalendar.rhcloud.com/facebook
     facebookLogoutUrl: http://jbossews-socialcalendar.rhcloud.com/logout
-    facebookLoginUrl: https://www.facebook.com/dialog/oauth?client_id=316869195141619&redirect_uri=http://jbossews-socialcalendar.rhcloud.com/facebook&auth_type=rerequest& scope=email
+    facebookLoginUrl: https://www.facebook.com/dialog/oauth?client_id=$facebookApiKey$&redirect_uri=http://jbossews-socialcalendar.rhcloud.com/facebook&auth_type=rerequest& scope=email

@@ -34,6 +34,11 @@ project.ext {
 generateLocalProperties {
     inputYamlPath = file("config/properties.yaml")
     outputPropertiesPath = file("src/main/resources/propertyPlaceholder.properties")
+    if (project.hasProperty('env'))
+        inputSecurePropertiesPath = 'secure.' + "$env" + '.properties'
+    else
+        inputSecurePropertiesPath = 'secure.local.properties'
+
 }
 
 configurations {
