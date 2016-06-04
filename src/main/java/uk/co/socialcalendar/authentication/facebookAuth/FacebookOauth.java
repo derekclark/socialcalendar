@@ -39,7 +39,7 @@ public class FacebookOauth implements HttpRequestHandler {
     }
 
     public FacebookOauth(String apiKey, String apiSecret, String callback) {
-        LOG.info("in FacebookOauth constructor;apikey=" + apiKey + " apisecret=" + apiSecret);
+        LOG.info("in FacebookOauth constructor");
         this.apiSecret = apiSecret;
     }
 

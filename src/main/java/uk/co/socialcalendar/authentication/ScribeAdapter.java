@@ -81,7 +81,7 @@ public class ScribeAdapter implements Oauth {
     }
 
     public OAuthService createService(String apiKey, String apiSecret, String callback) {
-        System.out.println("createService!!!!!!!!!!!! apikey=" + apiKey + " apisecret=" + apiSecret);
+        System.out.println("createService!!!!!!!!!!!!");
 
         return new ServiceBuilder()
                 .provider(FacebookApi.class)
