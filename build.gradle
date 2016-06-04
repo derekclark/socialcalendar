@@ -156,6 +156,14 @@ task copyRHPropertyFile(type: Copy) {
     }
 }
 
+task copyAWSPropertyFile(type: Copy) {
+    from 'config/propertyPlaceholder-AWS.properties'
+    into 'src/main/resources'
+    rename { String fileName ->
+        fileName.replace('-AWS','')
+    }
+}
+
 task copyLocalPropertyFile(type: Copy) {
     from 'config/propertyPlaceholder-LOCAL.properties'
     into 'src/main/resources'
@@ -192,6 +200,10 @@ task runLocal (type: GradleBuild){
 
 task createRHWar (type: GradleBuild){
   tasks=['copyRHPropertyFile','clean','war']  
+}
+
+task createAWSWar (type: GradleBuild){
+  tasks=['copyAWSPropertyFile','clean','war']  
 }
 
 task cucumber(type: JavaExec) {
