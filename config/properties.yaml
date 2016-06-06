@@ -32,9 +32,9 @@ environments:
 
     facebookApiKey: $facebookApiKey$
     facebookApiSecret: $facebookApiSecret$
-    facebookCallback: http://jbossews-socialcalendar.rhcloud.com/facebook
-    facebookLogoutUrl: http://jbossews-socialcalendar.rhcloud.com/logout
-    facebookLoginUrl: https://www.facebook.com/dialog/oauth?client_id=$facebookApiKey$&redirect_uri=http://jbossews-socialcalendar.rhcloud.com/facebook&auth_type=rerequest& scope=email
+    facebookCallback: http://tomcat-env.eu-west-1.elasticbeanstalk.com/facebook
+    facebookLogoutUrl: http://tomcat-env.eu-west-1.elasticbeanstalk.com/logout
+    facebookLoginUrl: https://www.facebook.com/dialog/oauth?client_id=$facebookApiKey$&redirect_uri=http://tomcat-env.eu-west-1.elasticbeanstalk.com/facebook&auth_type=rerequest& scope=email
 
 
   redhat: &config-redhat
