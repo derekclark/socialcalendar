@@ -10,6 +10,9 @@ public class UserDAOWebServiceImpl implements UserDAO{
 
     @Override
     public boolean save(User user) {
+        if (user.getEmail().isEmpty()){
+            return false;
+        }
         return true;
     }
 
