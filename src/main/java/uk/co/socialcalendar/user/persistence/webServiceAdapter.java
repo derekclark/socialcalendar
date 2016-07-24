@@ -2,36 +2,47 @@ package uk.co.socialcalendar.user.persistence;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.SerializationConfig;
-import uk.co.socialcalendar.user.entities.User;
+//import uk.co.socialcalendar.user.entities.User;
 import uk.co.tpplc.http.Response;
 import uk.co.tpplc.http.SimpleHttpClient;
 
 import java.io.IOException;
 
-public class UserDAOWebServiceAdapter {
+public class WebServiceAdapter {
     ObjectMapper objectMapper;
-    public static final String URL = "http://localhost:9000/social/v1/user";
+    String entityUrl;
+    public static final String BASE_URL = "http://localhost:9000/social/v1/";
 
-    public UserDAOWebServiceAdapter() {
+
+    public WebServiceAdapter() {
         objectMapper = new ObjectMapper();
     }
 
-    public Response save(User user) {
-        return postToService(user);
+    public WebServiceAdapter(String entity) {
+        this.entityUrl = entity;
+    }
+
+
+    public <T> Response save(T clazz) {
+        return postToService(clazz);
     }
 
     public Response read(String userId) {
         return getFromService(userId);
     }
 
-    private Response getFromService(String userId) {
-        return new SimpleHttpClient().get(URL+"/"+userId);
+    public Response delete(String userId) {
+        return deleteFromService(userId);
     }
 
-    private Response postToService(User user) {
+    private Response getFromService(String entityId) {
+        return new SimpleHttpClient().get(BASE_URL + entityUrl + "/"+entityId);
+    }
+
+    private <T> Response postToService(T clazz) {
         try {
-            return new SimpleHttpClient().post(URL,
-                    toJson(user));
+            return new SimpleHttpClient().post(BASE_URL + entityUrl,
+                    toJson(clazz));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -39,7 +50,7 @@ public class UserDAOWebServiceAdapter {
     }
 
     private Response deleteFromService(String userId) {
-        return new SimpleHttpClient().delete(URL+"/"+userId);
+        return new SimpleHttpClient().delete(BASE_URL + entityUrl + "/"+userId);
     }
 
     public String toJson (Object object) throws IOException {
@@ -47,11 +58,4 @@ public class UserDAOWebServiceAdapter {
         objectMapper.enable(SerializationConfig.Feature.INDENT_OUTPUT);
         return objectMapper.writeValueAsString(object);
     }
-
-
-    public Response delete(String userId) {
-        return deleteFromService(userId);
-    }
-
-
 }

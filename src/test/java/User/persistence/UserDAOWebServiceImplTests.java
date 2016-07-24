@@ -1,13 +1,13 @@
 package user.persistence;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import uk.co.socialcalendar.user.entities.User;
+import uk.co.socialcalendar.user.persistence.WebServiceAdapter;
 import uk.co.socialcalendar.user.persistence.UserDAOWebServiceImpl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class UserDAOWebServiceImplTests {
     public static final String EMAIL = "decla";
@@ -17,10 +17,16 @@ public class UserDAOWebServiceImplTests {
 
     UserDAOWebServiceImpl userDAO = new UserDAOWebServiceImpl();
     User user;
+    WebServiceAdapter adapter = new WebServiceAdapter("user");
 
     @Before
     public void setup(){
         user = new User(EMAIL, NAME, FACEBOOK_ID);
+    }
+
+    @After
+    public void tearDown(){
+        adapter.delete(EMAIL);
     }
 
     @Test
@@ -52,7 +58,6 @@ public class UserDAOWebServiceImplTests {
         userDAO.save(user);
         User retrievedUser = userDAO.read(user.getEmail());
         assertEquals(user, retrievedUser);
-
     }
 
 }

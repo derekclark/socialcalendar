@@ -5,7 +5,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import uk.co.socialcalendar.user.entities.User;
-import uk.co.socialcalendar.user.persistence.UserDAOWebServiceAdapter;
+import uk.co.socialcalendar.user.persistence.WebServiceAdapter;
 import uk.co.tpplc.http.Response;
 
 import static org.junit.Assert.assertEquals;
@@ -17,12 +17,12 @@ public class UserDAOWebServiceAdapterTests {
     public static final String NEW_USER_ID = "NewUserId";
 
     User actualUser = new User(EMAIL, NAME, FACEBOOK_ID);
-    UserDAOWebServiceAdapter userDAO = new UserDAOWebServiceAdapter();;
+    WebServiceAdapter userAdapter = new WebServiceAdapter("user");
 
     @Before
     public void setup(){
         deleteUser(EMAIL);
-        userDAO.save(actualUser);
+        userAdapter.save(actualUser);
     }
 
     @After
@@ -31,7 +31,7 @@ public class UserDAOWebServiceAdapterTests {
     }
 
     private Response deleteUser(String userId){
-        return userDAO.delete(userId);
+        return userAdapter.delete(userId);
     }
 
     @Test
@@ -39,7 +39,7 @@ public class UserDAOWebServiceAdapterTests {
         deleteUser(NEW_USER_ID);
 
         User user = new User(NEW_USER_ID, NAME, FACEBOOK_ID);
-        Response response = userDAO.save(user);
+        Response response = userAdapter.save(user);
         assertEquals(200, response.getStatus());
 
         response = deleteUser(NEW_USER_ID);
@@ -48,7 +48,7 @@ public class UserDAOWebServiceAdapterTests {
 
     @Test
     public void get200ResponseWhenReadingExistingUser(){
-        Response response = userDAO.read(EMAIL);
+        Response response = userAdapter.read(EMAIL);
         assertEquals(200, response.getStatus());
     }
 
@@ -60,13 +60,13 @@ public class UserDAOWebServiceAdapterTests {
 
     @Test
     public void get404ResponseWhenReadingNonExistingUser(){
-        Response response = userDAO.read("UNKNOWN_USER_ID");
+        Response response = userAdapter.read("UNKNOWN_USER_ID");
         assertEquals(404, response.getStatus());
     }
 
     @Test
     public void get200ResponseWhenDeletingExistingUser(){
-        Response response = userDAO.delete(EMAIL);
+        Response response = userAdapter.delete(EMAIL);
         assertEquals(200, response.getStatus());
     }
 }

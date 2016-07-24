@@ -7,10 +7,10 @@ import uk.co.tpplc.http.Response;
 import java.io.IOException;
 
 public class UserDAOWebServiceImpl implements UserDAO{
-    UserDAOWebServiceAdapter adapter;
+    WebServiceAdapter adapter;
 
     public UserDAOWebServiceImpl() {
-        adapter = new UserDAOWebServiceAdapter();
+        adapter = new WebServiceAdapter("user");
     }
 
     @Override
