@@ -9,7 +9,12 @@ import uk.co.tpplc.http.SimpleHttpClient;
 import java.io.IOException;
 
 public class UserDAOWebServiceImpl {
+    ObjectMapper objectMapper;
     public static final String URL = "http://localhost:9000/social/v1/user";
+
+    public UserDAOWebServiceImpl() {
+        objectMapper = new ObjectMapper();
+    }
 
     public Response save(User user) {
         return postToService(user);
@@ -38,7 +43,7 @@ public class UserDAOWebServiceImpl {
     }
 
     public String toJson (Object object) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationConfig.Feature.INDENT_OUTPUT);
         return objectMapper.writeValueAsString(object);
     }
@@ -47,4 +52,18 @@ public class UserDAOWebServiceImpl {
     public Response delete(String userId) {
         return deleteFromService(userId);
     }
+
+    public User convertJsonPayloadToUser(String jsonPayload) {
+        try {
+            return deserializeJsonToObject(jsonPayload,User.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private <T> T deserializeJsonToObject(String jsonString, Class<T> clazz) throws IOException {
+        return objectMapper.readValue(jsonString, clazz);
+    }
+
 }

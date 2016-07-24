@@ -16,13 +16,13 @@ public class UserDAOWebServiceImplTests {
     public static final String FACEBOOK_ID = "1234";
     public static final String NEW_USER_ID = "NewUserId";
 
-    User user = new User(EMAIL, NAME, FACEBOOK_ID);
+    User actualUser = new User(EMAIL, NAME, FACEBOOK_ID);
     UserDAOWebServiceImpl userDAO = new UserDAOWebServiceImpl();;
 
     @Before
     public void setup(){
         deleteUser(EMAIL);
-        userDAO.save(user);
+        userDAO.save(actualUser);
     }
 
     @After
@@ -50,6 +50,24 @@ public class UserDAOWebServiceImplTests {
     public void get200ResponseWhenReadingExistingUser(){
         Response response = userDAO.read(EMAIL);
         assertEquals(200, response.getStatus());
+    }
+
+    @Test
+    public void canConvertResponseBodyIntoUser(){
+        String jsonPayload = "{\n" +
+                "  \"email\" : \""+EMAIL+"\",\n" +
+                "  \"name\" : \""+NAME+"\",\n" +
+                "  \"facebookId\" : \""+FACEBOOK_ID+"\"\n" +
+                "}";
+
+        actualUser = userDAO.convertJsonPayloadToUser(jsonPayload);
+        User expectedUser = new User(EMAIL, NAME, FACEBOOK_ID);
+        assertEquals(expectedUser, actualUser);
+    }
+
+    @Test
+    public void returnsUserWhenReadingExistingUser(){
+
     }
 
     @Test
