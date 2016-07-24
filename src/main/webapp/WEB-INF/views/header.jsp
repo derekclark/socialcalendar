@@ -46,7 +46,7 @@
                             </td>
                             <td ><div class="welcome"> Welcome <b><%=userName%>!</b></div>
                                 <fmt:bundle basename="propertyPlaceholder">
-                                  <a class="logout" href="https://www.facebook.com/logout.php?access_token=<%=token%>&next=<fmt:message key="facebookLogoutUrl"/>"> Logout</a>
+                                  <a class="logout" id="logout" href="https://www.facebook.com/logout.php?access_token=<%=token%>&next=<fmt:message key="facebookLogoutUrl"/>"> Logout</a>
                                 </fmt:bundle>
                             </td>
                             <td class="user-picture">

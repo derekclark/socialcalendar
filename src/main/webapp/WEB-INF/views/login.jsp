@@ -10,7 +10,7 @@
         <fmt:bundle basename="propertyPlaceholder">
         	Login using Facebook          
         	<a href="<fmt:message key="facebookLoginUrl"/> ">
-                <img src="${context}/resources/img/facebook-connect.png" alt="Connect with Facebook" width="50%"/>
+                <img id="connectWithFacebook" src="${context}/resources/img/facebook-connect.png" alt="Connect with Facebook" width="50%"/>
             </a>
         </fmt:bundle>
 	</div>
