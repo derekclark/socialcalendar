@@ -9,8 +9,7 @@ import uk.co.tpplc.http.SimpleHttpClient;
 import java.io.IOException;
 
 public class UserDAOWebServiceImpl {
-    public static final String POST_URL = "http://localhost:9000/social/v1/user";
-    public static final String GET_URL = "http://localhost:9000/social/v1/user/";
+    public static final String URL = "http://localhost:9000/social/v1/user";
 
     public Response save(User user) {
         return postToService(user);
@@ -21,17 +20,21 @@ public class UserDAOWebServiceImpl {
     }
 
     private Response getFromService(String userId) {
-        return new SimpleHttpClient().get(GET_URL+userId);
+        return new SimpleHttpClient().get(URL+"/"+userId);
     }
 
     private Response postToService(User user) {
         try {
-            return new SimpleHttpClient().post(POST_URL,
+            return new SimpleHttpClient().post(URL,
                     toJson(user));
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private Response deleteFromService(String userId) {
+        return new SimpleHttpClient().delete(URL+"/"+userId);
     }
 
     public String toJson (Object object) throws IOException {
@@ -41,4 +44,7 @@ public class UserDAOWebServiceImpl {
     }
 
 
+    public Response delete(String userId) {
+        return deleteFromService(userId);
+    }
 }
