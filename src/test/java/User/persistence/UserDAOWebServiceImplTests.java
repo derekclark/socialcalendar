@@ -14,6 +14,7 @@ public class UserDAOWebServiceImplTests {
     public static final String EMAIL = "decla";
     public static final String NAME = "derek";
     public static final String FACEBOOK_ID = "1234";
+    public static final String NEW_USER_ID = "NewUserId";
 
     User user = new User(EMAIL, NAME, FACEBOOK_ID);
     UserDAOWebServiceImpl userDAO = new UserDAOWebServiceImpl();;
@@ -35,13 +36,13 @@ public class UserDAOWebServiceImplTests {
 
     @Test
     public void get200ResponseWhenAddingNewUser(){
-        deleteUser("NewUserId");
+        deleteUser(NEW_USER_ID);
 
-        User user = new User("NewUserId", NAME, FACEBOOK_ID);
+        User user = new User(NEW_USER_ID, NAME, FACEBOOK_ID);
         Response response = userDAO.save(user);
         assertEquals(200, response.getStatus());
 
-        response = deleteUser("NewUserId");
+        response = deleteUser(NEW_USER_ID);
         assertEquals(200,response.getStatus());
     }
 
@@ -49,6 +50,12 @@ public class UserDAOWebServiceImplTests {
     public void get200ResponseWhenReadingExistingUser(){
         Response response = userDAO.read(EMAIL);
         assertEquals(200, response.getStatus());
+    }
+
+    @Test
+    public void get404ResponseWhenReadingNonExistingUser(){
+        Response response = userDAO.read("UNKNOWN_USER_ID");
+        assertEquals(404, response.getStatus());
     }
 
     @Test
