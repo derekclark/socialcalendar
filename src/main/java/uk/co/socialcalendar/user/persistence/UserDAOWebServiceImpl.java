@@ -9,17 +9,19 @@ import uk.co.tpplc.http.SimpleHttpClient;
 import java.io.IOException;
 
 public class UserDAOWebServiceImpl {
-
     public static final String POST_URL = "http://localhost:9000/social/v1/user";
-
-    public String toJson (Object object) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.enable(SerializationConfig.Feature.INDENT_OUTPUT);
-        return objectMapper.writeValueAsString(object);
-    }
+    public static final String GET_URL = "http://localhost:9000/social/v1/user/";
 
     public Response save(User user) {
         return postToService(user);
+    }
+
+    public Response read(String userId) {
+        return getFromService(userId);
+    }
+
+    private Response getFromService(String userId) {
+        return new SimpleHttpClient().get(GET_URL+userId);
     }
 
     private Response postToService(User user) {
@@ -31,4 +33,12 @@ public class UserDAOWebServiceImpl {
         }
         return null;
     }
+
+    public String toJson (Object object) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.enable(SerializationConfig.Feature.INDENT_OUTPUT);
+        return objectMapper.writeValueAsString(object);
+    }
+
+
 }
