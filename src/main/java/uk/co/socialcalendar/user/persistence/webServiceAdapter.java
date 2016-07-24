@@ -2,21 +2,15 @@ package uk.co.socialcalendar.user.persistence;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.SerializationConfig;
-//import uk.co.socialcalendar.user.entities.User;
 import uk.co.tpplc.http.Response;
 import uk.co.tpplc.http.SimpleHttpClient;
 
 import java.io.IOException;
 
 public class WebServiceAdapter {
-    ObjectMapper objectMapper;
     String entityUrl;
     public static final String BASE_URL = "http://localhost:9000/social/v1/";
 
-
-    public WebServiceAdapter() {
-        objectMapper = new ObjectMapper();
-    }
 
     public WebServiceAdapter(String entity) {
         this.entityUrl = entity;
@@ -54,7 +48,7 @@ public class WebServiceAdapter {
     }
 
     public String toJson (Object object) throws IOException {
-        objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationConfig.Feature.INDENT_OUTPUT);
         return objectMapper.writeValueAsString(object);
     }

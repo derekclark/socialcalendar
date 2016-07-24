@@ -13,7 +13,6 @@ public class UserDAOWebServiceImplTests {
     public static final String EMAIL = "decla";
     public static final String NAME = "derek";
     public static final String FACEBOOK_ID = "1234";
-    public static final String NEW_USER_ID = "NewUserId";
 
     UserDAOWebServiceImpl userDAO = new UserDAOWebServiceImpl();
     User user;
