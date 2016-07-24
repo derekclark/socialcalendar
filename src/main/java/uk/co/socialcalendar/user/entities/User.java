@@ -56,7 +56,7 @@ public class User {
         return true;
     }
 
-    public int hashcode(){
+    public int hashCode(){
         int hash = 7;
         hash = 31 * hash + email.hashCode() + name.hashCode() + facebookId.hashCode();
         return hash;
