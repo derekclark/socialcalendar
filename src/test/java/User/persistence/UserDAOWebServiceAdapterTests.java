@@ -52,18 +52,6 @@ public class UserDAOWebServiceAdapterTests {
         assertEquals(200, response.getStatus());
     }
 
-    @Test
-    public void canConvertResponseBodyIntoUser(){
-        String jsonPayload = "{\n" +
-                "  \"email\" : \""+EMAIL+"\",\n" +
-                "  \"name\" : \""+NAME+"\",\n" +
-                "  \"facebookId\" : \""+FACEBOOK_ID+"\"\n" +
-                "}";
-
-        actualUser = userDAO.convertJsonPayloadToUser(jsonPayload);
-        User expectedUser = new User(EMAIL, NAME, FACEBOOK_ID);
-        assertEquals(expectedUser, actualUser);
-    }
 
     @Test
     public void returnsUserWhenReadingExistingUser(){

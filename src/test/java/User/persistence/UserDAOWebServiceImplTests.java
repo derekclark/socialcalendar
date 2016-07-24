@@ -1,9 +1,11 @@
 package user.persistence;
 
+import org.junit.Before;
 import org.junit.Test;
 import uk.co.socialcalendar.user.entities.User;
 import uk.co.socialcalendar.user.persistence.UserDAOWebServiceImpl;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -14,10 +16,15 @@ public class UserDAOWebServiceImplTests {
     public static final String NEW_USER_ID = "NewUserId";
 
     UserDAOWebServiceImpl userDAO = new UserDAOWebServiceImpl();
+    User user;
+
+    @Before
+    public void setup(){
+        user = new User(EMAIL, NAME, FACEBOOK_ID);
+    }
 
     @Test
-    public void canSaveUser(){
-        User user = new User(EMAIL, NAME, FACEBOOK_ID);
+    public void returnsTrueIfAddingUserWithId(){
         assertTrue(userDAO.save(user));
     }
 
@@ -25,6 +32,27 @@ public class UserDAOWebServiceImplTests {
     public void returnsFalseIfAddingUserWithEmptyId(){
         User user = new User("", NAME, FACEBOOK_ID);
         assertFalse(userDAO.save(user));
+    }
+
+    @Test
+    public void canConvertResponseBodyIntoUser(){
+        String jsonPayload = "{\n" +
+                "  \"email\" : \""+EMAIL+"\",\n" +
+                "  \"name\" : \""+NAME+"\",\n" +
+                "  \"facebookId\" : \""+FACEBOOK_ID+"\"\n" +
+                "}";
+
+        User actualUser = userDAO.convertJsonPayloadToUser(jsonPayload);
+        User expectedUser = new User(EMAIL, NAME, FACEBOOK_ID);
+        assertEquals(expectedUser, actualUser);
+    }
+
+    @Test
+    public void canRetrieveSavedUser(){
+        userDAO.save(user);
+        User retrievedUser = userDAO.read(user.getEmail());
+        assertEquals(user, retrievedUser);
+
     }
 
 }

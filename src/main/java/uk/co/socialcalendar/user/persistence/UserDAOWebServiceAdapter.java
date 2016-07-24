@@ -53,17 +53,5 @@ public class UserDAOWebServiceAdapter {
         return deleteFromService(userId);
     }
 
-    public User convertJsonPayloadToUser(String jsonPayload) {
-        try {
-            return deserializeJsonToObject(jsonPayload,User.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private <T> T deserializeJsonToObject(String jsonString, Class<T> clazz) throws IOException {
-        return objectMapper.readValue(jsonString, clazz);
-    }
 
 }
